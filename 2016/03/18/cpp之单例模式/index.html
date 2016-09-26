@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【转】Several C++ singleton implementations | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言该文的作者是Silviu Ardelean，博客地址为Several C++ singleton implementations(需翻)。
+正文This article offers some insight into singleton design-pattern.The singleton pattern is a design pattern used to implement the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【转】Several C++ singleton implementations">
+<meta property="og:url" content="http://yoursite.com/2016/03/18/cpp之单例模式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言该文的作者是Silviu Ardelean，博客地址为Several C++ singleton implementations(需翻)。
+正文This article offers some insight into singleton design-pattern.The singleton pattern is a design pattern used to implement the">
+<meta property="og:updated_time" content="2016-09-22T03:59:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【转】Several C++ singleton implementations">
+<meta name="twitter:description" content="前言该文的作者是Silviu Ardelean，博客地址为Several C++ singleton implementations(需翻)。
+正文This article offers some insight into singleton design-pattern.The singleton pattern is a design pattern used to implement the">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-cpp之单例模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/18/cpp之单例模式/" class="article-date">
+  <time datetime="2016-03-18T07:48:55.000Z" itemprop="datePublished">2016-03-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/c/">c++</a>►<a class="article-category-link" href="/categories/c/设计模式/">设计模式</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【转】Several C++ singleton implementations
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>该文的作者是Silviu Ardelean，博客地址为<a href="http://silviuardelean.ro/2012/06/05/few-singleton-approaches/" target="_blank" rel="external">Several C++ singleton implementations</a>(需翻)。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>This article offers some insight into singleton design-pattern.<br>The singleton pattern is a design pattern used to implement the mathematical concept of a singleton, by restricting the instantiation of a class to one object. The GoF book describes the singleton as: “Ensure a class only has one instance, and provide a global point of access to it.”</p>
+<p>The Singleton design pattern is not as simple as it appears at a first look and this is proven by the abundance of Singleton discussions and implementations. That’s way I’m trying to figure a few implementations, some base on C++ 11 features (smart pointers and locking primitives as mutexs). I am starting from, maybe, the most basic singleton implementation trying to figure different weaknesses and tried to add gradually better implementations.</p>
+<p>The basic idea of a singleton class implies using a static private instance, a private constructor and an interface method that returns the static instance.</p>
+<h2 id="Version-1"><a href="#Version-1" class="headerlink" title="Version 1"></a>Version 1</h2><p>Maybe, the most common and simpler approach looks like this:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> simpleSingleton</div><div class="line">&#123;</div><div class="line">  simpleSingleton();</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">static</span> simpleSingleton* <span class="number">_</span>pInstance;</div><div class="line">  <span class="keyword">public</span>:</div><div class="line">  ~simpleSingleton() &#123;&#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> simpleSingleton* <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">if</span> (!<span class="number">_</span>pInstance) &#123;</div><div class="line">      <span class="number">_</span>pInstance = <span class="keyword">new</span> simpleSingleton();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">_</span>pInstance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"simple singleton # next - your code ..."</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line">simpleSingleton* simpleSingleton::<span class="number">_</span>pInstance = <span class="literal">nullptr</span>;</div></pre></td></tr></table></figure>
+<p>Unfortunately this approach has many issues. Even if the default constructor is private, because the copy constructor and the assignment operator are not defined as private the compiler generates them and the next calls are valid:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Version 1</span></div><div class="line">simpleSingleton * p = simpleSingleton::getInstance(); <span class="comment">// cache instance pointer p-&gt;demo();</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 2</span></div><div class="line">simpleSingleton::getInstance()-&gt;demo();</div><div class="line"></div><div class="line"></div><div class="line"><span class="function">simpleSingleton <span class="title">ob2</span><span class="params">(*p)</span></span>; <span class="comment">// copy constructor</span></div><div class="line">ob2.demo();</div><div class="line"></div><div class="line"></div><div class="line">simpleSingleton ob3 = ob2; <span class="comment">// copy constructor</span></div><div class="line">ob2.demo();</div></pre></td></tr></table></figure>
+<p>So we have to define the copy constructor and the assignment operator having private visibility.<br><a id="more"></a></p>
+<h2 id="Version-2-–-Scott-Meyers-version"><a href="#Version-2-–-Scott-Meyers-version" class="headerlink" title="Version 2 – Scott Meyers version"></a>Version 2 – Scott Meyers version</h2><p>Scott Meyers in his Effective C++ book adds a slightly improved version and in the getInstance() method returns a reference instead of a pointer. So the pointer final deleting problem disappears.</p>
+<p>One advantage of this solution is that the function-static object is initialized when the control flow is first passing its definition.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> otherSingleton</div><div class="line">&#123;</div><div class="line">  <span class="keyword">static</span> otherSingleton * pInstance;</div><div class="line"></div><div class="line"></div><div class="line">  otherSingleton ();</div><div class="line"></div><div class="line"></div><div class="line">  otherSingleton(<span class="keyword">const</span> otherSingleton&amp; rs) &#123;</div><div class="line">    pInstance = rs.pInstance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  otherSingleton&amp; <span class="keyword">operator</span> = (<span class="keyword">const</span> otherSingleton&amp; rs) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;rs) &#123;</div><div class="line">      pInstance = rs.pInstance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">~otherSingleton ();</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span>:</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> otherSingleton&amp; <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">static</span> otherSingleton theInstance;</div><div class="line">    pInstance = &amp;theInstance;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> *pInstance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"other singleton # next - your code ..."</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">otherSingleton * otherSingleton::pInstance = <span class="literal">nullptr</span>;</div></pre></td></tr></table></figure>
+<p>The destructor is private in order to prevent clients that hold a pointer to the Singleton object from deleting it accidentally. So, this time a copy object creation is not allowed:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">otherSingleton ob = *p;</div><div class="line">ob.demo();</div></pre></td></tr></table></figure>
+<p>[code]error C2248: otherSingleton::otherSingleton ‘ : cannot access private member declared in class ‘otherSingleton’</p>
+<p>error C2248: ‘otherSingleton::~otherSingleton’ : cannot access private member declared in class ‘otherSingleton’[/code]</p>
+<p>but we can still use:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Version 1</span></div><div class="line">otherSingleton *p = &amp;otherSingleton::getInstance(); <span class="comment">// cache instance pointer</span></div><div class="line">p-&gt;demo();</div><div class="line"><span class="comment">// Version 2</span></div><div class="line">otherSingleton::getInstance().demo();</div></pre></td></tr></table></figure>
+<p>This singleton implementation was not thread-safe until the C++ 11 standard. In C++11 the thread-safety initialization and destruction is enforced in the standard.</p>
+<p>If you’re sure that your compiler is 100% C++11 compliant than this approach is thread-safe. If you’re not such sure, please use the approach version 4.</p>
+<h3 id="Multi-threaded-environment"><a href="#Multi-threaded-environment" class="headerlink" title="Multi-threaded environment"></a>Multi-threaded environment</h3><p>Both implementations are fine in a single-threaded application but in the multi-threaded world things are not as simple as they look. Raymond Chen explains here why C++ statics are not thread safe by default and this behavior is required by the C++ 99 standard.</p>
+<p>The shared global resource and normally it is open for race conditions and threading issues. So, the singleton object is not immune to this issue.</p>
+<p>Let’s imagine the next situation in a multithreaded application:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> simpleSingleton* <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">if</span>(!pInstance) <span class="comment">// 1</span></div><div class="line">  &#123;</div><div class="line">    pInstance = <span class="keyword">new</span> simpleSingleton(); <span class="comment">// 2</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> pInstance; <span class="comment">// 3</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>At the very first access a thread call getInstance() and pInstance is null. The thread reaches the second line (2) and is ready to invoke the new operator. It might just happen that the OS scheduler unwittingly interrupts the first thread at this point and passes control to the other thread.</p>
+<p>That thread follows the same steps: calls the new operator, assigns pInstance in place, and gets away with it.</p>
+<p>After that the first thread resumes, it continues the execution at line 2, so it reassigns pInstance and gets away with it, too.</p>
+<p>So now we have two singleton objects instead of one, and one of them will leak for sure. Each thread holds a distinct instance.</p>
+<p>An improvement to this situation might be a thread locking mechanism and we have it in the new C++ standard C++ 11. So we don’t need using POSIX or OS threading stuff and now locking getInstance() from Meyers’s implementation looks like:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> otherSingleton&amp; <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">std</span>::<span class="function">lock_guard <span class="title">lock</span><span class="params">(<span class="number">_</span>mutex)</span></span>;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">static</span> otherSingleton theInstance;</div><div class="line">  pInstance = &amp;theInstance;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> *pInstance;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>The constructor of class std::lock_guard (C++11) locks the mutex, and its destructor unlocks the mutex. While _mutex is locked, other threads that try to lock the same mutex are blocked.</p>
+<p>But in this implementation we’re paying for synchronization overhead for each getInstance() call and this is not what we need. Each access of the singleton requires the acquisition of a lock, but in reality we need a lock only when initializing pInstance. If pInstance is called n times during the course of a program run, we need the lock only for the first time.</p>
+<p>Writing a C++ singleton 100% thread safe implementation it’s not as simple as it appears as long as for many years C++ had no threading standard support. In order to implement a thread safe singleton we have to apply the double-checked locking (DCLP) pattern.</p>
+<p>The pattern consists in checking before entering in the synchronized code, and then check the condition again.</p>
+<p>So the first singleton implementation would be rewritten using a temporary object:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> simpleSingleton* <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">if</span> (!pInstance)</div><div class="line">  &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="function">lock_guard <span class="title">lock</span><span class="params">(<span class="number">_</span>mutex)</span></span>;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!pInstance)</div><div class="line">    &#123;</div><div class="line">      simpleSingleton * temp = <span class="keyword">new</span> simpleSingleton;</div><div class="line">      pInstance = temp;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> pInstance;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This pattern involves testing pInstance for nullness before trying to acquire a lock and only if the test succeeds the lock is acquired and after that the test is performed again. The second test is needed for avoiding race conditions in case other thread happens to initialize pInstance between the time pInstance was tested and the time the lock was acquired.</p>
+<p>Theoretically this pattern is correct, but in practice is not always true, especially in multiprocessor environments.</p>
+<p>Due to this rearranging of writes, the memory as seen by one processor at a time might look as if the operations are not performed in the correct order by another processor. In our case the assignment to pInstance performed by a processor might occur before the Singleton object has been fully initialized.</p>
+<p>After the first call of getInstance() the implementation with pointers (non-smart) needs pointer to that instance in order to avoid memory leaks.</p>
+<h2 id="Version-3-–-Singleton-with-smart-pointers"><a href="#Version-3-–-Singleton-with-smart-pointers" class="headerlink" title="Version 3 – Singleton with smart pointers"></a>Version 3 – Singleton with smart pointers</h2><p>Until C++ 11, the C++ standard didn’t have a threading model and developers needed to use external threading APIs (POSIX or OS dependent primitives). But finally C++ 11 standard has threading support.</p>
+<p>Unfortunately, the first C++ new standard implementation in Visual C++ 2010 is incomplete and threading support is available only starting with beta version of VS 2011 or the VS 2012 release oreview version.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> smartSingleton</div><div class="line">&#123;</div><div class="line">  <span class="keyword">private</span>:</div><div class="line">    <span class="keyword">static</span> <span class="built_in">std</span>::mutex <span class="number">_</span>mutex;</div><div class="line"></div><div class="line"></div><div class="line">    smartSingleton();</div><div class="line">    smartSingleton(<span class="keyword">const</span> smartSingleton&amp; rs);</div><div class="line">    smartSingleton&amp; <span class="keyword">operator</span> = (<span class="keyword">const</span> smartSingleton&amp; rs);</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">public</span>:</div><div class="line">    ~smartSingleton();</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">static</span> <span class="built_in">std</span>::<span class="function"><span class="built_in">shared_ptr</span>&amp; <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">std</span>::<span class="built_in">shared_ptr</span> instance = <span class="literal">nullptr</span>;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!instance)</div><div class="line">    &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="function">lock_guard <span class="title">lock</span><span class="params">(<span class="number">_</span>mutex)</span></span>;</div><div class="line"></div><div class="line"></div><div class="line">      <span class="keyword">if</span> (!instance) &#123;</div><div class="line">      instance.reset(<span class="keyword">new</span> smartSingleton());</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> instance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"smart pointers # next - your code ..."</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>As we know, in C++ by default the class members are private. So, our default constructor is private too. I added here in order to avoid misunderstanding and explicitly adding to public / protected.<br>Finally, feel free to use your special instance (singleton):</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Version 1</span></div><div class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&amp; smartSingleton &amp; p = smartSingleton::getInstance(); <span class="comment">// cache instance pointer</span></div><div class="line">p-&gt;demo();</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 2</span></div><div class="line"><span class="built_in">std</span>::weak_ptr&amp; smartSingleton &amp; pw = smartSingleton::getInstance(); <span class="comment">// cache instance pointer</span></div><div class="line">pw.lock()-&gt;demo();</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 3</span></div><div class="line">smartSingleton::getInstance()-&gt;demo();</div></pre></td></tr></table></figure>
+<p>And no memory leaks emotion…</p>
+<p>Multiple threads can simultaneously read and write different std::shared_ptr objects, even when the objects are copies that share ownership.</p>
+<p>But even this implementation using double checking pattern but is not optimal to double check each time.</p>
+<h2 id="Version-4-–-Thread-safe-singleton-C-11"><a href="#Version-4-–-Thread-safe-singleton-C-11" class="headerlink" title="Version 4 – Thread safe singleton C++ 11"></a>Version 4 – Thread safe singleton C++ 11</h2><p>To have a thread safe implementation we need to make sure that the class single instance is locked and created only once in a multi-threaded environment.</p>
+<p>Fortunately, C++ 11 comes in our help with two new entities: std::call_once and std::once_flag. Using them with a standard compiler we have the guaranty that our singleton is thread safely and no memory leak.</p>
+<p>Invocations of std::call_once on the same std::once_flag object are serialized.</p>
+<p>Instances of std::once_flag are used with std::call_once to ensure that a particular function is called exactly once, even if multiple threads invoke the call concurrently.</p>
+<p>Instances of std::once_flag are neither CopyConstructible, CopyAssignable, MoveConstructible nor MoveAssignable.</p>
+<p>Here it is my proposal for a singleton thread safe implementation in C++ 11:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> safeSingleton</div><div class="line">&#123;</div><div class="line">  <span class="keyword">static</span> <span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&amp; safeSingleton &amp; instance_;</div><div class="line">  <span class="keyword">static</span> <span class="built_in">std</span>::once_flag only_one;</div><div class="line"></div><div class="line"></div><div class="line">  safeSingleton(<span class="keyword">int</span> id) &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"safeSingleton::Singleton()"</span> &lt;&lt; id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  safeSingleton(<span class="keyword">const</span> safeSingleton&amp; rs) &#123;</div><div class="line">    instance_ = rs.instance_;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  safeSingleton&amp; <span class="keyword">operator</span> = (<span class="keyword">const</span> safeSingleton&amp; rs)</div><div class="line">  &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;rs) &#123;</div><div class="line">        instance_ = rs.instance_;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">public</span>:</div><div class="line">    ~safeSingleton() &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Singleton::~Singleton"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> safeSingleton &amp; <span class="title">getInstance</span><span class="params">( <span class="keyword">int</span> id )</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="built_in">std</span>::call_once( safeSingleton::only_one,</div><div class="line">                    [] (<span class="keyword">int</span> idx)</div><div class="line">                    &#123;</div><div class="line">                        safeSingleton::instance_.reset( <span class="keyword">new</span> safeSingleton(idx) );</div><div class="line"></div><div class="line"></div><div class="line">                        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"safeSingleton::create_singleton_() | thread id "</span> + idx &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">                    &#125;, id );</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> *safeSingleton::instance_;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"demo stuff from thread id "</span> &lt;&lt; id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">std</span>::once_flag safeSingleton::only_one;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&amp; safeSingleton&amp; safeSingleton::instance_ = <span class="literal">nullptr</span>;</div></pre></td></tr></table></figure>
+<p>The parameter to getInstance() was added for demo reasons only and should be passed to a new proper constructor. As you can see, I am using a lambda instead normal method.</p>
+<p>This is how I tested my safeSingleton and smartSingleton classes.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">std</span>::thread&gt; v;</div><div class="line"><span class="keyword">int</span> num = <span class="number">20</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">for</span>( <span class="keyword">int</span> n = <span class="number">0</span>; n &lt; num; ++n )</div><div class="line">&#123;</div><div class="line">  v.push_back( <span class="built_in">std</span>::thread( []( <span class="keyword">int</span> id )</div><div class="line">                                &#123;</div><div class="line">                                safeSingleton::getInstance( id ).demo( id );</div><div class="line">                                &#125;, n ) );</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">std</span>::for_each( v.begin(), v.end(), <span class="built_in">std</span>::mem_fn( &amp;<span class="built_in">std</span>::thread::join ) );</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 1</span></div><div class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span> p = smartSingleton::getInstance(<span class="number">1</span>); <span class="comment">// cache instance pointer</span></div><div class="line">p-&gt;demo(<span class="string">"demo 1"</span>);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 2</span></div><div class="line"><span class="built_in">std</span>::weak_ptr pw = smartSingleton::getInstance(<span class="number">2</span>); <span class="comment">// cache instance pointer</span></div><div class="line">pw.lock()-&gt;demo(<span class="number">2</span>);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 3</span></div><div class="line">smartSingleton::getInstance(<span class="number">3</span>)-&gt;demo(<span class="number">3</span>);</div></pre></td></tr></table></figure>
+<p>So I create 20 threads and I launch them in parallel (std::thread::join) and each thread accesses getInstance() (with a demo id parameter). Only one of the threads that is trying to create the instance succeeds.</p>
+<p>Additionally, if you’re using a C++11 100% compiler you could also delete the copy constructor and assignment operator. This will allow you to obtain an error while trying to use such deleted members.</p>
+<h2 id="Other-comments"><a href="#Other-comments" class="headerlink" title="Other comments"></a>Other comments</h2><p>I tested this implementation on a machine with Intel i5 processor (4 cores). If you see some concurrent issues in this implementation please fell free to share here. I am open to other good implementations, too.</p>
+<p>An alternative to this approach is creating the singleton instance of a class in the main thread and pass it to the objects which require it. In case we have many singleton objects this approach is not so nice because the objects discrepancies can be bundled into a single ‘Context’ object which is then passed around where necessary.</p>
+<p><strong>Update:</strong> According to Boris’s observation I removed std::mutex instance from safeSingleton class. This is not necessary anymore because std::call_once is enough to have thread safe behavior for this class.</p>
+<p><strong>Update2:</strong> According to Ervin and Remus’s observation, in order to make things clear I simplified the implementation version 3 and this is not using std::weak_ptr anymore.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/18/cpp之单例模式/" data-id="citk4krcb0006hxf40t44awe3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/18/康托编码/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【转】全排列的编码与展开：康托展开
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/15/哲学家就餐问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">哲学家就餐问题的死锁与解决</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/c/设计模式/">设计模式</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/网络/">网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习方法/">学习方法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/效率提升/">效率提升</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-primer-5th/">c++ primer 5th</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/存储/">存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习方法/">学习方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/效率/">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/死锁/">死锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络/">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/c/" style="font-size: 16.67px;">c++</a> <a href="/tags/c-primer-5th/" style="font-size: 10px;">c++ primer 5th</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a> <a href="/tags/学习方法/" style="font-size: 10px;">学习方法</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/效率/" style="font-size: 20px;">效率</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/死锁/" style="font-size: 10px;">死锁</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 13.33px;">算法</a> <a href="/tags/网络/" style="font-size: 13.33px;">网络</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/09/26/SVN和git相关/">SVN和git相关</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/18/康托编码/">【转】全排列的编码与展开：康托展开</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/18/cpp之单例模式/">【转】Several C++ singleton implementations</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/15/哲学家就餐问题/">哲学家就餐问题的死锁与解决</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>cout对字符型指针的处理以及内存中的字符串常量 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="cont对字符型指针的处理在开始前，首先看一下代码：
+123456789int main()&amp;#123;	char str1[] = &quot;abc&quot;;	char *str2 = &quot;abc&quot;;	std::cout &amp;lt;&amp;lt; str1 &amp;lt;&amp;lt; std::endl;	std::cout &amp;lt;&amp;lt; str2 &amp;lt;&amp;lt; std::endl;	return 0;&amp;#125;
+程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cout对字符型指针的处理以及内存中的字符串常量">
+<meta property="og:url" content="http://yoursite.com/2016/03/04/cpp之cout与字符串常量/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="cont对字符型指针的处理在开始前，首先看一下代码：
+123456789int main()&amp;#123;	char str1[] = &quot;abc&quot;;	char *str2 = &quot;abc&quot;;	std::cout &amp;lt;&amp;lt; str1 &amp;lt;&amp;lt; std::endl;	std::cout &amp;lt;&amp;lt; str2 &amp;lt;&amp;lt; std::endl;	return 0;&amp;#125;
+程序">
+<meta property="og:updated_time" content="2016-09-22T03:59:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cout对字符型指针的处理以及内存中的字符串常量">
+<meta name="twitter:description" content="cont对字符型指针的处理在开始前，首先看一下代码：
+123456789int main()&amp;#123;	char str1[] = &quot;abc&quot;;	char *str2 = &quot;abc&quot;;	std::cout &amp;lt;&amp;lt; str1 &amp;lt;&amp;lt; std::endl;	std::cout &amp;lt;&amp;lt; str2 &amp;lt;&amp;lt; std::endl;	return 0;&amp;#125;
+程序">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-cpp之cout与字符串常量" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/04/cpp之cout与字符串常量/" class="article-date">
+  <time datetime="2016-03-04T03:08:23.000Z" itemprop="datePublished">2016-03-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/c/">c++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      cout对字符型指针的处理以及内存中的字符串常量
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="cont对字符型指针的处理"><a href="#cont对字符型指针的处理" class="headerlink" title="cont对字符型指针的处理"></a>cont对字符型指针的处理</h2><p>在开始前，首先看一下代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">char</span> str1[] = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> *str2 = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; str1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; str2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>程序的本意是输出字符数组指针的地址值和字符指针的地址值，但是输出结果却都是字符串“abc”。</p>
+<p>查阅资料得知，由于C++标准库中I/O类对&lt;&lt;操作符重载，因此在遇到字符型指针时会将其当作字符串名来处理，输出指针所指的字符串。</p>
+<h3 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h3><p>得知原因之后，则需要让编译器不将字符型指针当成字符串名来处理，可以使用强制转换。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str1) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div></pre></td></tr></table></figure>
+<p>将字符型指针转换成无类型指针，则可以正常输出指针值。</p>
+<a id="more"></a>
+<h3 id="amp-标识只对字符数组指针有效"><a href="#amp-标识只对字符数组指针有效" class="headerlink" title="&amp;标识只对字符数组指针有效"></a>&amp;标识只对字符数组指针有效</h3><p>需要注意的是，有些地方说对字符数组指针来说，对其数组名再次取地址就可以得到它的地址而不是被当成字符串。实测这方法只对字符数组有效而对字符指针无效。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; &amp;str1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; &amp;str2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div></pre></td></tr></table></figure>
+<p>这里涉及到C++或者C对数组的处理，比如对数组<code>char a[] = &quot;abc&quot;</code>,<code>a = &amp;a</code>，它们的地址相同，但是类型并不相同，<code>a</code>是指向char类型的指针，<code>sizeof(a) = 1</code>；而<code>&amp;a</code>是指向char数组类型的指针，<code>sizeof(&amp;a) = 3</code>，长度为数组长度。</p>
+<p>然而对于字符指针，则真是对其再次取地址符，那样就得不到它的真实地址，还是需要通过强制转换来得到地址。</p>
+<h2 id="内存中的字符串常量"><a href="#内存中的字符串常量" class="headerlink" title="内存中的字符串常量"></a>内存中的字符串常量</h2><p>知道了cout对字符型指针的处理之后，就可以查看字符串常量在内存中是如何分布的了。</p>
+<p>照例，先上代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">char</span> str1[] = <span class="string">"abc"</span>;</div><div class="line">	<span class="keyword">char</span> str2[] = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> *str3 = <span class="string">"abc"</span>;</div><div class="line">	<span class="keyword">char</span> *str4 = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str1) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str2) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; (<span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str1) == <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str2)) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str3) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str4) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; (<span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str3) == <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str4)) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>得到输出为：</p>
+<pre><code>➜  ~ ./a.out
+0x7fff55d9ca28
+0x7fff55d9ca24
+0
+0x109e63f5c
+0x109e63f5c
+1
+</code></pre><p>(<em>注：不同机器得到的地址值不同，不过可以肯定前两个地址不同，而后两个地址相同</em>)</p>
+<p>之所以结果如此，是因为<strong>数组有自己的内存空间，而指针则可以指向任意类型的内存区域。</strong></p>
+<p>字符串常量是存储在静态存储区域的。</p>
+<p>将字符串常量赋给数组时，由于数组有自己的内存空间，并无法指向静态存储区域，因此在赋值时是将字符串常量拷贝到自己的内存空间了。不同的数组有不同的内存空间，因此理所当然两个地址是不相同的。</p>
+<p>而字符指针可以指向任意类型的内存区域，因此将字符串常量赋给字符指针时，并没有进行拷贝，而是指针指向了静态存储区域。因此两个指针存储的地址值都是字符串常量的地址，因此相同。</p>
+<p>（<em>注：在C++11的标准中，将字符串常量赋给字符指针会抛出不允许的警告，应该是有安全性的考虑</em>）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/04/cpp之cout与字符串常量/" data-id="citk4krc80005hxf46ijdl0uq" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/10/转-5分钟搞定内存字节对齐/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          [转]5分钟搞定内存字节对齐
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/01/cpp之拷贝赋值与销毁-md/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">C++之拷贝、赋值与销毁</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/c/设计模式/">设计模式</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/网络/">网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习方法/">学习方法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/效率提升/">效率提升</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-primer-5th/">c++ primer 5th</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/存储/">存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习方法/">学习方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/效率/">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/死锁/">死锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络/">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/c/" style="font-size: 16.67px;">c++</a> <a href="/tags/c-primer-5th/" style="font-size: 10px;">c++ primer 5th</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a> <a href="/tags/学习方法/" style="font-size: 10px;">学习方法</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/效率/" style="font-size: 20px;">效率</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/死锁/" style="font-size: 10px;">死锁</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 13.33px;">算法</a> <a href="/tags/网络/" style="font-size: 13.33px;">网络</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/09/26/SVN和git相关/">SVN和git相关</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/18/康托编码/">【转】全排列的编码与展开：康托展开</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/18/cpp之单例模式/">【转】Several C++ singleton implementations</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/15/哲学家就餐问题/">哲学家就餐问题的死锁与解决</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

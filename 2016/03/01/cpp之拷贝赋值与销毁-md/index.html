@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>C++之拷贝、赋值与销毁 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="拷贝构造函数定义如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。
+为何必须是引用？
+拷贝构造函数被用来初始化非引用类类型参数，比如非引用实参传给形参，或是非引用返回类型的函数返回对象等。
+若自身类型不是引用的话，为了调用拷贝构造函数，必须拷贝实参，此时又得调用拷贝构造函数，如此无限循环。
+合成拷贝构造函数一般情况下，合成的拷贝构造函数会将其参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++之拷贝、赋值与销毁">
+<meta property="og:url" content="http://yoursite.com/2016/03/01/cpp之拷贝赋值与销毁-md/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="拷贝构造函数定义如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。
+为何必须是引用？
+拷贝构造函数被用来初始化非引用类类型参数，比如非引用实参传给形参，或是非引用返回类型的函数返回对象等。
+若自身类型不是引用的话，为了调用拷贝构造函数，必须拷贝实参，此时又得调用拷贝构造函数，如此无限循环。
+合成拷贝构造函数一般情况下，合成的拷贝构造函数会将其参">
+<meta property="og:updated_time" content="2016-09-22T03:59:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++之拷贝、赋值与销毁">
+<meta name="twitter:description" content="拷贝构造函数定义如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。
+为何必须是引用？
+拷贝构造函数被用来初始化非引用类类型参数，比如非引用实参传给形参，或是非引用返回类型的函数返回对象等。
+若自身类型不是引用的话，为了调用拷贝构造函数，必须拷贝实参，此时又得调用拷贝构造函数，如此无限循环。
+合成拷贝构造函数一般情况下，合成的拷贝构造函数会将其参">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-cpp之拷贝赋值与销毁-md" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/01/cpp之拷贝赋值与销毁-md/" class="article-date">
+  <time datetime="2016-03-01T08:03:35.000Z" itemprop="datePublished">2016-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/c/">c++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      C++之拷贝、赋值与销毁
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。</p>
+<pre><code>为何必须是引用？
+拷贝构造函数被用来初始化非引用类类型参数，比如非引用实参传给形参，或是非引用返回类型的函数返回对象等。
+若自身类型不是引用的话，为了调用拷贝构造函数，必须拷贝实参，此时又得调用拷贝构造函数，如此无限循环。
+</code></pre><h4 id="合成拷贝构造函数"><a href="#合成拷贝构造函数" class="headerlink" title="合成拷贝构造函数"></a>合成拷贝构造函数</h4><p>一般情况下，合成的拷贝构造函数会将其参数的成员逐个拷贝到正在创建的对象当中</p>
+<h3 id="拷贝初始化"><a href="#拷贝初始化" class="headerlink" title="拷贝初始化"></a>拷贝初始化</h3><h4 id="何时发生"><a href="#何时发生" class="headerlink" title="何时发生"></a>何时发生</h4><ul>
+<li>用=定义变量的时候</li>
+<li>将一个对象作为实参传递给一个非引用类型的形参</li>
+<li>从一个返回类型为非引用类型的函数中返回一个对象</li>
+<li>用花括号列表初始化一个数组中的元素或一个聚合类中的成员</li>
+<li>初始化标准化库容器或是调用insert或push成员时（<strong>注意，使用emplace是直接初始化</strong>）</li>
+</ul>
+<h4 id="如何发生"><a href="#如何发生" class="headerlink" title="如何发生"></a>如何发生</h4><p>依靠拷贝构造函数或移动构造函数</p>
+<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><p>当传递一个实参或从函数返回一个值时，不能隐式地使用一个explict构造函数。例如</p>
+<p>对void f(vector<int>)：</int></p>
+<ul>
+<li>f(10)         <em>//错误：不能用一个explict构造函数拷贝一个实参</em></li>
+<li>f(vector<int>(10))      <em>正确：从一个int直接构造一个临时vector</em></int></li>
+</ul>
+<h4 id="部分习题解答"><a href="#部分习题解答" class="headerlink" title="部分习题解答"></a>部分习题解答</h4><p>13.4中指出多少地方用到了拷贝构造函数，有一处一开始没找到：*heap = new Point(global)。起初的想法是只要是用括号初始化的一律为直接初始化。然而回到拷贝构造函数的定义，Point(Point&amp;)就是拷贝构造函数，所以这里是直接调用。</p>
+<p>13.5解答：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HasPtr(<span class="keyword">const</span> HasPtr&amp; hp):ps(<span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(*hp.ps)),i(hp.i)&#123;&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="拷贝赋值运算符"><a href="#拷贝赋值运算符" class="headerlink" title="拷贝赋值运算符"></a>拷贝赋值运算符</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>拷贝赋值运算符就是一个名为operator=的函数。</p>
+<h3 id="何时发生-1"><a href="#何时发生-1" class="headerlink" title="何时发生"></a>何时发生</h3><p>当对象赋值时</p>
+<h3 id="何时生成合成拷贝赋值运算符"><a href="#何时生成合成拷贝赋值运算符" class="headerlink" title="何时生成合成拷贝赋值运算符"></a>何时生成合成拷贝赋值运算符</h3><p>如果一个类未定义自己的拷贝赋值运算符，编译器会为它生成一个合成拷贝赋值运算符</p>
+<h3 id="部分习题解答-1"><a href="#部分习题解答-1" class="headerlink" title="部分习题解答"></a>部分习题解答</h3><p>13.8 解答：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">HasPtr&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> HasPtr &amp;hp) &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> *new_ps = <span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(*hp.ps);</div><div class="line">    <span class="keyword">delete</span> ps;</div><div class="line">    ps = new_ps;</div><div class="line">    i = hp.i;</div><div class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><p>析构函数是类的一个成员函数，名字由波浪号接类名构成。它没有返回值，也不接受参数。(由于不接受参数，因此不可被重载)</p>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>释放对象使用的资源，并销毁对象的非static数据成员。</p>
+<h3 id="析构函数完成什么工作"><a href="#析构函数完成什么工作" class="headerlink" title="析构函数完成什么工作"></a>析构函数完成什么工作</h3><p>在一个析构函数中，首先执行函数体，然后销毁成员。成员按初始化顺序的逆序销毁。析构部分是隐式的，不存在初始化列表的东西来控制成员如何销毁。</p>
+<p><strong>注意：</strong>销毁类类型的成员需要执行成员自己的析构函数，智能指针也是类类型，而内置类型没有析构函数。</p>
+<h3 id="何时调用析构函数"><a href="#何时调用析构函数" class="headerlink" title="何时调用析构函数"></a>何时调用析构函数</h3><ul>
+<li>变量在离开其作用域时被销毁</li>
+<li>当一个对象被销毁时，其成员被销毁</li>
+<li>容器被销毁时，其元素被销毁</li>
+<li>对于动态分配的对象，当对指向它的指针应用delete运算符时被销毁</li>
+<li>对于临时对象，当创建它的完整表达式结束时被销毁</li>
+</ul>
+<h3 id="合成析构函数完成什么工作"><a href="#合成析构函数完成什么工作" class="headerlink" title="合成析构函数完成什么工作"></a>合成析构函数完成什么工作</h3><p>（类似拷贝构造函数）对于某些类，合成析构函数被用来阻止该类型的对象被销毁。否则，函数体为空。</p>
+<h3 id="何时生成合成析构函数"><a href="#何时生成合成析构函数" class="headerlink" title="何时生成合成析构函数"></a>何时生成合成析构函数</h3><p>未定义自己的析构函数</p>
+<h3 id="部分习题解答-2"><a href="#部分习题解答-2" class="headerlink" title="部分习题解答"></a>部分习题解答</h3><p>13.13 解答</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> X &#123;</div><div class="line">    X() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"X()"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">    X(<span class="keyword">const</span> X&amp;) &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"X(const X&amp;)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">    X&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> X&amp;) &#123; </div><div class="line">    	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"X&amp; operator=(const X&amp;)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; </div><div class="line">    	<span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">    ~X() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"~X()"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> X &amp;rx, X x)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;X&gt; vec;</div><div class="line">    vec.reserve(<span class="number">2</span>);</div><div class="line">    vec.push_back(rx);</div><div class="line">    vec.push_back(x);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    X *px = <span class="keyword">new</span> X;</div><div class="line">    f(*px, *px);</div><div class="line">    <span class="keyword">delete</span> px;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>之后的输出为：</p>
+<pre><code>X()
+X(const X&amp;)
+X(const X&amp;)
+X(const X&amp;)
+~X()
+~X()
+~X()
+~X()
+</code></pre><p>第一个是构造函数；接下来三个调用了拷贝构造函数，一个是传非引用参时调用，另两个是push_back调用的，注意在声明元素类型为X的vector时并没有进行初始化，仅仅是开辟了空间；接下来四个析构函数跟拷贝构造函数的相对应，剩下的一个是delete调用的。</p>
+<h2 id="三-五法则"><a href="#三-五法则" class="headerlink" title="三/五法则"></a>三/五法则</h2><h3 id="需要析构函数的类也需要拷贝和赋值操作"><a href="#需要析构函数的类也需要拷贝和赋值操作" class="headerlink" title="需要析构函数的类也需要拷贝和赋值操作"></a>需要析构函数的类也需要拷贝和赋值操作</h3><p>练习中的HasPtr就是个例子，因为类中在构造函数有一个指针类型的数据成员，指向一块动态申请的内存。如果是使用合成的拷贝构造函数和拷贝赋值函数，则会使得多个HasPtr对象都指向相同的内存。这样析构函数可能会多次释放同一块内存，出错！</p>
+<h3 id="需要拷贝操作的类也需要赋值操作，反之亦然"><a href="#需要拷贝操作的类也需要赋值操作，反之亦然" class="headerlink" title="需要拷贝操作的类也需要赋值操作，反之亦然"></a>需要拷贝操作的类也需要赋值操作，反之亦然</h3><h2 id="使用-default"><a href="#使用-default" class="headerlink" title="使用=default"></a>使用=default</h2><ul>
+<li>可以通过将拷贝控制成员定义为=default来显式地要求编译器生成合成的版本</li>
+<li>类内用=default修饰成员的声明时，隐式成为内联；类外定义用=default则不会内联</li>
+<li>只能对具有合成版本的成员函数使用=default</li>
+</ul>
+<h2 id="阻止拷贝"><a href="#阻止拷贝" class="headerlink" title="阻止拷贝"></a>阻止拷贝</h2><h3 id="定义删除的函数"><a href="#定义删除的函数" class="headerlink" title="定义删除的函数"></a>定义删除的函数</h3><p>在新标准下，可以通过将拷贝构造函数和拷贝赋值运算符定义为删除的函数（deleted function）来阻止拷贝。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Nocopy(<span class="keyword">const</span> NoCopy&amp;) = <span class="keyword">delete</span>;</div></pre></td></tr></table></figure>
+<h3 id="delete与-default的不同"><a href="#delete与-default的不同" class="headerlink" title="=delete与=default的不同"></a>=delete与=default的不同</h3><ul>
+<li>=delete必须出现在函数第一次声明的时候</li>
+<li>可以对任何函数指定=delete</li>
+</ul>
+<h3 id="析构函数不能是删除的成员"><a href="#析构函数不能是删除的成员" class="headerlink" title="析构函数不能是删除的成员"></a>析构函数不能是删除的成员</h3><ul>
+<li>不能删除析构函数。如果析构函数被删除，就无法销毁此类型的对象</li>
+<li>对于析构函数已删除的类型，不能定义该类型的变量或释放指向该类型动态分配对象的指针。（但可以动态分配这种类型的对象）</li>
+</ul>
+<h3 id="合成的拷贝控制成员可能是删除的"><a href="#合成的拷贝控制成员可能是删除的" class="headerlink" title="合成的拷贝控制成员可能是删除的"></a>合成的拷贝控制成员可能是删除的</h3><ul>
+<li>本质上，当不可能拷贝、赋值或销毁累的成员时，类的合成拷贝控制成员就被定义为删除的。</li>
+<li>对于具有引用成员或无法默认构造的const成员的类，编译器不会为其合成默认构造函数。</li>
+</ul>
+<h3 id="private拷贝控制"><a href="#private拷贝控制" class="headerlink" title="private拷贝控制"></a>private拷贝控制</h3><p>希望阻止拷贝的类应该使用=delete来定义它们自己的拷贝构造函数和拷贝赋值运算符，而不应该将它们声明为private的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/01/cpp之拷贝赋值与销毁-md/" data-id="citk4krcf0009hxf446e7m1sy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-primer-5th/">c++ primer 5th</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/04/cpp之cout与字符串常量/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          cout对字符型指针的处理以及内存中的字符串常量
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/02/29/redis入门/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">redis入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/c/设计模式/">设计模式</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/网络/">网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习方法/">学习方法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/效率提升/">效率提升</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-primer-5th/">c++ primer 5th</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/存储/">存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习方法/">学习方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/效率/">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/死锁/">死锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络/">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/c/" style="font-size: 16.67px;">c++</a> <a href="/tags/c-primer-5th/" style="font-size: 10px;">c++ primer 5th</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a> <a href="/tags/学习方法/" style="font-size: 10px;">学习方法</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/效率/" style="font-size: 20px;">效率</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/死锁/" style="font-size: 10px;">死锁</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 13.33px;">算法</a> <a href="/tags/网络/" style="font-size: 13.33px;">网络</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/09/26/SVN和git相关/">SVN和git相关</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/18/康托编码/">【转】全排列的编码与展开：康托展开</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/18/cpp之单例模式/">【转】Several C++ singleton implementations</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/15/哲学家就餐问题/">哲学家就餐问题的死锁与解决</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
