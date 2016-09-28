@@ -1,99 +1,330 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+<!doctype html>
+
+
+
   
-  <title>T的几道笔试题 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="T的几道笔试题昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="笔试面试,网络," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="JoeyWong's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/wqc_favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="T的几道笔试题昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。
 12345678910111 整数IP转字符串(不用考虑大小端/字节序)char *inet_ntoa(unsigned int uiIp)2 计算const char *g_pcTest[] = &amp;#123;&quot;aaa&quot;, &quot;bbbbbbbb&quot;, &quot;cccccc&quot;&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="T的几道笔试题">
-<meta property="og:url" content="http://yoursite.com/2016/03/10/T的几道笔试题/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://wangqiucheng.com/2016/03/10/T的几道笔试题/index.html">
+<meta property="og:site_name" content="JoeyWong's Blog">
 <meta property="og:description" content="T的几道笔试题昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。
 12345678910111 整数IP转字符串(不用考虑大小端/字节序)char *inet_ntoa(unsigned int uiIp)2 计算const char *g_pcTest[] = &amp;#123;&quot;aaa&quot;, &quot;bbbbbbbb&quot;, &quot;cccccc&quot;&amp;">
-<meta property="og:updated_time" content="2016-09-22T03:59:03.000Z">
+<meta property="og:updated_time" content="2016-09-28T03:52:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="T的几道笔试题">
 <meta name="twitter:description" content="T的几道笔试题昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。
 12345678910111 整数IP转字符串(不用考虑大小端/字节序)char *inet_ntoa(unsigned int uiIp)2 计算const char *g_pcTest[] = &amp;#123;&quot;aaa&quot;, &quot;bbbbbbbb&quot;, &quot;cccccc&quot;&amp;">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
 
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> T的几道笔试题 | JoeyWong's Blog </title>
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">JoeyWong's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">脚踏实地以及持续努力</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
       
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
         
-          <a class="main-nav-link" href="/">Home</a>
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
         
-      </nav>
-      <nav id="sub-nav">
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-T的几道笔试题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/10/T的几道笔试题/" class="article-date">
-  <time datetime="2016-03-10T14:13:30.000Z" itemprop="datePublished">2016-03-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/网络/">网络</a>
-  </div>
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      T的几道笔试题
-    </h1>
+      
+    </ul>
   
 
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                T的几道笔试题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-10T22:13:30+08:00" content="2016-03-10">
+              2016-03-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/网络/" itemprop="url" rel="index">
+                    <span itemprop="name">网络</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/10/T的几道笔试题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/10/T的几道笔试题/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
       
         <h1 id="T的几道笔试题"><a href="#T的几道笔试题" class="headerlink" title="T的几道笔试题"></a>T的几道笔试题</h1><p>昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">1 整数IP转字符串(不用考虑大小端/字节序)</div><div class="line">char *inet_ntoa(unsigned int uiIp)</div><div class="line"></div><div class="line">2 计算</div><div class="line">const char *g_pcTest[] = &#123;"aaa", "bbbbbbbb", "cccccc"&#125;;</div><div class="line"></div><div class="line">sizeof(g_pcTest) = ?</div><div class="line"></div><div class="line">3 mac地址转64位整数, 例如 3c:aa:4d:9a:8b:c 转成 uint64整数(去掉冒号,转换成整数)</div><div class="line"></div><div class="line">unsigned long long MacToUint64(const char *pcMac)</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <h2 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h2><p>整数IP转字符串，一开始选择的语言是c。无奈最近一直看得是cpp，对c的东西有点陌生了，特别是字符串操作这一块。所以倒腾了比较久。最后写出的代码太挫就不贴了，大概思路讲一下。</p>
 <p>对整数IP的概念需要了解一下，假设IP为192.168.120.10，其中192的二进制为11000000，168的二进制为10101000，120的二进制为01111000，10的二进制为00001010。则将IP的点分十进制转换为整数就是直接相连得到一个32位的uint32数。其实IP的点分十进制就是对该UINT32数进行切分再加点得到的。</p>
 <p>知道原理后就只需要定义几个常量整数分别是0xff000000，0xff0000，0xff00和0xff。让传入的整数IP跟这几个常量整数做与运算再进行右移，可以分别得到点分十进制中每部分数字。接下来就是将数字转换成字符串再分别加上‘.’连接起来。</p>
@@ -104,7 +335,6 @@
 <li>如果是在函数中使用非静态的局部变量，也就是char数组，这样在函数返回时会将内存释放掉，从而返回的指针指向的内容为空，产生未定义行为。</li>
 <li>而如果是使用malloc申请动态内存，则又面临一个是否释放的问题，如果不释放会导致资源泄露，在不断调用该函数时还是导致内存不足问题，如果释放则会跟非静态局部变量一样</li>
 </ol>
-<a id="more"></a>
 <p>面试官不断提醒我在函数过程中存储位置都有啥，除了堆和栈，还有静态存储区，存储的是全局变量和静态变量。当时我注意到了全局变量而没有注意静态变量。想说第一题还是可以使用全局变量的同时，我想到了多线程读取写入问题。在多线程中，不同线程对对该函数在短时间内使用不同实参进行调用，则全局变量str数组的写入就会出现问题，产生未定义行为。</p>
 <p>贴上微软对该函数的实现：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* Copyright (c) Microsoft Corporation. All rights reserved. */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mmlite.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">undef</span> WINAPI</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> WINAPI</span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> in_addr &#123;</div><div class="line">    UINT32 s_addr;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> * WINAPI <span class="title">inet_ntoa</span><span class="params">(<span class="keyword">struct</span> in_addr in)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">char</span> b[<span class="number">18</span>];  <span class="comment">/* perfectly MP safe Berkeley junk, tzk tzk */</span></div><div class="line">    UINT8 *ptr;</div><div class="line"></div><div class="line">    ptr = (UINT8 *) &amp;in.s_addr;</div><div class="line">    <span class="built_in">sprintf</span>(b, <span class="string">"%d.%d.%d.%d"</span>, ptr[<span class="number">0</span>], ptr[<span class="number">1</span>], ptr[<span class="number">2</span>], ptr[<span class="number">3</span>]);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -117,7 +347,7 @@
 <p>其实有个相对较新的函数叫做inet_ntop，在UNP第三章中有所涉及。该函数的做法就是会指定一块内存区域让函数将转换后的结果存储在该内存空间。也就是说，该函数的使用者自己可以知道是否要覆盖之前的内存区域，如果指定同一块内存区域或者有所交叉的区域，那么使用者也就自己检查覆盖问题，要么就是指定两块不会相互覆盖的内存区域，避免未定义的行为。</p>
 <h2 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">char</span> *g_pcTest[] = &#123;<span class="string">"aaa"</span>, <span class="string">"bbbbbbbb"</span>, <span class="string">"cccccc"</span>&#125;;</div><div class="line"></div><div class="line"><span class="keyword">sizeof</span>(g_pcTest) = ?</div></pre></td></tr></table></figure>
 <p>求问sizeof的问题，一般要跟具体机器字长相联系，在这里g_pcTest其实就是个存储char*类型元素的数组，总共存放了3个元素，那么就是sizeof(char*)*3，我机器上字长为8字节，所以结果就是24。</p>
-<p>昨天在做的时候脑子一抽，想成了字节对齐的问题，就是看了一下<a href="http://wangqiucheng.com/2016/03/10/%E8%BD%AC-5%E5%88%86%E9%92%9F%E6%90%9E%E5%AE%9A%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90/" target="_blank" rel="external">[转]5分钟搞定内存字节对齐</a>，所以说得乱七八糟的，还是太紧张了，也是平时基础不够踏实。</p>
+<p>昨天在做的时候脑子一抽，想成了字节对齐的问题，就是看了一下<a href="http://wangqiucheng.com/2016/03/10/%E8%BD%AC-5%E5%88%86%E9%92%9F%E6%90%9E%E5%AE%9A%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90/">[转]5分钟搞定内存字节对齐</a>，所以说得乱七八糟的，还是太紧张了，也是平时基础不够踏实。</p>
 <h2 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">3</span> mac地址转<span class="number">64</span>位整数, 例如 <span class="number">3</span>c:aa:<span class="number">4</span>d:<span class="number">9</span>a:<span class="number">8b</span>:c 转成 uint64整数(去掉冒号,转换成整数)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">MacToUint64</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pcMac)</span></span></div></pre></td></tr></table></figure>
 <p>我的代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">MacToUint64</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pcMac)</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> len = <span class="built_in">strlen</span>(pcMac);</div><div class="line">    <span class="keyword">int</span> index = len<span class="number">-1</span>;</div><div class="line">    <span class="keyword">int</span> multi = <span class="number">1</span>;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> ret = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(index)&#123;</div><div class="line">        <span class="keyword">if</span>(pcMac[index] == <span class="string">':'</span>)&#123;</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(pcMac[index] &gt;= <span class="string">'a'</span> &amp;&amp; pcMac[index] &lt;= <span class="string">'f'</span>)&#123;</div><div class="line">            ret += multi*(pcMac[index] - <span class="string">'a'</span> + <span class="number">10</span>);</div><div class="line">            multi *= <span class="number">16</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(pcMac[index] &gt;= <span class="string">'0'</span> &amp;&amp; pcMac[index] &lt;= <span class="string">'9'</span>)&#123;</div><div class="line">            ret += multi*(pcMac[index] - <span class="string">'0'</span>);</div><div class="line">            multi *= <span class="number">16</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span>&#123;</div><div class="line">            ret = <span class="number">-1</span>;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        index--;</div><div class="line">    &#125;   </div><div class="line">    <span class="keyword">return</span> ret;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -132,143 +362,361 @@
 
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/10/T的几道笔试题/" data-id="citk6hzvx0001unf43l6ipxso" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络/">网络</a></li></ul>
 
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/笔试面试/" rel="tag">#笔试面试</a>
+          
+            <a href="/tags/网络/" rel="tag">#网络</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/10/转-5分钟搞定内存字节对齐/" rel="next" title="[转]5分钟搞定内存字节对齐">
+                <i class="fa fa-chevron-left"></i> [转]5分钟搞定内存字节对齐
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/15/哲学家就餐问题/" rel="prev" title="哲学家就餐问题的死锁与解决">
+                哲学家就餐问题的死锁与解决 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
     </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
-  
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
     
-<nav id="article-nav">
-  
-    <a href="/2016/03/15/哲学家就餐问题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+      <div class="ds-thread" data-thread-key="2016/03/10/T的几道笔试题/"
+           data-title="T的几道笔试题" data-url="http://wangqiucheng.com/2016/03/10/T的几道笔试题/">
+      </div>
+    
+  </div>
+
+
+        </div>
         
-          哲学家就餐问题的死锁与解决
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JoeyWong" />
+          <p class="site-author-name" itemprop="name">JoeyWong</p>
+          <p class="site-description motion-element" itemprop="description">是时候展示真正的技术了</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangqc" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/51851904/" target="_blank" title="douban">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  douban
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2339504280?wvr=3.6&lf=reg&retcode=6102&is_hot=1" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/ping-qiu-er" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#T的几道笔试题"><span class="nav-number">1.</span> <span class="nav-text">T的几道笔试题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一题"><span class="nav-number">1.1.</span> <span class="nav-text">第一题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#友情提示"><span class="nav-number">1.1.1.</span> <span class="nav-text">友情提示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一题总结"><span class="nav-number">1.1.2.</span> <span class="nav-text">第一题总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二题"><span class="nav-number">1.2.</span> <span class="nav-text">第二题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三题"><span class="nav-number">1.3.</span> <span class="nav-text">第三题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#此次笔试总结"><span class="nav-number">1.4.</span> <span class="nav-text">此次笔试总结</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
-    </a>
-  
-  
-    <a href="/2016/03/10/转-5分钟搞定内存字节对齐/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">[转]5分钟搞定内存字节对齐</div>
-    </a>
-  
-</nav>
+    </main>
 
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
   
-</article>
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JoeyWong</span>
+</div>
 
-</section>
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
         
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/c/设计模式/">设计模式</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/网络/">网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习方法/">学习方法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/效率提升/">效率提升</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li></ul>
-    </div>
-  </div>
 
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-primer-5th/">c++ primer 5th</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/存储/">存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习方法/">学习方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/效率/">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/死锁/">死锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络/">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/c/" style="font-size: 16.67px;">c++</a> <a href="/tags/c-primer-5th/" style="font-size: 10px;">c++ primer 5th</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a> <a href="/tags/学习方法/" style="font-size: 10px;">学习方法</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/效率/" style="font-size: 20px;">效率</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/死锁/" style="font-size: 10px;">死锁</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 13.33px;">算法</a> <a href="/tags/网络/" style="font-size: 13.33px;">网络</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2016/09/26/SVN和git相关/">SVN和git相关</a>
-          </li>
-        
-          <li>
-            <a href="/2016/09/19/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/18/康托编码/">【转】全排列的编码与展开：康托展开</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/18/cpp之单例模式/">【转】Several C++ singleton implementations</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/15/哲学家就餐问题/">哲学家就餐问题的死锁与解决</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2016 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
+
   
-    <a href="/" class="mobile-nav-link">Home</a>
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+
+
+
   
-</nav>
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
     
+  
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wqc-duoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js"></script>
 
-  </div>
+  
+  
+  
+
+  
+
+  
+
 </body>
 </html>

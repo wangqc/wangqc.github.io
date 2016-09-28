@@ -1,490 +1,949 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
+<!doctype html>
+
+
+
   
 
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JoeyWong, 王秋城" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="JoeyWong's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/wqc_favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="是时候展示真正的技术了">
+<meta property="og:type" content="website">
+<meta property="og:title" content="JoeyWong's Blog">
+<meta property="og:url" content="http://wangqiucheng.com/index.html">
+<meta property="og:site_name" content="JoeyWong's Blog">
+<meta property="og:description" content="是时候展示真正的技术了">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JoeyWong's Blog">
+<meta name="twitter:description" content="是时候展示真正的技术了">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> JoeyWong's Blog </title>
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">JoeyWong's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">脚踏实地以及持续努力</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
       
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
         
-          <a class="main-nav-link" href="/">Home</a>
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
         
-      </nav>
-      <nav id="sub-nav">
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-SVN和git相关" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/26/SVN和git相关/" class="article-date">
-  <time datetime="2016-09-26T13:48:29.000Z" itemprop="datePublished">2016-09-26</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/工作/">工作</a>
-  </div>
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/26/SVN和git相关/">SVN和git相关</a>
-    </h1>
+      
+    </ul>
   
 
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/26/SVN和git相关/" itemprop="url">
+                  SVN和git相关
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-26T21:48:29+08:00" content="2016-09-26">
+              2016-09-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/26/SVN和git相关/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/26/SVN和git相关/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="SVN相关"><a href="#SVN相关" class="headerlink" title="SVN相关"></a>SVN相关</h2><p>此次对SVN的相关操作主要是将飞行棋项目从Windows迁移到Linux（SVN服务器）上，并且根据项目成员不同的角色进行不同的权限控制。（以下操作的前提是在Windows和Linux上已经安装好SVN服务）</p>
-<h3 id="1-SVN迁移"><a href="#1-SVN迁移" class="headerlink" title="1. SVN迁移"></a>1. SVN迁移</h3><h4 id="从Windows上备份SVN项目"><a href="#从Windows上备份SVN项目" class="headerlink" title="从Windows上备份SVN项目"></a>从Windows上备份SVN项目</h4><p>对SVN项目进行全备份的操作，在CMD命令行窗口中输入：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svnadmin dump $SVN_DIR &gt; $SVN_BAK_DIR/$SVN_PROJ.dump</div></pre></td></tr></table></figure>
-<p>其中：</p>
-<ol>
-<li>dump命令会导出每个版本的详细信息，保证了之前的历史信息不会丢失</li>
-<li>权限控制方面的信息是存放在conf文件夹中，该文件夹不会被备份，需要单独拷贝备份。</li>
-</ol>
-<p>除了全备份之外，SVN还支持增量备份，也就是在之前已经全备份后，之后提交更改的记录可以以增量的形式备份下来，省时省力。增量备份的命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svnadmin dump $SVN_DIR -r $LOWER:$UPPER --incremental &gt; $SVN_BAK_DIR/$SVN_PROJ_$LOWER-$UPPER.dump</div></pre></td></tr></table></figure>
-<p>注意，其中的LOWER到UPPER是半开半闭区间，比如如果需要SVN项目修改记录从101开始，现在想备份到记录150处（包含150），则LOWER和UPPER分别为101和151。</p>
-<h4 id="在Linux上恢复SVN项目"><a href="#在Linux上恢复SVN项目" class="headerlink" title="在Linux上恢复SVN项目"></a>在Linux上恢复SVN项目</h4><p>假设设计SVN项目都是存放在/data/svn中，则需要建立该目录并启动svn服务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir /data/svn</div><div class="line">$ svnserve -d -r /data/svn</div></pre></td></tr></table></figure>
-<p>初始化项目库：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ svnadmin create /data/svn/$SVN_PROJ</div><div class="line">$ cd /data/svn/$SVN_PROJ/conf</div><div class="line">$ vim svnserve.conf</div><div class="line"></div><div class="line">取消以下几行的注释：</div><div class="line">19 #anon-access = read</div><div class="line">20 #auth-access = write</div><div class="line"></div><div class="line">27 #password-db = passwd</div><div class="line"></div><div class="line">34 #authz-db = authz</div></pre></td></tr></table></figure>
-<p>将在windows上dump好的备份文件$SVN_PROJ.dump传到linux上，导入项目库：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#全备份恢复</div><div class="line">svnadmin load /data/svn/$SVN_PROJ &lt; $SVN_PROJ.dump</div><div class="line"></div><div class="line">#增量备份恢复</div><div class="line">svnadmin load /data/svn/$SVN_PROJ &lt; $SVN_PROJ_$LOWER-$UPPER.dump</div></pre></td></tr></table></figure>
-<p>至此，SVN项目已经从windows迁移到linux上。另外如果还是沿用之前的权限管理方案，就把之前拷贝备份的conf文件夹复制过来覆盖即可。</p>
-<h3 id="2-SVN权限控制"><a href="#2-SVN权限控制" class="headerlink" title="2. SVN权限控制"></a>2. SVN权限控制</h3><p>SVN权限控制方案都是在conf文件夹里面定义的。其中authz是配置不同用户对于SVN项目中不同目录的访问权限，passwd存储不同用户的密码，svnserve.conf就是保存svn项目的相关设置，这个在之前设置过，不再需要修改了，现在主要是对authz和passwd两个进行修改。</p>
-<p>现假设项目名称为/data/svn/happygame，其目录结构为：</p>
-<ul>
-<li>happygame<ul>
-<li>server_code</li>
-<li>client_code</li>
-<li>doc</li>
-<li>resource</li>
-</ul>
-</li>
-</ul>
-<p>现在有几个用户：Leader，Manager，PM，RD，assistant_RD，UI。其中Leader和Manager有整个工程的读写权限，PM有文档权限，RD和assistant_RD有代码权限，UI有资源权限。则最后authz展示如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[groups]</div><div class="line">g_all = Leader,Manager</div><div class="line">g_code = RD,assistant_RD</div><div class="line">g_doc = PM</div><div class="line">g_resource = UI</div><div class="line"></div><div class="line">[/]</div><div class="line">@g_all = rw</div><div class="line">@g_code = r</div><div class="line">@g_doc = r</div><div class="line">@g_resource = r</div><div class="line">* = </div><div class="line"></div><div class="line">[/server_code]</div><div class="line">@g_all = rw</div><div class="line">@g_code = rw</div><div class="line">* = </div><div class="line"></div><div class="line">[/client_code]</div><div class="line">@g_all = rw</div><div class="line">@g_code = rw</div><div class="line">* = </div><div class="line"></div><div class="line">[/doc]</div><div class="line">@g_all = rw</div><div class="line">@g_doc = rw</div><div class="line">* =</div><div class="line"></div><div class="line">[/resource]</div><div class="line">@g_all = rw</div><div class="line">@g_resource = rw</div><div class="line">* =</div></pre></td></tr></table></figure>
-<p>几点说明：</p>
-<ol>
-<li>最好是对用户进行分组，这样以后对用户管理方便一点，分组是在[groups]下面进行添加</li>
-<li>在每个文件夹中，如果是分组的话记得添加@符号，否则会直接按照名字查找是否有该用户</li>
-<li>在每个文件夹中，最后使用 *= 结尾，这表示其他用户和组别都没有权限，原理类似switch结构中最后的default项</li>
-<li>一般来说，在根目录下会让所有用户都有r权限，下一级目录再决定该用户是否有读写权限，这样用户在登录根目录时就会看到有读写权限的子目录。否则用户在登录根目录时会提示“Permission Denied”，需要直接知道自己所能操作的子目录的完整路径，造成不便。</li>
-</ol>
-<p>而用户的明文密码存放在passwd中，依据参考格式填写即可，此处不再赘述。</p>
-<h3 id="3-配置Apache支持SVN"><a href="#3-配置Apache支持SVN" class="headerlink" title="3. 配置Apache支持SVN"></a>3. 配置Apache支持SVN</h3><p>还是以前面的happygame项目为例，需要在Apache的httpd.conf文件末尾添加以下段落：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;Location /happygame&gt;</div><div class="line">	DAV svn</div><div class="line">	SVNPath /data/svn/happygame/</div><div class="line">	AuthType Basic</div><div class="line">	AuthName &quot;svn for project&quot;</div><div class="line">	AuthUserFile /data/svn/happygame/conf/webpasswd</div><div class="line">	AuthzSVNAccessFile /data/svn/happygame/conf/authz</div><div class="line">	Satisfy all</div><div class="line">	Require valid-user</div><div class="line">&lt;/Location&gt;</div></pre></td></tr></table></figure>
-<p>段落中间出现了webpasswd文件名，这是需要自己生成的。其中存储用户名和密码，用于对HTTP用户的basic认证，可通过htpasswd建立和更新。</p>
-<p>假设对于用户名Leader，已知其密码为happygame，则通过htpasswd命令生成并存放在webpasswd文件中：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ htpasswd -b webpasswd Leader happygame</div></pre></td></tr></table></figure>
-<p>现用户名和密码都已经存放在passwd中，可以通过awk快速添加和更新：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ awk -F&apos;=&apos; &apos;&#123;sub(/^ | *$/,&quot;&quot;,$1); sub(/^ | *$/,&quot;&quot;,$2); if($2!=null) system(&quot;/usr/local/apache2/bin/htpasswd -b webpasswd &quot;$1&quot; &quot;$2)&#125;&apos; passwd</div></pre></td></tr></table></figure>
-<p>之后重启svn服务和apache服务即可。</p>
-<h3 id="4-SVN-Checkout问题"><a href="#4-SVN-Checkout问题" class="headerlink" title="4. SVN Checkout问题"></a>4. SVN Checkout问题</h3><p>在本地机器使用TortoiseSVN将远程SVN项目checkout到本地的过程中，可能会出现如下错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">The server sent a truncated HTTP response body</div></pre></td></tr></table></figure>
-<p>网上说法是项目库过大，网速不够快导致的。可以参考的做法有3个：</p>
-<ol>
-<li>将下载好的项目库删掉，再重新checkout。（不可取，很容易出现相同的错误）</li>
-<li>右键，TortoiseSVN-&gt;CleanUp，在弹出的框中可以将“Break locks”给勾选上，点击“OK”。之后再SVN Update即可</li>
-<li>对服务端进行操作，具体参考<a href="http://svn.haxx.se/tsvn/archive-2014-01/0002.shtml" target="_blank" rel="external">Re: ra_serf: The server sent a truncated HTTP response body</a>.</li>
-</ol>
-<p>以上方法中，比较推荐方法2，因为普通用户无法接触到服务端进行改动，而方法2一般可以解决，不过如果项目库真的过大，在整个checkout完成的过程中，可能得重复多次。</p>
-<h2 id="Git相关"><a href="#Git相关" class="headerlink" title="Git相关"></a>Git相关</h2><h3 id="搭建git服务器"><a href="#搭建git服务器" class="headerlink" title="搭建git服务器"></a>搭建git服务器</h3><p>此次搭建git服务器是在linux主机上。</p>
-<h4 id="建立认证文件"><a href="#建立认证文件" class="headerlink" title="建立认证文件"></a>建立认证文件</h4><p>先查看是否有目录/home/git/.ssh，如果没有，创建之。之后在该目录下创建文件authorized_keys。之后放置登录用户的公钥。另外修改authorized_keys的权限，从而登录用户可以读取到内容。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo chmod -R 755 /home/git</div></pre></td></tr></table></figure>
-<p>登录用户将其id_rsa.pub文件发送给git服务器管理者，管理者将公钥添加到authorized_keys中即可。</p>
-<h4 id="创建git专用用户名和用户组："><a href="#创建git专用用户名和用户组：" class="headerlink" title="创建git专用用户名和用户组："></a>创建git专用用户名和用户组：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo groupadd git</div><div class="line">$ sudo adduser git -g git</div></pre></td></tr></table></figure>
-<h4 id="git项目库"><a href="#git项目库" class="headerlink" title="git项目库"></a>git项目库</h4><p>将git项目库放置在目录/home/gitrepo/底下。</p>
-<p>创建空的项目库happygame：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo git init --bare /home/gitrepo/happygame.git</div><div class="line">#更换用户名和用户组</div><div class="line">$ sudo chown -R git:git /home/gitrepo/happygame.git</div></pre></td></tr></table></figure>
-<h3 id="从linux访问git服务器"><a href="#从linux访问git服务器" class="headerlink" title="从linux访问git服务器"></a>从linux访问git服务器</h3><h4 id="生成密钥文件"><a href="#生成密钥文件" class="headerlink" title="生成密钥文件"></a>生成密钥文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -b 4096 -C &quot;users&apos;s workstation&quot;</div></pre></td></tr></table></figure>
-<p>会默认在目录/$user/.ssh/下生成id_rsa和id_rsa.pub文件，-b 4096是加长密钥长度，-C是注释，增强可读性。</p>
-<p>之后将公钥文件id_rsa.pub发送给git服务器管理者添加信任即可。</p>
-<h4 id="clone项目库"><a href="#clone项目库" class="headerlink" title="clone项目库"></a>clone项目库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git clone git@xx.xx.xx.xx:/home/gitrepo/happygame.git</div></pre></td></tr></table></figure>
-<p>当添加信任之后就不需要输入密码，直接可以clone本地。</p>
-<h3 id="从windows访问git服务器"><a href="#从windows访问git服务器" class="headerlink" title="从windows访问git服务器"></a>从windows访问git服务器</h3><p>在windows底下下载后git后，在文件管理器中右键可以看到git gui和git bash两个选项。</p>
-<h4 id="生成密钥文件-1"><a href="#生成密钥文件-1" class="headerlink" title="生成密钥文件"></a>生成密钥文件</h4><p>点击git bash，出来命令行窗口，类似linux输入命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -b 4096 -C &quot;users&apos;s workstation&quot;</div></pre></td></tr></table></figure>
-<p>进入目录~/.ssh/中，看到生成了id_rsa和id_rsa.pub文件，同样发送给git服务器管理者。</p>
-<h4 id="通过git-gui来clone项目库"><a href="#通过git-gui来clone项目库" class="headerlink" title="通过git gui来clone项目库"></a>通过git gui来clone项目库</h4><p>通过git bash跟在linux下操作类似，略过，主要讲git gui。</p>
-<p>打开git gui后，点击clone existing repository，其中Source Location填写地址的格式为git@xx.xx.xx.xx:/home/gitrepo/happygame.git，而Target Location填写本地的文件夹。</p>
-<p>这里需要注意的有两点：</p>
-<ol>
-<li>通过git gui来clone，如果项目库为空的话会报错，而通过git bash则不会</li>
-<li>Target Location的地址需要是不存在的目录，git gui会自动建立该目录。</li>
-</ol>
-<p>至此，git服务器能正常进行git服务了。</p>
 
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="SVN相关"><a href="#SVN相关" class="headerlink" title="SVN相关"></a>SVN相关</h2><p>此次对SVN的相关操作主要是将飞行棋项目从Windows迁移到Linux（SVN服务器）上，并且根据项目成员不同的角色进行不同的权限控制。（以下操作的前提是在Windows和Linux上已经安装好SVN服务）</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/09/26/SVN和git相关/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/09/26/SVN和git相关/" data-id="citk6hzvr0000unf4ktgby38l" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/效率/">效率</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/版本控制/">版本控制</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
-  
-</article>
+  </article>
 
 
+    
+      
+
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/19/hello-world/" class="article-date">
-  <time datetime="2016-09-19T15:31:35.000Z" itemprop="datePublished">2016-09-19</time>
-</a>
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/19/hello-world/">Hello World</a>
-    </h1>
-  
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/18/康托编码/" itemprop="url">
+                  【转】全排列的编码与展开：康托展开
+                </a>
+              
+            
+          </h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-18T17:17:28+08:00" content="2016-03-18">
+              2016-03-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/18/康托编码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/18/康托编码/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/09/19/hello-world/" data-id="citk6hzwo000eunf4mpa0gsi5" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
 
 
-  
-    <article id="post-康托编码" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/18/康托编码/" class="article-date">
-  <time datetime="2016-03-18T09:17:28.000Z" itemprop="datePublished">2016-03-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
+    <div class="post-body" itemprop="articleBody">
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+      
+      
+
+      
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/18/康托编码/">【转】全排列的编码与展开：康托展开</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="一、康托展开：全排列到一个自然数的双射"><a href="#一、康托展开：全排列到一个自然数的双射" class="headerlink" title="一、康托展开：全排列到一个自然数的双射"></a>一、康托展开：全排列到一个自然数的双射</h1><p>X=an*(n-1)!+an-1*(n-2)!+…+ai*(i-1)!+…+a2*1!+a1*0!<br>ai为整数，并且0&lt;=ai&lt;i(1&lt;=i&lt;=n)<br>适用范围：没有重复元素的全排列</p>
+          <h1 id="一、康托展开：全排列到一个自然数的双射"><a href="#一、康托展开：全排列到一个自然数的双射" class="headerlink" title="一、康托展开：全排列到一个自然数的双射"></a>一、康托展开：全排列到一个自然数的双射</h1><p>X=an*(n-1)!+an-1*(n-2)!+…+ai*(i-1)!+…+a2*1!+a1*0!<br>ai为整数，并且0&lt;=ai&lt;i(1&lt;=i&lt;=n)<br>适用范围：没有重复元素的全排列</p>
 <h1 id="二、全排列的编码："><a href="#二、全排列的编码：" class="headerlink" title="二、全排列的编码："></a>二、全排列的编码：</h1><p>{1,2,3,4,…,n}的排列总共有n!种，将它们从小到大排序，怎样知道其中一种排列是有序序列中的第几个？  </p>
-<p>###例子321</p>
-<p>{1,2,3} 按从小到大排列一共6个：123 132 213 231 312 321。想知道321是{1,2,3}中第几个大的数。<br>第一位是3，小于3的数有1、2 。所以有2*2!个。<br>再看小于第二位，小于2的数只有一个就是1，所以有1*1!=1。<br>所以小于32的{1,2,3}排列数有2*2!+1*1!=5个。<br>所以321是第6个大的数。<br>2*2!+1*1!是康托展开。<br>（注意判断排列是第几个时要在康托展开的结果后+1）</p>
-<p>###例子1324<br>1324是{1,2,3,4}排列数中第几个大的数：<br>第一位是1小于1的数没有，是0个，0*3!；<br>第二位是3小于3的数有1和2，但1已经在第一位了，所以只有一个数2，1*2!；<br>第三位是2小于2的数是1，但1在第一位，所以有0个数，0*1!。<br>所以比1324小的排列有0*3!+1*2!+0*1!=2个，1324是第三个大数。</p>
-<p>###例子357412968<br>排列3 5 7 4 1 2 9 6 8展开为98884，因为X=2*8!+3*7!+4*6!+2*5!+0*4!+0*3!+2*2!+0*1!+0*0!=98884.</p>
-<p>解释：<br>排列的第一位是3，比3小的数有两个，以这样的数开始的排列有8!个，因此第一项为2*8!<br>排列的第二位是5，比5小的数有1、2、3、4，由于3已经出现，因此共有3个比5小的数，这样的排列有7!个，因此第二项为3*7!<br>以此类推，直至0*0!</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span>  </span></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> fac[] = &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">24</span>, <span class="number">120</span>, <span class="number">720</span>, <span class="number">5040</span>, <span class="number">40320</span>&#125;;<span class="comment">///阶乘  </span></div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">KT</span><span class="params">(<span class="keyword">int</span> s[], <span class="keyword">int</span> n)</span>  </div><div class="line"></span>&#123;  </div><div class="line">    <span class="keyword">int</span> i, j, cnt, sum;  </div><div class="line">    sum = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++i)  </div><div class="line">    &#123;  </div><div class="line">        cnt = <span class="number">0</span>;  </div><div class="line">        <span class="keyword">for</span> (j = i + <span class="number">1</span>; j &lt; n; ++j)  </div><div class="line">            <span class="keyword">if</span> (s[j] &lt; s[i]) ++cnt;  </div><div class="line">        sum += cnt * fac[n - i - <span class="number">1</span>];  </div><div class="line">    &#125;  </div><div class="line">    <span class="keyword">return</span> sum;  </div><div class="line">&#125;  </div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </div><div class="line"></span>&#123;  </div><div class="line">    <span class="keyword">int</span> a[] = &#123;<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">6</span>, <span class="number">8</span>&#125;;  </div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, <span class="number">1</span> + KT(a, <span class="keyword">sizeof</span>(a) / <span class="keyword">sizeof</span>(*a))); <span class="comment">///1+98884  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/18/康托编码/#more">Read More</a>
-          </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/18/康托编码/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/18/康托编码/" data-id="citk6hzx2000uunf4fbdh9f6d" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
+  </article>
+
+
+    
+      
+
   
-</article>
-
+  
 
   
-    <article id="post-cpp之单例模式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/18/cpp之单例模式/" class="article-date">
-  <time datetime="2016-03-18T07:48:55.000Z" itemprop="datePublished">2016-03-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/c/">c++</a>►<a class="article-category-link" href="/categories/c/设计模式/">设计模式</a>
-  </div>
+  
+  
 
-  </div>
-  <div class="article-inner">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/18/cpp之单例模式/">【转】Several C++ singleton implementations</a>
-    </h1>
-  
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/18/cpp之单例模式/" itemprop="url">
+                  【转】Several C++ singleton implementations
+                </a>
+              
+            
+          </h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-18T15:48:55+08:00" content="2016-03-18">
+              2016-03-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/18/cpp之单例模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/18/cpp之单例模式/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>该文的作者是Silviu Ardelean，博客地址为<a href="http://silviuardelean.ro/2012/06/05/few-singleton-approaches/">Several C++ singleton implementations</a>(需翻)。</p>
+      
+
+      
+        
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>该文的作者是Silviu Ardelean，博客地址为<a href="http://silviuardelean.ro/2012/06/05/few-singleton-approaches/">Several C++ singleton implementations</a>(需翻)。</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>This article offers some insight into singleton design-pattern.<br>The singleton pattern is a design pattern used to implement the mathematical concept of a singleton, by restricting the instantiation of a class to one object. The GoF book describes the singleton as: “Ensure a class only has one instance, and provide a global point of access to it.”</p>
 <p>The Singleton design pattern is not as simple as it appears at a first look and this is proven by the abundance of Singleton discussions and implementations. That’s way I’m trying to figure a few implementations, some base on C++ 11 features (smart pointers and locking primitives as mutexs). I am starting from, maybe, the most basic singleton implementation trying to figure different weaknesses and tried to add gradually better implementations.</p>
 <p>The basic idea of a singleton class implies using a static private instance, a private constructor and an interface method that returns the static instance.</p>
-<h2 id="Version-1"><a href="#Version-1" class="headerlink" title="Version 1"></a>Version 1</h2><p>Maybe, the most common and simpler approach looks like this:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> simpleSingleton</div><div class="line">&#123;</div><div class="line">  simpleSingleton();</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">static</span> simpleSingleton* <span class="number">_</span>pInstance;</div><div class="line">  <span class="keyword">public</span>:</div><div class="line">  ~simpleSingleton() &#123;&#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> simpleSingleton* <span class="title">getInstance</span><span class="params">()</span></div><div class="line">  </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!<span class="number">_</span>pInstance) &#123;</div><div class="line">      <span class="number">_</span>pInstance = <span class="keyword">new</span> simpleSingleton();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">_</span>pInstance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"simple singleton # next - your code ..."</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line">simpleSingleton* simpleSingleton::<span class="number">_</span>pInstance = <span class="literal">nullptr</span>;</div></pre></td></tr></table></figure>
-<p>Unfortunately this approach has many issues. Even if the default constructor is private, because the copy constructor and the assignment operator are not defined as private the compiler generates them and the next calls are valid:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Version 1</span></div><div class="line">simpleSingleton * p = simpleSingleton::getInstance(); <span class="comment">// cache instance pointer p-&gt;demo();</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 2</span></div><div class="line">simpleSingleton::getInstance()-&gt;demo();</div><div class="line"></div><div class="line"></div><div class="line"><span class="function">simpleSingleton <span class="title">ob2</span><span class="params">(*p)</span></span>; <span class="comment">// copy constructor</span></div><div class="line">ob2.demo();</div><div class="line"></div><div class="line"></div><div class="line">simpleSingleton ob3 = ob2; <span class="comment">// copy constructor</span></div><div class="line">ob2.demo();</div></pre></td></tr></table></figure>
-<p>So we have to define the copy constructor and the assignment operator having private visibility.<br>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/18/cpp之单例模式/#more">Read More</a>
-          </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/18/cpp之单例模式/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/18/cpp之单例模式/" data-id="citk6hzwb0006unf4629uft4i" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
+  </article>
+
+
+    
+      
+
   
-</article>
-
+  
 
   
-    <article id="post-哲学家就餐问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/15/哲学家就餐问题/" class="article-date">
-  <time datetime="2016-03-15T08:52:11.000Z" itemprop="datePublished">2016-03-15</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/多线程/">多线程</a>►<a class="article-category-link" href="/categories/多线程/网络/">网络</a>
-  </div>
+  
+  
 
-  </div>
-  <div class="article-inner">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/15/哲学家就餐问题/">哲学家就餐问题的死锁与解决</a>
-    </h1>
-  
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/15/哲学家就餐问题/" itemprop="url">
+                  哲学家就餐问题的死锁与解决
+                </a>
+              
+            
+          </h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-15T16:52:11+08:00" content="2016-03-15">
+              2016-03-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/网络/" itemprop="url" rel="index">
+                    <span itemprop="name">网络</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/15/哲学家就餐问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/哲学家就餐问题/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <p>最近在看多线程和并发的东西。关于并发绕不开的问题就是哲学家就餐了。</p>
+      
+
+      
+        
+          <p>最近在看多线程和并发的东西。关于并发绕不开的问题就是哲学家就餐了。</p>
 <p>以下摘自维基百科：</p>
 <blockquote>
 <p>哲学家进餐问题描述有五个哲学家，他们的生活方式是交替地进行思考和进餐，哲学家们共用一张圆桌，分别坐在周围的五张椅子上，在圆桌上有五个碗和五支筷子，平时哲学家进行思考，饥饿时便试图取其左、右最靠近他的筷子，只有在他拿到两支筷子时才能进餐，进餐完毕，放下筷子又继续思考。</p>
 </blockquote>
-<h2 id="代码展示哲学家问题简化版"><a href="#代码展示哲学家问题简化版" class="headerlink" title="代码展示哲学家问题简化版"></a>代码展示哲学家问题简化版</h2><p>在代码中，筷子的获取与占有其实跟互斥量mutex的加锁是一致的，因此可以将筷子当成互斥量。而哲学家不确定什么时候会拿筷子，正如不确定线程的执行顺序一样，则哲学家就是线程。在本文的就餐问题中，哲学家拿到两只筷子会占有3秒，表明一下自己后再放下筷子。</p>
-<p>为了引起死锁，设定每个哲学家都是先拿右手边筷子，再拿左手边筷子。而且在拿了右手筷子后会等待一段时间（调用I/O操作），这样就会触发哲学家都拿了右手边筷子之后等待左手边筷子，死锁。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> NUMSOFCHOP = <span class="number">5</span>;</div><div class="line"><span class="keyword">pthread_mutex_t</span> chops[NUMSOFCHOP];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getChops</span><span class="params">(<span class="keyword">void</span> *args)</span></span>&#123;</div><div class="line">	<span class="keyword">int</span> index;</div><div class="line">	index = (<span class="keyword">int</span>)args;</div><div class="line">	<span class="keyword">pthread_t</span> nid = pthread_self();</div><div class="line">	<span class="keyword">int</span> right = (index+<span class="number">1</span>)%NUMSOFCHOP;</div><div class="line">	<span class="keyword">int</span> left = (index+NUMSOFCHOP)%NUMSOFCHOP;</div><div class="line">	pthread_mutex_lock(&amp;chops[right]);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Add the I/O time between two lock.\n"</span>);</div><div class="line">	pthread_mutex_lock(&amp;chops[left]);</div><div class="line">	sleep(<span class="number">3</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Philosophyer %d in the thread %u.\n"</span>, index, (<span class="keyword">unsigned</span> <span class="keyword">int</span>)nid);</div><div class="line">	<span class="comment">//Do something</span></div><div class="line">	pthread_mutex_unlock(&amp;chops[left]);</div><div class="line">	pthread_mutex_unlock(&amp;chops[right]);</div><div class="line">	pthread_exit(<span class="literal">NULL</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line">	<span class="keyword">pthread_t</span> phi[NUMSOFCHOP];</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_mutex_init(&amp;chops[i], <span class="literal">NULL</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_create(&amp;phi[i], <span class="literal">NULL</span>, getChops, (<span class="keyword">void</span>*)i);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_join(phi[i], <span class="literal">NULL</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_mutex_destroy(&amp;chops[i]);	</div><div class="line">	&#125;</div><div class="line">	pthread_exit(<span class="literal">NULL</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>运行结果如下，之后就一直等待中，无法释放了。</p>
-<pre><code>➜  thread ./philosophy
-Add the I/O time between two lock.
-Add the I/O time between two lock.
-Add the I/O time between two lock.
-Add the I/O time between two lock.
-Add the I/O time between two lock.
-</code></pre>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/15/哲学家就餐问题/#more">Read More</a>
-          </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/15/哲学家就餐问题/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/15/哲学家就餐问题/" data-id="citk6hzwz000runf446m36fyh" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/死锁/">死锁</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络/">网络</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
+  </article>
+
+
+    
+      
+
   
-</article>
-
+  
 
   
-    <article id="post-T的几道笔试题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/10/T的几道笔试题/" class="article-date">
-  <time datetime="2016-03-10T14:13:30.000Z" itemprop="datePublished">2016-03-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/网络/">网络</a>
-  </div>
+  
+  
 
-  </div>
-  <div class="article-inner">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/10/T的几道笔试题/">T的几道笔试题</a>
-    </h1>
-  
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/10/T的几道笔试题/" itemprop="url">
+                  T的几道笔试题
+                </a>
+              
+            
+          </h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-10T22:13:30+08:00" content="2016-03-10">
+              2016-03-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/网络/" itemprop="url" rel="index">
+                    <span itemprop="name">网络</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/10/T的几道笔试题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/10/T的几道笔试题/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <h1 id="T的几道笔试题"><a href="#T的几道笔试题" class="headerlink" title="T的几道笔试题"></a>T的几道笔试题</h1><p>昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。</p>
+      
+
+      
+        
+          <h1 id="T的几道笔试题"><a href="#T的几道笔试题" class="headerlink" title="T的几道笔试题"></a>T的几道笔试题</h1><p>昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">1 整数IP转字符串(不用考虑大小端/字节序)</div><div class="line">char *inet_ntoa(unsigned int uiIp)</div><div class="line"></div><div class="line">2 计算</div><div class="line">const char *g_pcTest[] = &#123;"aaa", "bbbbbbbb", "cccccc"&#125;;</div><div class="line"></div><div class="line">sizeof(g_pcTest) = ?</div><div class="line"></div><div class="line">3 mac地址转64位整数, 例如 3c:aa:4d:9a:8b:c 转成 uint64整数(去掉冒号,转换成整数)</div><div class="line"></div><div class="line">unsigned long long MacToUint64(const char *pcMac)</div></pre></td></tr></table></figure>
-<h2 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h2><p>整数IP转字符串，一开始选择的语言是c。无奈最近一直看得是cpp，对c的东西有点陌生了，特别是字符串操作这一块。所以倒腾了比较久。最后写出的代码太挫就不贴了，大概思路讲一下。</p>
-<p>对整数IP的概念需要了解一下，假设IP为192.168.120.10，其中192的二进制为11000000，168的二进制为10101000，120的二进制为01111000，10的二进制为00001010。则将IP的点分十进制转换为整数就是直接相连得到一个32位的uint32数。其实IP的点分十进制就是对该UINT32数进行切分再加点得到的。</p>
-<p>知道原理后就只需要定义几个常量整数分别是0xff000000，0xff0000，0xff00和0xff。让传入的整数IP跟这几个常量整数做与运算再进行右移，可以分别得到点分十进制中每部分数字。接下来就是将数字转换成字符串再分别加上‘.’连接起来。</p>
-<p>使用纯C语言写出来的代码如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> str[<span class="number">30</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">my_inet_ntoa</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> inaddr)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">int</span> a[<span class="number">4</span>],i;</div><div class="line">    <span class="keyword">char</span> b[<span class="number">20</span>],c[<span class="number">15</span>],d[<span class="number">10</span>],e[<span class="number">5</span>];</div><div class="line">    a[<span class="number">0</span>]=((inaddr &amp; <span class="number">0xff000000</span>)&gt;&gt;<span class="number">24</span>);</div><div class="line">    a[<span class="number">1</span>]=((inaddr &amp; <span class="number">0x00ff0000</span>)&gt;&gt;<span class="number">16</span>);</div><div class="line">    a[<span class="number">2</span>]=((inaddr &amp; <span class="number">0x0000ff00</span>)&gt;&gt;<span class="number">8</span>);</div><div class="line">    a[<span class="number">3</span>]=((inaddr &amp; <span class="number">0x000000ff</span>)&gt;&gt;<span class="number">0</span>);</div><div class="line">    </div><div class="line">    <span class="built_in">sprintf</span>(b,<span class="string">"%d"</span>,a[<span class="number">0</span>]);</div><div class="line">    <span class="built_in">strcat</span>(b,<span class="string">"."</span>);</div><div class="line"></div><div class="line">    <span class="built_in">sprintf</span>(c,<span class="string">"%d"</span>,a[<span class="number">1</span>]);</div><div class="line">    <span class="built_in">strcat</span>(c,<span class="string">"."</span>);</div><div class="line"></div><div class="line">    <span class="built_in">sprintf</span>(d,<span class="string">"%d"</span>,a[<span class="number">2</span>]);</div><div class="line">    <span class="built_in">strcat</span>(d,<span class="string">"."</span>);</div><div class="line"></div><div class="line">    <span class="built_in">sprintf</span>(e,<span class="string">"%d"</span>,a[<span class="number">3</span>]);</div><div class="line">        </div><div class="line">    <span class="built_in">strcat</span>(str,<span class="built_in">strcat</span>(b,<span class="built_in">strcat</span>(c,<span class="built_in">strcat</span>(d,e))));</div><div class="line">    <span class="keyword">return</span> str;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里需要注意的一点是返回值。</p>
-<ol>
-<li>如果是在函数中使用非静态的局部变量，也就是char数组，这样在函数返回时会将内存释放掉，从而返回的指针指向的内容为空，产生未定义行为。</li>
-<li>而如果是使用malloc申请动态内存，则又面临一个是否释放的问题，如果不释放会导致资源泄露，在不断调用该函数时还是导致内存不足问题，如果释放则会跟非静态局部变量一样</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/10/T的几道笔试题/#more">Read More</a>
-          </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/10/T的几道笔试题/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/10/T的几道笔试题/" data-id="citk6hzvx0001unf43l6ipxso" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络/">网络</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
+  </article>
+
+
+    
+      
+
   
-</article>
-
+  
 
   
-    <article id="post-转-5分钟搞定内存字节对齐" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/10/转-5分钟搞定内存字节对齐/" class="article-date">
-  <time datetime="2016-03-10T03:25:26.000Z" itemprop="datePublished">2016-03-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/操作系统/">操作系统</a>
-  </div>
+  
+  
 
-  </div>
-  <div class="article-inner">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/10/转-5分钟搞定内存字节对齐/">[转]5分钟搞定内存字节对齐</a>
-    </h1>
-  
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/10/转-5分钟搞定内存字节对齐/" itemprop="url">
+                  [转]5分钟搞定内存字节对齐
+                </a>
+              
+            
+          </h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-10T11:25:26+08:00" content="2016-03-10">
+              2016-03-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/10/转-5分钟搞定内存字节对齐/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/10/转-5分钟搞定内存字节对齐/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文章参考博客<a href="http://blog.csdn.net/hairetz/article/details/4084088" target="_blank" rel="external">5分钟搞定内存字节对齐</a>，主要就是修改了格式以及对齐进行了验证。</p>
+      
+
+      
+        
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文章参考博客<a href="http://blog.csdn.net/hairetz/article/details/4084088">5分钟搞定内存字节对齐</a>，主要就是修改了格式以及对齐进行了验证。</p>
 <h2 id="三条原则"><a href="#三条原则" class="headerlink" title="三条原则"></a>三条原则</h2><ol>
 <li><p><strong>数据成员对齐规则</strong>：struct(或union)的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从自身成员大小或者成员的子成员大小（只要自身成员有子成员，比如说是array，struct等）的整数倍开始(比如int在32位机为4字节,则要从4的整数倍地址开始存储）。  </p>
 </li>
@@ -493,322 +952,562 @@ Add the I/O time between two lock.
 <li><p><strong>收尾工作</strong>：结构体的总大小,也就是sizeof的结果,.必须是其内部最大成员的整数倍.不足的要补齐. </p>
 </li>
 </ol>
-<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> bb</div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> id;             <span class="comment">//[0]....[3]</span></div><div class="line">	<span class="keyword">double</span> weight;      <span class="comment">//[8].....[15]　　　　　　原则１</span></div><div class="line">	<span class="keyword">float</span> height;      </div><div class="line">	<span class="comment">//[16]..[19],总长要为８的整数倍,补齐[20]...[23]　　　　　原则３</span></div><div class="line">&#125;BB;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> aa</div><div class="line">&#123;</div><div class="line">	<span class="keyword">char</span> name[<span class="number">2</span>];     <span class="comment">//[0],[1]</span></div><div class="line">	<span class="keyword">int</span>  id;         <span class="comment">//[4]...[7]　　　　　　　　　　原则１</span></div><div class="line">	<span class="keyword">double</span> score;     <span class="comment">//[8]....[15]　　　　</span></div><div class="line">	<span class="keyword">short</span> grade;    <span class="comment">//[16],[17]　　　　　　　　</span></div><div class="line">	BB b;             <span class="comment">//[24]......[47]　　　　　　　　　　原则２</span></div><div class="line">&#125;AA;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  AA a;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="keyword">sizeof</span>(a) &lt;&lt; <span class="string">" "</span> &lt;&lt; <span class="keyword">sizeof</span>(BB) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>结果是：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">48</span> <span class="number">24</span></div></pre></td></tr></table></figure>
-<h2 id="特例：-pragma-pack"><a href="#特例：-pragma-pack" class="headerlink" title="特例：#pragma pack()"></a>特例：#pragma pack()</h2><p>当为#pragma pack(1)时不需要对齐；</p>
-<p>当其他数时，遵循百度百科中的说法</p>
-<blockquote>
-<p>第一、如果n大于等于该变量所占用的字节数，那么偏移量必须满足默认的对齐方式;<br>第二、如果n小于该变量的类型所占用的字节数，那么偏移量为n的倍数，不用满足默认的对齐方式。</p>
-</blockquote>
-
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/10/转-5分钟搞定内存字节对齐/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/10/转-5分钟搞定内存字节对齐/" data-id="citk6hzx4000zunf4drwcf808" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/存储/">存储</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
+  </article>
+
+
+    
+      
+
   
-</article>
-
+  
 
   
-    <article id="post-cpp之cout与字符串常量" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/04/cpp之cout与字符串常量/" class="article-date">
-  <time datetime="2016-03-04T03:08:23.000Z" itemprop="datePublished">2016-03-04</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/c/">c++</a>
-  </div>
+  
+  
 
-  </div>
-  <div class="article-inner">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/04/cpp之cout与字符串常量/">cout对字符型指针的处理以及内存中的字符串常量</a>
-    </h1>
-  
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/04/cpp之cout与字符串常量/" itemprop="url">
+                  cout对字符型指针的处理以及内存中的字符串常量
+                </a>
+              
+            
+          </h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-04T11:08:23+08:00" content="2016-03-04">
+              2016-03-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c++</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/04/cpp之cout与字符串常量/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/04/cpp之cout与字符串常量/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <h2 id="cont对字符型指针的处理"><a href="#cont对字符型指针的处理" class="headerlink" title="cont对字符型指针的处理"></a>cont对字符型指针的处理</h2><p>在开始前，首先看一下代码：</p>
+      
+
+      
+        
+          <h2 id="cont对字符型指针的处理"><a href="#cont对字符型指针的处理" class="headerlink" title="cont对字符型指针的处理"></a>cont对字符型指针的处理</h2><p>在开始前，首先看一下代码：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">char</span> str1[] = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> *str2 = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; str1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; str2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>程序的本意是输出字符数组指针的地址值和字符指针的地址值，但是输出结果却都是字符串“abc”。</p>
 <p>查阅资料得知，由于C++标准库中I/O类对&lt;&lt;操作符重载，因此在遇到字符型指针时会将其当作字符串名来处理，输出指针所指的字符串。</p>
-<h3 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h3><p>得知原因之后，则需要让编译器不将字符型指针当成字符串名来处理，可以使用强制转换。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str1) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div></pre></td></tr></table></figure>
-<p>将字符型指针转换成无类型指针，则可以正常输出指针值。</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/04/cpp之cout与字符串常量/#more">Read More</a>
-          </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/04/cpp之cout与字符串常量/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/04/cpp之cout与字符串常量/" data-id="citk6hzw60005unf4i7tcn4g1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
+  </article>
+
+
+    
+      
+
   
-</article>
-
+  
 
   
-    <article id="post-cpp之拷贝赋值与销毁-md" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/01/cpp之拷贝赋值与销毁-md/" class="article-date">
-  <time datetime="2016-03-01T08:03:35.000Z" itemprop="datePublished">2016-03-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/c/">c++</a>
-  </div>
+  
+  
 
-  </div>
-  <div class="article-inner">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/01/cpp之拷贝赋值与销毁-md/">C++之拷贝、赋值与销毁</a>
-    </h1>
-  
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/01/cpp之拷贝赋值与销毁-md/" itemprop="url">
+                  C++之拷贝、赋值与销毁
+                </a>
+              
+            
+          </h1>
+        
 
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-01T16:03:35+08:00" content="2016-03-01">
+              2016-03-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c++</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/01/cpp之拷贝赋值与销毁-md/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/01/cpp之拷贝赋值与销毁-md/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。</p>
+      
+
+      
+        
+          <h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。</p>
 <pre><code>为何必须是引用？
 拷贝构造函数被用来初始化非引用类类型参数，比如非引用实参传给形参，或是非引用返回类型的函数返回对象等。
 若自身类型不是引用的话，为了调用拷贝构造函数，必须拷贝实参，此时又得调用拷贝构造函数，如此无限循环。
 </code></pre><h4 id="合成拷贝构造函数"><a href="#合成拷贝构造函数" class="headerlink" title="合成拷贝构造函数"></a>合成拷贝构造函数</h4><p>一般情况下，合成的拷贝构造函数会将其参数的成员逐个拷贝到正在创建的对象当中</p>
-<h3 id="拷贝初始化"><a href="#拷贝初始化" class="headerlink" title="拷贝初始化"></a>拷贝初始化</h3><h4 id="何时发生"><a href="#何时发生" class="headerlink" title="何时发生"></a>何时发生</h4><ul>
-<li>用=定义变量的时候</li>
-<li>将一个对象作为实参传递给一个非引用类型的形参</li>
-<li>从一个返回类型为非引用类型的函数中返回一个对象</li>
-<li>用花括号列表初始化一个数组中的元素或一个聚合类中的成员</li>
-<li>初始化标准化库容器或是调用insert或push成员时（<strong>注意，使用emplace是直接初始化</strong>）</li>
-</ul>
-<h4 id="如何发生"><a href="#如何发生" class="headerlink" title="如何发生"></a>如何发生</h4><p>依靠拷贝构造函数或移动构造函数</p>
-<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><p>当传递一个实参或从函数返回一个值时，不能隐式地使用一个explict构造函数。例如</p>
-<p>对void f(vector<int>)：</p>
-<ul>
-<li>f(10)         <em>//错误：不能用一个explict构造函数拷贝一个实参</em></li>
-<li>f(vector<int>(10))      <em>正确：从一个int直接构造一个临时vector</em></li>
-</ul>
-<h4 id="部分习题解答"><a href="#部分习题解答" class="headerlink" title="部分习题解答"></a>部分习题解答</h4><p>13.4中指出多少地方用到了拷贝构造函数，有一处一开始没找到：*heap = new Point(global)。起初的想法是只要是用括号初始化的一律为直接初始化。然而回到拷贝构造函数的定义，Point(Point&amp;)就是拷贝构造函数，所以这里是直接调用。</p>
-<p>13.5解答：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HasPtr(<span class="keyword">const</span> HasPtr&amp; hp):ps(<span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(*hp.ps)),i(hp.i)&#123;&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/01/cpp之拷贝赋值与销毁-md/#more">Read More</a>
-          </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/01/cpp之拷贝赋值与销毁-md/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/01/cpp之拷贝赋值与销毁-md/" data-id="citk6hzwe0009unf4gik8kvgx" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-primer-5th/">c++ primer 5th</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-redis入门" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/02/29/redis入门/" class="article-date">
-  <time datetime="2016-02-29T14:00:27.000Z" itemprop="datePublished">2016-02-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/redis/">redis</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/29/redis入门/">redis入门</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="redis入门"><a href="#redis入门" class="headerlink" title="redis入门"></a>redis入门</h1><p>前阵子拜读了《redis入门指南第2版》，书中对redis的介绍通俗易懂，以下为简单的思维导图：</p>
-<h3 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h3><p><img src="http://7xjnpo.com1.z0.glb.clouddn.com/wqcredis_newer.png" alt="redis framework"></p>
-<p>由于图片过小可能看不清楚，以下为整本书的简单框架：</p>
-<h3 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h3><p><strong>redis</strong></p>
-<ol>
-<li>准备<ol>
-<li>安装——brew install redis</li>
-<li>启动服务端<ol>
-<li>redis-server [–port xxx]</li>
-<li>初始化脚本自启动</li>
-</ol>
-</li>
-<li>启动客户端——redis-cli</li>
-<li>测试连通性——在客户端中ping</li>
-<li>停止服务端——在客户端shutdown
-        
-          <p class="article-more-link">
-            <a href="/2016/02/29/redis入门/#more">Read More</a>
-          </p>
-        
+    <div>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/02/29/redis入门/" data-id="citk6hzwt000lunf4udnqn4wo" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
 
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </footer>
-  </div>
+  </article>
+
+
+    
+  </section>
+
   
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">__('next') &raquo;</a>
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
-</section>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
         
-          <aside id="sidebar">
+          
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/c/设计模式/">设计模式</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/网络/">网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习方法/">学习方法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工作/">工作</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/效率提升/">效率提升</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li></ul>
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
   </div>
 
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-primer-5th/">c++ primer 5th</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/存储/">存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习方法/">学习方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/效率/">效率</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/死锁/">死锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络/">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+      
+
+      
+
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JoeyWong" />
+          <p class="site-author-name" itemprop="name">JoeyWong</p>
+          <p class="site-description motion-element" itemprop="description">是时候展示真正的技术了</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wangqc" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/51851904/" target="_blank" title="douban">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  douban
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2339504280?wvr=3.6&lf=reg&retcode=6102&is_hot=1" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/ping-qiu-er" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+
     </div>
-  </div>
+  </aside>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/c/" style="font-size: 16.67px;">c++</a> <a href="/tags/c-primer-5th/" style="font-size: 10px;">c++ primer 5th</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a> <a href="/tags/学习方法/" style="font-size: 10px;">学习方法</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/效率/" style="font-size: 20px;">效率</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/死锁/" style="font-size: 10px;">死锁</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 13.33px;">算法</a> <a href="/tags/网络/" style="font-size: 13.33px;">网络</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2016/09/26/SVN和git相关/">SVN和git相关</a>
-          </li>
-        
-          <li>
-            <a href="/2016/09/19/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/18/康托编码/">【转】全排列的编码与展开：康托展开</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/18/cpp之单例模式/">【转】Several C++ singleton implementations</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/15/哲学家就餐问题/">哲学家就餐问题的死锁与解决</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
         
       </div>
-      <footer id="footer">
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
   
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2016 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JoeyWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
+
   
-    <a href="/" class="mobile-nav-link">Home</a>
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+
+
+
   
-</nav>
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
     
+  
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wqc-duoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js"></script>
 
-  </div>
+  
+  
+  
+
+  
+
+  
+
 </body>
 </html>

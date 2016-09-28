@@ -1,0 +1,999 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>JoeyWong&#39;s Blog</title>
+  <subtitle>脚踏实地以及持续努力</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://wangqiucheng.com/"/>
+  <updated>2016-09-28T03:51:57.000Z</updated>
+  <id>http://wangqiucheng.com/</id>
+  
+  <author>
+    <name>JoeyWong</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SVN和git相关</title>
+    <link href="http://wangqiucheng.com/2016/09/26/SVN%E5%92%8Cgit%E7%9B%B8%E5%85%B3/"/>
+    <id>http://wangqiucheng.com/2016/09/26/SVN和git相关/</id>
+    <published>2016-09-26T13:48:29.000Z</published>
+    <updated>2016-09-28T03:51:57.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="SVN相关"><a href="#SVN相关" class="headerlink" title="SVN相关"></a>SVN相关</h2><p>此次对SVN的相关操作主要是将飞行棋项目从Windows迁移到Linux（SVN服务器）上，并且根据项目成员不同的角色进行不同的权限控制。（以下操作的前提是在Windows和Linux上已经安装好SVN服务）</p>
+<a id="more"></a>
+<h3 id="1-SVN迁移"><a href="#1-SVN迁移" class="headerlink" title="1. SVN迁移"></a>1. SVN迁移</h3><h4 id="从Windows上备份SVN项目"><a href="#从Windows上备份SVN项目" class="headerlink" title="从Windows上备份SVN项目"></a>从Windows上备份SVN项目</h4><p>对SVN项目进行全备份的操作，在CMD命令行窗口中输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svnadmin dump $SVN_DIR &gt; $SVN_BAK_DIR/$SVN_PROJ.dump</div></pre></td></tr></table></figure>
+<p>其中：</p>
+<ol>
+<li>dump命令会导出每个版本的详细信息，保证了之前的历史信息不会丢失</li>
+<li>权限控制方面的信息是存放在conf文件夹中，该文件夹不会被备份，需要单独拷贝备份。</li>
+</ol>
+<p>除了全备份之外，SVN还支持增量备份，也就是在之前已经全备份后，之后提交更改的记录可以以增量的形式备份下来，省时省力。增量备份的命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svnadmin dump $SVN_DIR -r $LOWER:$UPPER --incremental &gt; $SVN_BAK_DIR/$SVN_PROJ_$LOWER-$UPPER.dump</div></pre></td></tr></table></figure>
+<p>注意，其中的LOWER到UPPER是半开半闭区间，比如如果需要SVN项目修改记录从101开始，现在想备份到记录150处（包含150），则LOWER和UPPER分别为101和151。</p>
+<h4 id="在Linux上恢复SVN项目"><a href="#在Linux上恢复SVN项目" class="headerlink" title="在Linux上恢复SVN项目"></a>在Linux上恢复SVN项目</h4><p>假设设计SVN项目都是存放在/data/svn中，则需要建立该目录并启动svn服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir /data/svn</div><div class="line">$ svnserve -d -r /data/svn</div></pre></td></tr></table></figure>
+<p>初始化项目库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ svnadmin create /data/svn/$SVN_PROJ</div><div class="line">$ cd /data/svn/$SVN_PROJ/conf</div><div class="line">$ vim svnserve.conf</div><div class="line"></div><div class="line">取消以下几行的注释：</div><div class="line">19 #anon-access = read</div><div class="line">20 #auth-access = write</div><div class="line"></div><div class="line">27 #password-db = passwd</div><div class="line"></div><div class="line">34 #authz-db = authz</div></pre></td></tr></table></figure>
+<p>将在windows上dump好的备份文件$SVN_PROJ.dump传到linux上，导入项目库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#全备份恢复</div><div class="line">svnadmin load /data/svn/$SVN_PROJ &lt; $SVN_PROJ.dump</div><div class="line"></div><div class="line">#增量备份恢复</div><div class="line">svnadmin load /data/svn/$SVN_PROJ &lt; $SVN_PROJ_$LOWER-$UPPER.dump</div></pre></td></tr></table></figure>
+<p>至此，SVN项目已经从windows迁移到linux上。另外如果还是沿用之前的权限管理方案，就把之前拷贝备份的conf文件夹复制过来覆盖即可。</p>
+<h3 id="2-SVN权限控制"><a href="#2-SVN权限控制" class="headerlink" title="2. SVN权限控制"></a>2. SVN权限控制</h3><p>SVN权限控制方案都是在conf文件夹里面定义的。其中authz是配置不同用户对于SVN项目中不同目录的访问权限，passwd存储不同用户的密码，svnserve.conf就是保存svn项目的相关设置，这个在之前设置过，不再需要修改了，现在主要是对authz和passwd两个进行修改。</p>
+<p>现假设项目名称为/data/svn/happygame，其目录结构为：</p>
+<ul>
+<li>happygame<ul>
+<li>server_code</li>
+<li>client_code</li>
+<li>doc</li>
+<li>resource</li>
+</ul>
+</li>
+</ul>
+<p>现在有几个用户：Leader，Manager，PM，RD，assistant_RD，UI。其中Leader和Manager有整个工程的读写权限，PM有文档权限，RD和assistant_RD有代码权限，UI有资源权限。则最后authz展示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[groups]</div><div class="line">g_all = Leader,Manager</div><div class="line">g_code = RD,assistant_RD</div><div class="line">g_doc = PM</div><div class="line">g_resource = UI</div><div class="line"></div><div class="line">[/]</div><div class="line">@g_all = rw</div><div class="line">@g_code = r</div><div class="line">@g_doc = r</div><div class="line">@g_resource = r</div><div class="line">* = </div><div class="line"></div><div class="line">[/server_code]</div><div class="line">@g_all = rw</div><div class="line">@g_code = rw</div><div class="line">* = </div><div class="line"></div><div class="line">[/client_code]</div><div class="line">@g_all = rw</div><div class="line">@g_code = rw</div><div class="line">* = </div><div class="line"></div><div class="line">[/doc]</div><div class="line">@g_all = rw</div><div class="line">@g_doc = rw</div><div class="line">* =</div><div class="line"></div><div class="line">[/resource]</div><div class="line">@g_all = rw</div><div class="line">@g_resource = rw</div><div class="line">* =</div></pre></td></tr></table></figure>
+<p>几点说明：</p>
+<ol>
+<li>最好是对用户进行分组，这样以后对用户管理方便一点，分组是在[groups]下面进行添加</li>
+<li>在每个文件夹中，如果是分组的话记得添加@符号，否则会直接按照名字查找是否有该用户</li>
+<li>在每个文件夹中，最后使用 *= 结尾，这表示其他用户和组别都没有权限，原理类似switch结构中最后的default项</li>
+<li>一般来说，在根目录下会让所有用户都有r权限，下一级目录再决定该用户是否有读写权限，这样用户在登录根目录时就会看到有读写权限的子目录。否则用户在登录根目录时会提示“Permission Denied”，需要直接知道自己所能操作的子目录的完整路径，造成不便。</li>
+</ol>
+<p>而用户的明文密码存放在passwd中，依据参考格式填写即可，此处不再赘述。</p>
+<h3 id="3-配置Apache支持SVN"><a href="#3-配置Apache支持SVN" class="headerlink" title="3. 配置Apache支持SVN"></a>3. 配置Apache支持SVN</h3><p>还是以前面的happygame项目为例，需要在Apache的httpd.conf文件末尾添加以下段落：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;Location /happygame&gt;</div><div class="line">	DAV svn</div><div class="line">	SVNPath /data/svn/happygame/</div><div class="line">	AuthType Basic</div><div class="line">	AuthName &quot;svn for project&quot;</div><div class="line">	AuthUserFile /data/svn/happygame/conf/webpasswd</div><div class="line">	AuthzSVNAccessFile /data/svn/happygame/conf/authz</div><div class="line">	Satisfy all</div><div class="line">	Require valid-user</div><div class="line">&lt;/Location&gt;</div></pre></td></tr></table></figure>
+<p>段落中间出现了webpasswd文件名，这是需要自己生成的。其中存储用户名和密码，用于对HTTP用户的basic认证，可通过htpasswd建立和更新。</p>
+<p>假设对于用户名Leader，已知其密码为happygame，则通过htpasswd命令生成并存放在webpasswd文件中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ htpasswd -b webpasswd Leader happygame</div></pre></td></tr></table></figure>
+<p>现用户名和密码都已经存放在passwd中，可以通过awk快速添加和更新：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ awk -F&apos;=&apos; &apos;&#123;sub(/^ | *$/,&quot;&quot;,$1); sub(/^ | *$/,&quot;&quot;,$2); if($2!=null) system(&quot;/usr/local/apache2/bin/htpasswd -b webpasswd &quot;$1&quot; &quot;$2)&#125;&apos; passwd</div></pre></td></tr></table></figure>
+<p>之后重启svn服务和apache服务即可。</p>
+<h3 id="4-SVN-Checkout问题"><a href="#4-SVN-Checkout问题" class="headerlink" title="4. SVN Checkout问题"></a>4. SVN Checkout问题</h3><p>在本地机器使用TortoiseSVN将远程SVN项目checkout到本地的过程中，可能会出现如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">The server sent a truncated HTTP response body</div></pre></td></tr></table></figure>
+<p>网上说法是项目库过大，网速不够快导致的。可以参考的做法有3个：</p>
+<ol>
+<li>将下载好的项目库删掉，再重新checkout。（不可取，很容易出现相同的错误）</li>
+<li>右键，TortoiseSVN-&gt;CleanUp，在弹出的框中可以将“Break locks”给勾选上，点击“OK”。之后再SVN Update即可</li>
+<li>对服务端进行操作，具体参考<a href="http://svn.haxx.se/tsvn/archive-2014-01/0002.shtml" target="_blank" rel="external">Re: ra_serf: The server sent a truncated HTTP response body</a>.</li>
+</ol>
+<p>以上方法中，比较推荐方法2，因为普通用户无法接触到服务端进行改动，而方法2一般可以解决，不过如果项目库真的过大，在整个checkout完成的过程中，可能得重复多次。</p>
+<h2 id="Git相关"><a href="#Git相关" class="headerlink" title="Git相关"></a>Git相关</h2><h3 id="搭建git服务器"><a href="#搭建git服务器" class="headerlink" title="搭建git服务器"></a>搭建git服务器</h3><p>此次搭建git服务器是在linux主机上。</p>
+<h4 id="建立认证文件"><a href="#建立认证文件" class="headerlink" title="建立认证文件"></a>建立认证文件</h4><p>先查看是否有目录/home/git/.ssh，如果没有，创建之。之后在该目录下创建文件authorized_keys。之后放置登录用户的公钥。另外修改authorized_keys的权限，从而登录用户可以读取到内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo chmod -R 755 /home/git</div></pre></td></tr></table></figure>
+<p>登录用户将其id_rsa.pub文件发送给git服务器管理者，管理者将公钥添加到authorized_keys中即可。</p>
+<h4 id="创建git专用用户名和用户组："><a href="#创建git专用用户名和用户组：" class="headerlink" title="创建git专用用户名和用户组："></a>创建git专用用户名和用户组：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo groupadd git</div><div class="line">$ sudo adduser git -g git</div></pre></td></tr></table></figure>
+<h4 id="git项目库"><a href="#git项目库" class="headerlink" title="git项目库"></a>git项目库</h4><p>将git项目库放置在目录/home/gitrepo/底下。</p>
+<p>创建空的项目库happygame：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo git init --bare /home/gitrepo/happygame.git</div><div class="line">#更换用户名和用户组</div><div class="line">$ sudo chown -R git:git /home/gitrepo/happygame.git</div></pre></td></tr></table></figure>
+<h3 id="从linux访问git服务器"><a href="#从linux访问git服务器" class="headerlink" title="从linux访问git服务器"></a>从linux访问git服务器</h3><h4 id="生成密钥文件"><a href="#生成密钥文件" class="headerlink" title="生成密钥文件"></a>生成密钥文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -b 4096 -C &quot;users&apos;s workstation&quot;</div></pre></td></tr></table></figure>
+<p>会默认在目录/$user/.ssh/下生成id_rsa和id_rsa.pub文件，-b 4096是加长密钥长度，-C是注释，增强可读性。</p>
+<p>之后将公钥文件id_rsa.pub发送给git服务器管理者添加信任即可。</p>
+<h4 id="clone项目库"><a href="#clone项目库" class="headerlink" title="clone项目库"></a>clone项目库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git clone git@xx.xx.xx.xx:/home/gitrepo/happygame.git</div></pre></td></tr></table></figure>
+<p>当添加信任之后就不需要输入密码，直接可以clone本地。</p>
+<h3 id="从windows访问git服务器"><a href="#从windows访问git服务器" class="headerlink" title="从windows访问git服务器"></a>从windows访问git服务器</h3><p>在windows底下下载后git后，在文件管理器中右键可以看到git gui和git bash两个选项。</p>
+<h4 id="生成密钥文件-1"><a href="#生成密钥文件-1" class="headerlink" title="生成密钥文件"></a>生成密钥文件</h4><p>点击git bash，出来命令行窗口，类似linux输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -b 4096 -C &quot;users&apos;s workstation&quot;</div></pre></td></tr></table></figure>
+<p>进入目录~/.ssh/中，看到生成了id_rsa和id_rsa.pub文件，同样发送给git服务器管理者。</p>
+<h4 id="通过git-gui来clone项目库"><a href="#通过git-gui来clone项目库" class="headerlink" title="通过git gui来clone项目库"></a>通过git gui来clone项目库</h4><p>通过git bash跟在linux下操作类似，略过，主要讲git gui。</p>
+<p>打开git gui后，点击clone existing repository，其中Source Location填写地址的格式为git@xx.xx.xx.xx:/home/gitrepo/happygame.git，而Target Location填写本地的文件夹。</p>
+<p>这里需要注意的有两点：</p>
+<ol>
+<li>通过git gui来clone，如果项目库为空的话会报错，而通过git bash则不会</li>
+<li>Target Location的地址需要是不存在的目录，git gui会自动建立该目录。</li>
+</ol>
+<p>至此，git服务器能正常进行git服务了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;SVN相关&quot;&gt;&lt;a href=&quot;#SVN相关&quot; class=&quot;headerlink&quot; title=&quot;SVN相关&quot;&gt;&lt;/a&gt;SVN相关&lt;/h2&gt;&lt;p&gt;此次对SVN的相关操作主要是将飞行棋项目从Windows迁移到Linux（SVN服务器）上，并且根据项目成员不同的角色进行不同的权限控制。（以下操作的前提是在Windows和Linux上已经安装好SVN服务）&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具" scheme="http://wangqiucheng.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="版本控制" scheme="http://wangqiucheng.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/"/>
+    
+      <category term="效率" scheme="http://wangqiucheng.com/tags/%E6%95%88%E7%8E%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【转】全排列的编码与展开：康托展开</title>
+    <link href="http://wangqiucheng.com/2016/03/18/%E5%BA%B7%E6%89%98%E7%BC%96%E7%A0%81/"/>
+    <id>http://wangqiucheng.com/2016/03/18/康托编码/</id>
+    <published>2016-03-18T09:17:28.000Z</published>
+    <updated>2016-09-28T03:58:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、康托展开：全排列到一个自然数的双射"><a href="#一、康托展开：全排列到一个自然数的双射" class="headerlink" title="一、康托展开：全排列到一个自然数的双射"></a>一、康托展开：全排列到一个自然数的双射</h1><p>X=an*(n-1)!+an-1*(n-2)!+…+ai*(i-1)!+…+a2*1!+a1*0!<br>ai为整数，并且0&lt;=ai&lt;i(1&lt;=i&lt;=n)<br>适用范围：没有重复元素的全排列</p>
+<h1 id="二、全排列的编码："><a href="#二、全排列的编码：" class="headerlink" title="二、全排列的编码："></a>二、全排列的编码：</h1><p>{1,2,3,4,…,n}的排列总共有n!种，将它们从小到大排序，怎样知道其中一种排列是有序序列中的第几个？  </p>
+<a id="more"></a>
+<p>###例子321</p>
+<p>{1,2,3} 按从小到大排列一共6个：123 132 213 231 312 321。想知道321是{1,2,3}中第几个大的数。<br>第一位是3，小于3的数有1、2 。所以有2*2!个。<br>再看小于第二位，小于2的数只有一个就是1，所以有1*1!=1。<br>所以小于32的{1,2,3}排列数有2*2!+1*1!=5个。<br>所以321是第6个大的数。<br>2*2!+1*1!是康托展开。<br>（注意判断排列是第几个时要在康托展开的结果后+1）</p>
+<p>###例子1324<br>1324是{1,2,3,4}排列数中第几个大的数：<br>第一位是1小于1的数没有，是0个，0*3!；<br>第二位是3小于3的数有1和2，但1已经在第一位了，所以只有一个数2，1*2!；<br>第三位是2小于2的数是1，但1在第一位，所以有0个数，0*1!。<br>所以比1324小的排列有0*3!+1*2!+0*1!=2个，1324是第三个大数。</p>
+<p>###例子357412968<br>排列3 5 7 4 1 2 9 6 8展开为98884，因为X=2*8!+3*7!+4*6!+2*5!+0*4!+0*3!+2*2!+0*1!+0*0!=98884.</p>
+<p>解释：<br>排列的第一位是3，比3小的数有两个，以这样的数开始的排列有8!个，因此第一项为2*8!<br>排列的第二位是5，比5小的数有1、2、3、4，由于3已经出现，因此共有3个比5小的数，这样的排列有7!个，因此第二项为3*7!<br>以此类推，直至0*0!</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span>  </span></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> fac[] = &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">24</span>, <span class="number">120</span>, <span class="number">720</span>, <span class="number">5040</span>, <span class="number">40320</span>&#125;;<span class="comment">///阶乘  </span></div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">KT</span><span class="params">(<span class="keyword">int</span> s[], <span class="keyword">int</span> n)</span>  </span></div><div class="line">&#123;  </div><div class="line">    <span class="keyword">int</span> i, j, cnt, sum;  </div><div class="line">    sum = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++i)  </div><div class="line">    &#123;  </div><div class="line">        cnt = <span class="number">0</span>;  </div><div class="line">        <span class="keyword">for</span> (j = i + <span class="number">1</span>; j &lt; n; ++j)  </div><div class="line">            <span class="keyword">if</span> (s[j] &lt; s[i]) ++cnt;  </div><div class="line">        sum += cnt * fac[n - i - <span class="number">1</span>];  </div><div class="line">    &#125;  </div><div class="line">    <span class="keyword">return</span> sum;  </div><div class="line">&#125;  </div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></div><div class="line">&#123;  </div><div class="line">    <span class="keyword">int</span> a[] = &#123;<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">6</span>, <span class="number">8</span>&#125;;  </div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, <span class="number">1</span> + KT(a, <span class="keyword">sizeof</span>(a) / <span class="keyword">sizeof</span>(*a))); <span class="comment">///1+98884  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="三、全排列的解码"><a href="#三、全排列的解码" class="headerlink" title="三、全排列的解码"></a>三、全排列的解码</h1><p>如何找出第16个（按字典序的）{1,2,3,4,5}的全排列？</p>
+<ol>
+<li>首先用16-1得到15</li>
+<li>用15去除4! 得到0余15</li>
+<li>用15去除3! 得到2余3</li>
+<li>用3去除2! 得到1余1</li>
+<li>用1去除1! 得到1余0</li>
+</ol>
+<p>有0个数比它小的数是1，所以第一位是1<br>有2个数比它小的数是3，但1已经在之前出现过了所以是4<br>有1个数比它小的数是2，但1已经在之前出现过了所以是3<br>有1个数比它小的数是2，但1,3,4都出现过了所以是5<br>最后一个数只能是2<br>所以排列为1 4 3 5 2</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span>  </span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span>  </span></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> fac[] = &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">24</span>, <span class="number">120</span>, <span class="number">720</span>, <span class="number">5040</span>, <span class="number">40320</span>&#125;;<span class="comment">///阶乘  </span></div><div class="line">    </div><div class="line"><span class="keyword">bool</span> vis[<span class="number">10</span>];  </div><div class="line">    </div><div class="line"><span class="comment">///n为ans大小，k为全排列的编码  </span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">invKT</span><span class="params">(<span class="keyword">int</span> ans[], <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span>  </span></div><div class="line">&#123;  </div><div class="line">    <span class="keyword">int</span> i, j, t;  </div><div class="line">    <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(vis));  </div><div class="line">    --k;  </div><div class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++i)  </div><div class="line">    &#123;  </div><div class="line">        t = k / fac[n - i - <span class="number">1</span>];  </div><div class="line">        <span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n; j++)  </div><div class="line">            <span class="keyword">if</span> (!vis[j])  </div><div class="line">            &#123;  </div><div class="line">                <span class="keyword">if</span> (t == <span class="number">0</span>) <span class="keyword">break</span>;  </div><div class="line">                --t;  </div><div class="line">            &#125;  </div><div class="line">        ans[i] = j, vis[j] = <span class="literal">true</span>;  </div><div class="line">        k %= fac[n - i - <span class="number">1</span>];<span class="comment">///余数  </span></div><div class="line">    &#125;  </div><div class="line">&#125;  </div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></div><div class="line">&#123;  </div><div class="line">    <span class="keyword">int</span> a[<span class="number">10</span>];  </div><div class="line">    invKT(a, <span class="number">5</span>, <span class="number">16</span>);  </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; ++i)  </div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d "</span>, a[i]);<span class="comment">///1 4 3 5 2  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="转载出处"><a href="#转载出处" class="headerlink" title="转载出处"></a>转载出处</h2><p><a href="http://www.bianceng.cn/Programming/sjjg/201407/43080.htm" target="_blank" rel="external">全排列的编码与解码：康托展开 (附完整代码)</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;一、康托展开：全排列到一个自然数的双射&quot;&gt;&lt;a href=&quot;#一、康托展开：全排列到一个自然数的双射&quot; class=&quot;headerlink&quot; title=&quot;一、康托展开：全排列到一个自然数的双射&quot;&gt;&lt;/a&gt;一、康托展开：全排列到一个自然数的双射&lt;/h1&gt;&lt;p&gt;X=an*(n-1)!+an-1*(n-2)!+…+ai*(i-1)!+…+a2*1!+a1*0!&lt;br&gt;ai为整数，并且0&amp;lt;=ai&amp;lt;i(1&amp;lt;=i&amp;lt;=n)&lt;br&gt;适用范围：没有重复元素的全排列&lt;/p&gt;
+&lt;h1 id=&quot;二、全排列的编码：&quot;&gt;&lt;a href=&quot;#二、全排列的编码：&quot; class=&quot;headerlink&quot; title=&quot;二、全排列的编码：&quot;&gt;&lt;/a&gt;二、全排列的编码：&lt;/h1&gt;&lt;p&gt;{1,2,3,4,…,n}的排列总共有n!种，将它们从小到大排序，怎样知道其中一种排列是有序序列中的第几个？  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法" scheme="http://wangqiucheng.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="算法" scheme="http://wangqiucheng.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【转】Several C++ singleton implementations</title>
+    <link href="http://wangqiucheng.com/2016/03/18/cpp%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
+    <id>http://wangqiucheng.com/2016/03/18/cpp之单例模式/</id>
+    <published>2016-03-18T07:48:55.000Z</published>
+    <updated>2016-09-28T03:56:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>该文的作者是Silviu Ardelean，博客地址为<a href="http://silviuardelean.ro/2012/06/05/few-singleton-approaches/" target="_blank" rel="external">Several C++ singleton implementations</a>(需翻)。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>This article offers some insight into singleton design-pattern.<br>The singleton pattern is a design pattern used to implement the mathematical concept of a singleton, by restricting the instantiation of a class to one object. The GoF book describes the singleton as: “Ensure a class only has one instance, and provide a global point of access to it.”</p>
+<p>The Singleton design pattern is not as simple as it appears at a first look and this is proven by the abundance of Singleton discussions and implementations. That’s way I’m trying to figure a few implementations, some base on C++ 11 features (smart pointers and locking primitives as mutexs). I am starting from, maybe, the most basic singleton implementation trying to figure different weaknesses and tried to add gradually better implementations.</p>
+<p>The basic idea of a singleton class implies using a static private instance, a private constructor and an interface method that returns the static instance.</p>
+<a id="more"></a>
+<h2 id="Version-1"><a href="#Version-1" class="headerlink" title="Version 1"></a>Version 1</h2><p>Maybe, the most common and simpler approach looks like this:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> simpleSingleton</div><div class="line">&#123;</div><div class="line">  simpleSingleton();</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">static</span> simpleSingleton* <span class="number">_</span>pInstance;</div><div class="line">  <span class="keyword">public</span>:</div><div class="line">  ~simpleSingleton() &#123;&#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> simpleSingleton* <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">if</span> (!<span class="number">_</span>pInstance) &#123;</div><div class="line">      <span class="number">_</span>pInstance = <span class="keyword">new</span> simpleSingleton();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">_</span>pInstance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"simple singleton # next - your code ..."</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line">simpleSingleton* simpleSingleton::<span class="number">_</span>pInstance = <span class="literal">nullptr</span>;</div></pre></td></tr></table></figure>
+<p>Unfortunately this approach has many issues. Even if the default constructor is private, because the copy constructor and the assignment operator are not defined as private the compiler generates them and the next calls are valid:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Version 1</span></div><div class="line">simpleSingleton * p = simpleSingleton::getInstance(); <span class="comment">// cache instance pointer p-&gt;demo();</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 2</span></div><div class="line">simpleSingleton::getInstance()-&gt;demo();</div><div class="line"></div><div class="line"></div><div class="line"><span class="function">simpleSingleton <span class="title">ob2</span><span class="params">(*p)</span></span>; <span class="comment">// copy constructor</span></div><div class="line">ob2.demo();</div><div class="line"></div><div class="line"></div><div class="line">simpleSingleton ob3 = ob2; <span class="comment">// copy constructor</span></div><div class="line">ob2.demo();</div></pre></td></tr></table></figure>
+<p>So we have to define the copy constructor and the assignment operator having private visibility.</p>
+<h2 id="Version-2-–-Scott-Meyers-version"><a href="#Version-2-–-Scott-Meyers-version" class="headerlink" title="Version 2 – Scott Meyers version"></a>Version 2 – Scott Meyers version</h2><p>Scott Meyers in his Effective C++ book adds a slightly improved version and in the getInstance() method returns a reference instead of a pointer. So the pointer final deleting problem disappears.</p>
+<p>One advantage of this solution is that the function-static object is initialized when the control flow is first passing its definition.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> otherSingleton</div><div class="line">&#123;</div><div class="line">  <span class="keyword">static</span> otherSingleton * pInstance;</div><div class="line"></div><div class="line"></div><div class="line">  otherSingleton ();</div><div class="line"></div><div class="line"></div><div class="line">  otherSingleton(<span class="keyword">const</span> otherSingleton&amp; rs) &#123;</div><div class="line">    pInstance = rs.pInstance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  otherSingleton&amp; <span class="keyword">operator</span> = (<span class="keyword">const</span> otherSingleton&amp; rs) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;rs) &#123;</div><div class="line">      pInstance = rs.pInstance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">~otherSingleton ();</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span>:</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> otherSingleton&amp; <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">static</span> otherSingleton theInstance;</div><div class="line">    pInstance = &amp;theInstance;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> *pInstance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"other singleton # next - your code ..."</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">otherSingleton * otherSingleton::pInstance = <span class="literal">nullptr</span>;</div></pre></td></tr></table></figure>
+<p>The destructor is private in order to prevent clients that hold a pointer to the Singleton object from deleting it accidentally. So, this time a copy object creation is not allowed:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">otherSingleton ob = *p;</div><div class="line">ob.demo();</div></pre></td></tr></table></figure>
+<p>[code]error C2248: otherSingleton::otherSingleton ‘ : cannot access private member declared in class ‘otherSingleton’</p>
+<p>error C2248: ‘otherSingleton::~otherSingleton’ : cannot access private member declared in class ‘otherSingleton’[/code]</p>
+<p>but we can still use:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Version 1</span></div><div class="line">otherSingleton *p = &amp;otherSingleton::getInstance(); <span class="comment">// cache instance pointer</span></div><div class="line">p-&gt;demo();</div><div class="line"><span class="comment">// Version 2</span></div><div class="line">otherSingleton::getInstance().demo();</div></pre></td></tr></table></figure>
+<p>This singleton implementation was not thread-safe until the C++ 11 standard. In C++11 the thread-safety initialization and destruction is enforced in the standard.</p>
+<p>If you’re sure that your compiler is 100% C++11 compliant than this approach is thread-safe. If you’re not such sure, please use the approach version 4.</p>
+<h3 id="Multi-threaded-environment"><a href="#Multi-threaded-environment" class="headerlink" title="Multi-threaded environment"></a>Multi-threaded environment</h3><p>Both implementations are fine in a single-threaded application but in the multi-threaded world things are not as simple as they look. Raymond Chen explains here why C++ statics are not thread safe by default and this behavior is required by the C++ 99 standard.</p>
+<p>The shared global resource and normally it is open for race conditions and threading issues. So, the singleton object is not immune to this issue.</p>
+<p>Let’s imagine the next situation in a multithreaded application:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> simpleSingleton* <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">if</span>(!pInstance) <span class="comment">// 1</span></div><div class="line">  &#123;</div><div class="line">    pInstance = <span class="keyword">new</span> simpleSingleton(); <span class="comment">// 2</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> pInstance; <span class="comment">// 3</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>At the very first access a thread call getInstance() and pInstance is null. The thread reaches the second line (2) and is ready to invoke the new operator. It might just happen that the OS scheduler unwittingly interrupts the first thread at this point and passes control to the other thread.</p>
+<p>That thread follows the same steps: calls the new operator, assigns pInstance in place, and gets away with it.</p>
+<p>After that the first thread resumes, it continues the execution at line 2, so it reassigns pInstance and gets away with it, too.</p>
+<p>So now we have two singleton objects instead of one, and one of them will leak for sure. Each thread holds a distinct instance.</p>
+<p>An improvement to this situation might be a thread locking mechanism and we have it in the new C++ standard C++ 11. So we don’t need using POSIX or OS threading stuff and now locking getInstance() from Meyers’s implementation looks like:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> otherSingleton&amp; <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">std</span>::<span class="function">lock_guard <span class="title">lock</span><span class="params">(<span class="number">_</span>mutex)</span></span>;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">static</span> otherSingleton theInstance;</div><div class="line">  pInstance = &amp;theInstance;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> *pInstance;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>The constructor of class std::lock_guard (C++11) locks the mutex, and its destructor unlocks the mutex. While _mutex is locked, other threads that try to lock the same mutex are blocked.</p>
+<p>But in this implementation we’re paying for synchronization overhead for each getInstance() call and this is not what we need. Each access of the singleton requires the acquisition of a lock, but in reality we need a lock only when initializing pInstance. If pInstance is called n times during the course of a program run, we need the lock only for the first time.</p>
+<p>Writing a C++ singleton 100% thread safe implementation it’s not as simple as it appears as long as for many years C++ had no threading standard support. In order to implement a thread safe singleton we have to apply the double-checked locking (DCLP) pattern.</p>
+<p>The pattern consists in checking before entering in the synchronized code, and then check the condition again.</p>
+<p>So the first singleton implementation would be rewritten using a temporary object:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> simpleSingleton* <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">if</span> (!pInstance)</div><div class="line">  &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="function">lock_guard <span class="title">lock</span><span class="params">(<span class="number">_</span>mutex)</span></span>;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!pInstance)</div><div class="line">    &#123;</div><div class="line">      simpleSingleton * temp = <span class="keyword">new</span> simpleSingleton;</div><div class="line">      pInstance = temp;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> pInstance;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This pattern involves testing pInstance for nullness before trying to acquire a lock and only if the test succeeds the lock is acquired and after that the test is performed again. The second test is needed for avoiding race conditions in case other thread happens to initialize pInstance between the time pInstance was tested and the time the lock was acquired.</p>
+<p>Theoretically this pattern is correct, but in practice is not always true, especially in multiprocessor environments.</p>
+<p>Due to this rearranging of writes, the memory as seen by one processor at a time might look as if the operations are not performed in the correct order by another processor. In our case the assignment to pInstance performed by a processor might occur before the Singleton object has been fully initialized.</p>
+<p>After the first call of getInstance() the implementation with pointers (non-smart) needs pointer to that instance in order to avoid memory leaks.</p>
+<h2 id="Version-3-–-Singleton-with-smart-pointers"><a href="#Version-3-–-Singleton-with-smart-pointers" class="headerlink" title="Version 3 – Singleton with smart pointers"></a>Version 3 – Singleton with smart pointers</h2><p>Until C++ 11, the C++ standard didn’t have a threading model and developers needed to use external threading APIs (POSIX or OS dependent primitives). But finally C++ 11 standard has threading support.</p>
+<p>Unfortunately, the first C++ new standard implementation in Visual C++ 2010 is incomplete and threading support is available only starting with beta version of VS 2011 or the VS 2012 release oreview version.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> smartSingleton</div><div class="line">&#123;</div><div class="line">  <span class="keyword">private</span>:</div><div class="line">    <span class="keyword">static</span> <span class="built_in">std</span>::mutex <span class="number">_</span>mutex;</div><div class="line"></div><div class="line"></div><div class="line">    smartSingleton();</div><div class="line">    smartSingleton(<span class="keyword">const</span> smartSingleton&amp; rs);</div><div class="line">    smartSingleton&amp; <span class="keyword">operator</span> = (<span class="keyword">const</span> smartSingleton&amp; rs);</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">public</span>:</div><div class="line">    ~smartSingleton();</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">static</span> <span class="built_in">std</span>::<span class="function"><span class="built_in">shared_ptr</span>&amp; <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">std</span>::<span class="built_in">shared_ptr</span> instance = <span class="literal">nullptr</span>;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!instance)</div><div class="line">    &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="function">lock_guard <span class="title">lock</span><span class="params">(<span class="number">_</span>mutex)</span></span>;</div><div class="line"></div><div class="line"></div><div class="line">      <span class="keyword">if</span> (!instance) &#123;</div><div class="line">      instance.reset(<span class="keyword">new</span> smartSingleton());</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">return</span> instance;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"smart pointers # next - your code ..."</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>As we know, in C++ by default the class members are private. So, our default constructor is private too. I added here in order to avoid misunderstanding and explicitly adding to public / protected.<br>Finally, feel free to use your special instance (singleton):</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Version 1</span></div><div class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&amp; smartSingleton &amp; p = smartSingleton::getInstance(); <span class="comment">// cache instance pointer</span></div><div class="line">p-&gt;demo();</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 2</span></div><div class="line"><span class="built_in">std</span>::weak_ptr&amp; smartSingleton &amp; pw = smartSingleton::getInstance(); <span class="comment">// cache instance pointer</span></div><div class="line">pw.lock()-&gt;demo();</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 3</span></div><div class="line">smartSingleton::getInstance()-&gt;demo();</div></pre></td></tr></table></figure>
+<p>And no memory leaks emotion…</p>
+<p>Multiple threads can simultaneously read and write different std::shared_ptr objects, even when the objects are copies that share ownership.</p>
+<p>But even this implementation using double checking pattern but is not optimal to double check each time.</p>
+<h2 id="Version-4-–-Thread-safe-singleton-C-11"><a href="#Version-4-–-Thread-safe-singleton-C-11" class="headerlink" title="Version 4 – Thread safe singleton C++ 11"></a>Version 4 – Thread safe singleton C++ 11</h2><p>To have a thread safe implementation we need to make sure that the class single instance is locked and created only once in a multi-threaded environment.</p>
+<p>Fortunately, C++ 11 comes in our help with two new entities: std::call_once and std::once_flag. Using them with a standard compiler we have the guaranty that our singleton is thread safely and no memory leak.</p>
+<p>Invocations of std::call_once on the same std::once_flag object are serialized.</p>
+<p>Instances of std::once_flag are used with std::call_once to ensure that a particular function is called exactly once, even if multiple threads invoke the call concurrently.</p>
+<p>Instances of std::once_flag are neither CopyConstructible, CopyAssignable, MoveConstructible nor MoveAssignable.</p>
+<p>Here it is my proposal for a singleton thread safe implementation in C++ 11:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> safeSingleton</div><div class="line">&#123;</div><div class="line">  <span class="keyword">static</span> <span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&amp; safeSingleton &amp; instance_;</div><div class="line">  <span class="keyword">static</span> <span class="built_in">std</span>::once_flag only_one;</div><div class="line"></div><div class="line"></div><div class="line">  safeSingleton(<span class="keyword">int</span> id) &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"safeSingleton::Singleton()"</span> &lt;&lt; id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  safeSingleton(<span class="keyword">const</span> safeSingleton&amp; rs) &#123;</div><div class="line">    instance_ = rs.instance_;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  safeSingleton&amp; <span class="keyword">operator</span> = (<span class="keyword">const</span> safeSingleton&amp; rs)</div><div class="line">  &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;rs) &#123;</div><div class="line">        instance_ = rs.instance_;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="keyword">public</span>:</div><div class="line">    ~safeSingleton() &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Singleton::~Singleton"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> safeSingleton &amp; <span class="title">getInstance</span><span class="params">( <span class="keyword">int</span> id )</span></span></div><div class="line">  &#123;</div><div class="line">    <span class="built_in">std</span>::call_once( safeSingleton::only_one,</div><div class="line">                    [] (<span class="keyword">int</span> idx)</div><div class="line">                    &#123;</div><div class="line">                        safeSingleton::instance_.reset( <span class="keyword">new</span> safeSingleton(idx) );</div><div class="line"></div><div class="line"></div><div class="line">                        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"safeSingleton::create_singleton_() | thread id "</span> + idx &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">                    &#125;, id );</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">return</span> *safeSingleton::instance_;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">demo</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"demo stuff from thread id "</span> &lt;&lt; id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">std</span>::once_flag safeSingleton::only_one;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&amp; safeSingleton&amp; safeSingleton::instance_ = <span class="literal">nullptr</span>;</div></pre></td></tr></table></figure>
+<p>The parameter to getInstance() was added for demo reasons only and should be passed to a new proper constructor. As you can see, I am using a lambda instead normal method.</p>
+<p>This is how I tested my safeSingleton and smartSingleton classes.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">std</span>::thread&gt; v;</div><div class="line"><span class="keyword">int</span> num = <span class="number">20</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">for</span>( <span class="keyword">int</span> n = <span class="number">0</span>; n &lt; num; ++n )</div><div class="line">&#123;</div><div class="line">  v.push_back( <span class="built_in">std</span>::thread( []( <span class="keyword">int</span> id )</div><div class="line">                                &#123;</div><div class="line">                                safeSingleton::getInstance( id ).demo( id );</div><div class="line">                                &#125;, n ) );</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">std</span>::for_each( v.begin(), v.end(), <span class="built_in">std</span>::mem_fn( &amp;<span class="built_in">std</span>::thread::join ) );</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 1</span></div><div class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span> p = smartSingleton::getInstance(<span class="number">1</span>); <span class="comment">// cache instance pointer</span></div><div class="line">p-&gt;demo(<span class="string">"demo 1"</span>);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 2</span></div><div class="line"><span class="built_in">std</span>::weak_ptr pw = smartSingleton::getInstance(<span class="number">2</span>); <span class="comment">// cache instance pointer</span></div><div class="line">pw.lock()-&gt;demo(<span class="number">2</span>);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// Version 3</span></div><div class="line">smartSingleton::getInstance(<span class="number">3</span>)-&gt;demo(<span class="number">3</span>);</div></pre></td></tr></table></figure>
+<p>So I create 20 threads and I launch them in parallel (std::thread::join) and each thread accesses getInstance() (with a demo id parameter). Only one of the threads that is trying to create the instance succeeds.</p>
+<p>Additionally, if you’re using a C++11 100% compiler you could also delete the copy constructor and assignment operator. This will allow you to obtain an error while trying to use such deleted members.</p>
+<h2 id="Other-comments"><a href="#Other-comments" class="headerlink" title="Other comments"></a>Other comments</h2><p>I tested this implementation on a machine with Intel i5 processor (4 cores). If you see some concurrent issues in this implementation please fell free to share here. I am open to other good implementations, too.</p>
+<p>An alternative to this approach is creating the singleton instance of a class in the main thread and pass it to the objects which require it. In case we have many singleton objects this approach is not so nice because the objects discrepancies can be bundled into a single ‘Context’ object which is then passed around where necessary.</p>
+<p><strong>Update:</strong> According to Boris’s observation I removed std::mutex instance from safeSingleton class. This is not necessary anymore because std::call_once is enough to have thread safe behavior for this class.</p>
+<p><strong>Update2:</strong> According to Ervin and Remus’s observation, in order to make things clear I simplified the implementation version 3 and this is not using std::weak_ptr anymore.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;该文的作者是Silviu Ardelean，博客地址为&lt;a href=&quot;http://silviuardelean.ro/2012/06/05/few-singleton-approaches/&quot;&gt;Several C++ singleton implementations&lt;/a&gt;(需翻)。&lt;/p&gt;
+&lt;h1 id=&quot;正文&quot;&gt;&lt;a href=&quot;#正文&quot; class=&quot;headerlink&quot; title=&quot;正文&quot;&gt;&lt;/a&gt;正文&lt;/h1&gt;&lt;p&gt;This article offers some insight into singleton design-pattern.&lt;br&gt;The singleton pattern is a design pattern used to implement the mathematical concept of a singleton, by restricting the instantiation of a class to one object. The GoF book describes the singleton as: “Ensure a class only has one instance, and provide a global point of access to it.”&lt;/p&gt;
+&lt;p&gt;The Singleton design pattern is not as simple as it appears at a first look and this is proven by the abundance of Singleton discussions and implementations. That’s way I’m trying to figure a few implementations, some base on C++ 11 features (smart pointers and locking primitives as mutexs). I am starting from, maybe, the most basic singleton implementation trying to figure different weaknesses and tried to add gradually better implementations.&lt;/p&gt;
+&lt;p&gt;The basic idea of a singleton class implies using a static private instance, a private constructor and an interface method that returns the static instance.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="设计模式" scheme="http://wangqiucheng.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+    
+      <category term="c++" scheme="http://wangqiucheng.com/tags/c/"/>
+    
+      <category term="设计模式" scheme="http://wangqiucheng.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>哲学家就餐问题的死锁与解决</title>
+    <link href="http://wangqiucheng.com/2016/03/15/%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%B0%B1%E9%A4%90%E9%97%AE%E9%A2%98/"/>
+    <id>http://wangqiucheng.com/2016/03/15/哲学家就餐问题/</id>
+    <published>2016-03-15T08:52:11.000Z</published>
+    <updated>2016-09-28T03:59:39.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在看多线程和并发的东西。关于并发绕不开的问题就是哲学家就餐了。</p>
+<p>以下摘自维基百科：</p>
+<blockquote>
+<p>哲学家进餐问题描述有五个哲学家，他们的生活方式是交替地进行思考和进餐，哲学家们共用一张圆桌，分别坐在周围的五张椅子上，在圆桌上有五个碗和五支筷子，平时哲学家进行思考，饥饿时便试图取其左、右最靠近他的筷子，只有在他拿到两支筷子时才能进餐，进餐完毕，放下筷子又继续思考。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="代码展示哲学家问题简化版"><a href="#代码展示哲学家问题简化版" class="headerlink" title="代码展示哲学家问题简化版"></a>代码展示哲学家问题简化版</h2><p>在代码中，筷子的获取与占有其实跟互斥量mutex的加锁是一致的，因此可以将筷子当成互斥量。而哲学家不确定什么时候会拿筷子，正如不确定线程的执行顺序一样，则哲学家就是线程。在本文的就餐问题中，哲学家拿到两只筷子会占有3秒，表明一下自己后再放下筷子。</p>
+<p>为了引起死锁，设定每个哲学家都是先拿右手边筷子，再拿左手边筷子。而且在拿了右手筷子后会等待一段时间（调用I/O操作），这样就会触发哲学家都拿了右手边筷子之后等待左手边筷子，死锁。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> NUMSOFCHOP = <span class="number">5</span>;</div><div class="line"><span class="keyword">pthread_mutex_t</span> chops[NUMSOFCHOP];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getChops</span><span class="params">(<span class="keyword">void</span> *args)</span></span>&#123;</div><div class="line">	<span class="keyword">int</span> index;</div><div class="line">	index = (<span class="keyword">int</span>)args;</div><div class="line">	<span class="keyword">pthread_t</span> nid = pthread_self();</div><div class="line">	<span class="keyword">int</span> right = (index+<span class="number">1</span>)%NUMSOFCHOP;</div><div class="line">	<span class="keyword">int</span> left = (index+NUMSOFCHOP)%NUMSOFCHOP;</div><div class="line">	pthread_mutex_lock(&amp;chops[right]);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Add the I/O time between two lock.\n"</span>);</div><div class="line">	pthread_mutex_lock(&amp;chops[left]);</div><div class="line">	sleep(<span class="number">3</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Philosophyer %d in the thread %u.\n"</span>, index, (<span class="keyword">unsigned</span> <span class="keyword">int</span>)nid);</div><div class="line">	<span class="comment">//Do something</span></div><div class="line">	pthread_mutex_unlock(&amp;chops[left]);</div><div class="line">	pthread_mutex_unlock(&amp;chops[right]);</div><div class="line">	pthread_exit(<span class="literal">NULL</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line">	<span class="keyword">pthread_t</span> phi[NUMSOFCHOP];</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_mutex_init(&amp;chops[i], <span class="literal">NULL</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_create(&amp;phi[i], <span class="literal">NULL</span>, getChops, (<span class="keyword">void</span>*)i);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_join(phi[i], <span class="literal">NULL</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NUMSOFCHOP; i++)&#123;</div><div class="line">		pthread_mutex_destroy(&amp;chops[i]);	</div><div class="line">	&#125;</div><div class="line">	pthread_exit(<span class="literal">NULL</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果如下，之后就一直等待中，无法释放了。</p>
+<pre><code>➜  thread ./philosophy
+Add the I/O time between two lock.
+Add the I/O time between two lock.
+Add the I/O time between two lock.
+Add the I/O time between two lock.
+Add the I/O time between two lock.
+</code></pre><h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="服务员解法"><a href="#服务员解法" class="headerlink" title="服务员解法"></a>服务员解法</h3><p>再使用一个大锁，哲学家想要拿筷子需要征得服务员同意，哲学家征得同意后需要拿到两根筷子后才能让服务员离开。</p>
+<p>这里有两个注意的地方：</p>
+<h3 id="1-随机时间获取大锁"><a href="#1-随机时间获取大锁" class="headerlink" title="1. 随机时间获取大锁"></a>1. 随机时间获取大锁</h3><p>一开始的usleep(rand()%1000)，这里是让哲学家们要找到服务员（大锁）的顺序打乱掉，否则很可能进入的顺序就是从1号到5号递增的顺序，这样1号拿到2号和1号筷子，开始就餐。2号拿到3号筷子，等待1号放下2号筷子；3号拿到4号筷子，等待被2号拿着的3号筷子（此时2号并没有在就餐），依此类推。这样线程就变成串行的了。最后运行时间为15s+。</p>
+<p>而如果一开始有个随机时间，那么5个哲学家最多可以有两个人一起用餐，这样时间就可能变为12s+。</p>
+<h3 id="2-大锁获取和释放位置"><a href="#2-大锁获取和释放位置" class="headerlink" title="2. 大锁获取和释放位置"></a>2. 大锁获取和释放位置</h3><p>大锁的位置应该放在获取两个小锁的开头和结尾，也就是只要哲学家已经把两只筷子都获取到了，就可以释放大锁了，而不是等待哲学家就餐完。如果是整个就餐过程都是加锁的话，那同样变成了串行。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">pthread_mutex_t</span> total;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getChops</span><span class="params">(<span class="keyword">void</span> *args)</span></span>&#123;</div><div class="line">	usleep(rand()%<span class="number">1000</span>); 			<span class="comment">//随机获取大锁时间	......</span></div><div class="line">	pthread_mutex_lock(&amp;total); 	<span class="comment">//加大锁</span></div><div class="line">	</div><div class="line">	pthread_mutex_lock(&amp;chops[right]);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Add the I/O time between two lock.\n"</span>);</div><div class="line">	pthread_mutex_lock(&amp;chops[left]);</div><div class="line">	</div><div class="line">	pthread_mutex_unlock(&amp;total);	<span class="comment">//解大锁</span></div><div class="line">	......</div><div class="line">	pthread_exit(<span class="literal">NULL</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	...</div><div class="line">	pthread_mutex_init(&amp;total, <span class="literal">NULL</span>);</div><div class="line">	...</div><div class="line">	</div><div class="line">	pthread_mutex_destory(&amp;total);	</div><div class="line">	pthread_exit(<span class="literal">NULL</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="安全序列"><a href="#安全序列" class="headerlink" title="安全序列"></a>安全序列</h3><p>另一种解决方法就是设置一个加解锁的安全序列，比如让最后一个哲学家拿筷子的顺序跟其他哲学家相反，这样就不会成环了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getChops</span><span class="params">(<span class="keyword">void</span> *args)</span></span>&#123;</div><div class="line">	...</div><div class="line">	<span class="keyword">int</span> right = (index+<span class="number">1</span>)%NUMSOFCHOP;</div><div class="line">	<span class="keyword">int</span> left = (index+NUMSOFCHOP)%NUMSOFCHOP;</div><div class="line"><span class="comment">//	if(index == NUMSOFCHOP -1)&#123;</span></div><div class="line"><span class="comment">//		int tmp = right;</span></div><div class="line"><span class="comment">//		right = left;</span></div><div class="line"><span class="comment">//		left = tmp;</span></div><div class="line"><span class="comment">//	&#125;</span></div><div class="line">	pthread_mutex_lock(&amp;chops[right]);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Add the I/O time between two lock.\n"</span>);</div><div class="line">	pthread_mutex_lock(&amp;chops[left]);</div><div class="line">	...</div><div class="line">	pthread_exit(<span class="literal">NULL</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在看多线程和并发的东西。关于并发绕不开的问题就是哲学家就餐了。&lt;/p&gt;
+&lt;p&gt;以下摘自维基百科：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;哲学家进餐问题描述有五个哲学家，他们的生活方式是交替地进行思考和进餐，哲学家们共用一张圆桌，分别坐在周围的五张椅子上，在圆桌上有五个碗和五支筷子，平时哲学家进行思考，饥饿时便试图取其左、右最靠近他的筷子，只有在他拿到两支筷子时才能进餐，进餐完毕，放下筷子又继续思考。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="网络" scheme="http://wangqiucheng.com/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+      <category term="网络" scheme="http://wangqiucheng.com/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+      <category term="多线程" scheme="http://wangqiucheng.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="并发" scheme="http://wangqiucheng.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>T的几道笔试题</title>
+    <link href="http://wangqiucheng.com/2016/03/10/T%E7%9A%84%E5%87%A0%E9%81%93%E7%AC%94%E8%AF%95%E9%A2%98/"/>
+    <id>http://wangqiucheng.com/2016/03/10/T的几道笔试题/</id>
+    <published>2016-03-10T14:13:30.000Z</published>
+    <updated>2016-09-28T03:52:33.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="T的几道笔试题"><a href="#T的几道笔试题" class="headerlink" title="T的几道笔试题"></a>T的几道笔试题</h1><p>昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">1 整数IP转字符串(不用考虑大小端/字节序)</div><div class="line">char *inet_ntoa(unsigned int uiIp)</div><div class="line"></div><div class="line">2 计算</div><div class="line">const char *g_pcTest[] = &#123;"aaa", "bbbbbbbb", "cccccc"&#125;;</div><div class="line"></div><div class="line">sizeof(g_pcTest) = ?</div><div class="line"></div><div class="line">3 mac地址转64位整数, 例如 3c:aa:4d:9a:8b:c 转成 uint64整数(去掉冒号,转换成整数)</div><div class="line"></div><div class="line">unsigned long long MacToUint64(const char *pcMac)</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h2><p>整数IP转字符串，一开始选择的语言是c。无奈最近一直看得是cpp，对c的东西有点陌生了，特别是字符串操作这一块。所以倒腾了比较久。最后写出的代码太挫就不贴了，大概思路讲一下。</p>
+<p>对整数IP的概念需要了解一下，假设IP为192.168.120.10，其中192的二进制为11000000，168的二进制为10101000，120的二进制为01111000，10的二进制为00001010。则将IP的点分十进制转换为整数就是直接相连得到一个32位的uint32数。其实IP的点分十进制就是对该UINT32数进行切分再加点得到的。</p>
+<p>知道原理后就只需要定义几个常量整数分别是0xff000000，0xff0000，0xff00和0xff。让传入的整数IP跟这几个常量整数做与运算再进行右移，可以分别得到点分十进制中每部分数字。接下来就是将数字转换成字符串再分别加上‘.’连接起来。</p>
+<p>使用纯C语言写出来的代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> str[<span class="number">30</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">my_inet_ntoa</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> inaddr)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> a[<span class="number">4</span>],i;</div><div class="line">    <span class="keyword">char</span> b[<span class="number">20</span>],c[<span class="number">15</span>],d[<span class="number">10</span>],e[<span class="number">5</span>];</div><div class="line">    a[<span class="number">0</span>]=((inaddr &amp; <span class="number">0xff000000</span>)&gt;&gt;<span class="number">24</span>);</div><div class="line">    a[<span class="number">1</span>]=((inaddr &amp; <span class="number">0x00ff0000</span>)&gt;&gt;<span class="number">16</span>);</div><div class="line">    a[<span class="number">2</span>]=((inaddr &amp; <span class="number">0x0000ff00</span>)&gt;&gt;<span class="number">8</span>);</div><div class="line">    a[<span class="number">3</span>]=((inaddr &amp; <span class="number">0x000000ff</span>)&gt;&gt;<span class="number">0</span>);</div><div class="line">    </div><div class="line">    <span class="built_in">sprintf</span>(b,<span class="string">"%d"</span>,a[<span class="number">0</span>]);</div><div class="line">    <span class="built_in">strcat</span>(b,<span class="string">"."</span>);</div><div class="line"></div><div class="line">    <span class="built_in">sprintf</span>(c,<span class="string">"%d"</span>,a[<span class="number">1</span>]);</div><div class="line">    <span class="built_in">strcat</span>(c,<span class="string">"."</span>);</div><div class="line"></div><div class="line">    <span class="built_in">sprintf</span>(d,<span class="string">"%d"</span>,a[<span class="number">2</span>]);</div><div class="line">    <span class="built_in">strcat</span>(d,<span class="string">"."</span>);</div><div class="line"></div><div class="line">    <span class="built_in">sprintf</span>(e,<span class="string">"%d"</span>,a[<span class="number">3</span>]);</div><div class="line">        </div><div class="line">    <span class="built_in">strcat</span>(str,<span class="built_in">strcat</span>(b,<span class="built_in">strcat</span>(c,<span class="built_in">strcat</span>(d,e))));</div><div class="line">    <span class="keyword">return</span> str;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里需要注意的一点是返回值。</p>
+<ol>
+<li>如果是在函数中使用非静态的局部变量，也就是char数组，这样在函数返回时会将内存释放掉，从而返回的指针指向的内容为空，产生未定义行为。</li>
+<li>而如果是使用malloc申请动态内存，则又面临一个是否释放的问题，如果不释放会导致资源泄露，在不断调用该函数时还是导致内存不足问题，如果释放则会跟非静态局部变量一样</li>
+</ol>
+<p>面试官不断提醒我在函数过程中存储位置都有啥，除了堆和栈，还有静态存储区，存储的是全局变量和静态变量。当时我注意到了全局变量而没有注意静态变量。想说第一题还是可以使用全局变量的同时，我想到了多线程读取写入问题。在多线程中，不同线程对对该函数在短时间内使用不同实参进行调用，则全局变量str数组的写入就会出现问题，产生未定义行为。</p>
+<p>贴上微软对该函数的实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* Copyright (c) Microsoft Corporation. All rights reserved. */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mmlite.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">undef</span> WINAPI</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> WINAPI</span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> in_addr &#123;</div><div class="line">    UINT32 s_addr;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> * WINAPI <span class="title">inet_ntoa</span><span class="params">(<span class="keyword">struct</span> in_addr in)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">char</span> b[<span class="number">18</span>];  <span class="comment">/* perfectly MP safe Berkeley junk, tzk tzk */</span></div><div class="line">    UINT8 *ptr;</div><div class="line"></div><div class="line">    ptr = (UINT8 *) &amp;in.s_addr;</div><div class="line">    <span class="built_in">sprintf</span>(b, <span class="string">"%d.%d.%d.%d"</span>, ptr[<span class="number">0</span>], ptr[<span class="number">1</span>], ptr[<span class="number">2</span>], ptr[<span class="number">3</span>]);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="友情提示"><a href="#友情提示" class="headerlink" title="友情提示"></a>友情提示</h3><ol>
+<li>微软代码中的WINAPI只是一个标记，如果想要放到电脑上运行可以去掉</li>
+<li>UINT32和UINT8编译器可能会找不到定义，可以换成uint32_t和uint8_t，再加上头文件<stdint.h></stdint.h></li>
+<li>最后在电脑上输出结果可能跟预想的不同，那是因为在网络中是大端序，在X86平台上是小端序。</li>
+</ol>
+<h3 id="第一题总结"><a href="#第一题总结" class="headerlink" title="第一题总结"></a>第一题总结</h3><p>即使使用static，在多线程的环境下，也是会产生和全局变量类似的问题。甚至在单线程当中也会出现问题，如果程序首先使用整数X进行转换，那么此时存放在b数组中的就是X的点分十进制字符串。这时返回的是一个char指针的类型x_ptr。之后使用不同的整数Y进行转换，b数组中的点分十进制字符串已经被覆盖了，但x_ptr还是指向该字符串，同样出错了。</p>
+<p>其实有个相对较新的函数叫做inet_ntop，在UNP第三章中有所涉及。该函数的做法就是会指定一块内存区域让函数将转换后的结果存储在该内存空间。也就是说，该函数的使用者自己可以知道是否要覆盖之前的内存区域，如果指定同一块内存区域或者有所交叉的区域，那么使用者也就自己检查覆盖问题，要么就是指定两块不会相互覆盖的内存区域，避免未定义的行为。</p>
+<h2 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">char</span> *g_pcTest[] = &#123;<span class="string">"aaa"</span>, <span class="string">"bbbbbbbb"</span>, <span class="string">"cccccc"</span>&#125;;</div><div class="line"></div><div class="line"><span class="keyword">sizeof</span>(g_pcTest) = ?</div></pre></td></tr></table></figure>
+<p>求问sizeof的问题，一般要跟具体机器字长相联系，在这里g_pcTest其实就是个存储char*类型元素的数组，总共存放了3个元素，那么就是sizeof(char*)*3，我机器上字长为8字节，所以结果就是24。</p>
+<p>昨天在做的时候脑子一抽，想成了字节对齐的问题，就是看了一下<a href="http://wangqiucheng.com/2016/03/10/%E8%BD%AC-5%E5%88%86%E9%92%9F%E6%90%9E%E5%AE%9A%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90/">[转]5分钟搞定内存字节对齐</a>，所以说得乱七八糟的，还是太紧张了，也是平时基础不够踏实。</p>
+<h2 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">3</span> mac地址转<span class="number">64</span>位整数, 例如 <span class="number">3</span>c:aa:<span class="number">4</span>d:<span class="number">9</span>a:<span class="number">8b</span>:c 转成 uint64整数(去掉冒号,转换成整数)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">MacToUint64</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pcMac)</span></span></div></pre></td></tr></table></figure>
+<p>我的代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">MacToUint64</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pcMac)</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> len = <span class="built_in">strlen</span>(pcMac);</div><div class="line">    <span class="keyword">int</span> index = len<span class="number">-1</span>;</div><div class="line">    <span class="keyword">int</span> multi = <span class="number">1</span>;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> ret = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(index)&#123;</div><div class="line">        <span class="keyword">if</span>(pcMac[index] == <span class="string">':'</span>)&#123;</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(pcMac[index] &gt;= <span class="string">'a'</span> &amp;&amp; pcMac[index] &lt;= <span class="string">'f'</span>)&#123;</div><div class="line">            ret += multi*(pcMac[index] - <span class="string">'a'</span> + <span class="number">10</span>);</div><div class="line">            multi *= <span class="number">16</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(pcMac[index] &gt;= <span class="string">'0'</span> &amp;&amp; pcMac[index] &lt;= <span class="string">'9'</span>)&#123;</div><div class="line">            ret += multi*(pcMac[index] - <span class="string">'0'</span>);</div><div class="line">            multi *= <span class="number">16</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span>&#123;</div><div class="line">            ret = <span class="number">-1</span>;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        index--;</div><div class="line">    &#125;   </div><div class="line">    <span class="keyword">return</span> ret;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是我提交的代码，当时面试官看了一下也没说什么。不过当时在写的过程中比较在意的就是给出的mac地址格式问题。</p>
+<ol>
+<li>如果给出的有非法字符怎么办？（这里稍微处理了一下，直接返回-1）；</li>
+<li>如果给出的格式是缺省形式怎么办？就是每个分段应该是两位十六进制数，有的分段如果是0a的话会缺省成a。如果不管这个会使前面的十六进制数都少乘了个16；</li>
+<li>如果给出的是非法格式怎么办？就是多个冒号？这个往大了说就是模式匹配的东西，就是确认其中是否符合xx:xx:xx:xx:xx:xx的模式。</li>
+</ol>
+<p>而且这里的变量multi不应该是int类型，应该是long long类型。因为不断乘以16之后会超出int表示的最大值。</p>
+<h2 id="此次笔试总结"><a href="#此次笔试总结" class="headerlink" title="此次笔试总结"></a>此次笔试总结</h2><p>考察的知识都不难，就是紧张之间红红火火恍恍惚惚了。不过此次面试官特别和善，在我卡壳时总是耐心提示我，所以不管最后过不过，作为人生中工作的第一位面试官，真心很感谢，微笑微笑微笑（手动表情）。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;T的几道笔试题&quot;&gt;&lt;a href=&quot;#T的几道笔试题&quot; class=&quot;headerlink&quot; title=&quot;T的几道笔试题&quot;&gt;&lt;/a&gt;T的几道笔试题&lt;/h1&gt;&lt;p&gt;昨天晚上突然之间接到电话，说要进行远程笔试。算是人生当中关于工作的第一次笔试面试了，相当紧张。废话不多说，直接先上题。&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1 整数IP转字符串(不用考虑大小端/字节序)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;char *inet_ntoa(unsigned int uiIp)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2 计算&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;const char *g_pcTest[] = &amp;#123;&quot;aaa&quot;, &quot;bbbbbbbb&quot;, &quot;cccccc&quot;&amp;#125;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;sizeof(g_pcTest) = ?&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3 mac地址转64位整数, 例如 3c:aa:4d:9a:8b:c 转成 uint64整数(去掉冒号,转换成整数)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;unsigned long long MacToUint64(const char *pcMac)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="网络" scheme="http://wangqiucheng.com/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+      <category term="笔试面试" scheme="http://wangqiucheng.com/tags/%E7%AC%94%E8%AF%95%E9%9D%A2%E8%AF%95/"/>
+    
+      <category term="网络" scheme="http://wangqiucheng.com/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[转]5分钟搞定内存字节对齐</title>
+    <link href="http://wangqiucheng.com/2016/03/10/%E8%BD%AC-5%E5%88%86%E9%92%9F%E6%90%9E%E5%AE%9A%E5%86%85%E5%AD%98%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90/"/>
+    <id>http://wangqiucheng.com/2016/03/10/转-5分钟搞定内存字节对齐/</id>
+    <published>2016-03-10T03:25:26.000Z</published>
+    <updated>2016-09-28T03:58:23.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文章参考博客<a href="http://blog.csdn.net/hairetz/article/details/4084088" target="_blank" rel="external">5分钟搞定内存字节对齐</a>，主要就是修改了格式以及对齐进行了验证。</p>
+<h2 id="三条原则"><a href="#三条原则" class="headerlink" title="三条原则"></a>三条原则</h2><ol>
+<li><p><strong>数据成员对齐规则</strong>：struct(或union)的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从自身成员大小或者成员的子成员大小（只要自身成员有子成员，比如说是array，struct等）的整数倍开始(比如int在32位机为4字节,则要从4的整数倍地址开始存储）。  </p>
+</li>
+<li><p><strong>结构体作为成员</strong>：如果一个结构里有某些结构体成员,则结构体成员要从其内部最大元素大小的整数倍地址开始存储.(struct a里存有struct b,b里有char,int ,double等元素,那b应该从8的整数倍开始存储.)</p>
+</li>
+<li><p><strong>收尾工作</strong>：结构体的总大小,也就是sizeof的结果,.必须是其内部最大成员的整数倍.不足的要补齐. </p>
+</li>
+</ol>
+<a id="more"></a>
+<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> bb</div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> id;             <span class="comment">//[0]....[3]</span></div><div class="line">	<span class="keyword">double</span> weight;      <span class="comment">//[8].....[15]　　　　　　原则１</span></div><div class="line">	<span class="keyword">float</span> height;      </div><div class="line">	<span class="comment">//[16]..[19],总长要为８的整数倍,补齐[20]...[23]　　　　　原则３</span></div><div class="line">&#125;BB;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> aa</div><div class="line">&#123;</div><div class="line">	<span class="keyword">char</span> name[<span class="number">2</span>];     <span class="comment">//[0],[1]</span></div><div class="line">	<span class="keyword">int</span>  id;         <span class="comment">//[4]...[7]　　　　　　　　　　原则１</span></div><div class="line">	<span class="keyword">double</span> score;     <span class="comment">//[8]....[15]　　　　</span></div><div class="line">	<span class="keyword">short</span> grade;    <span class="comment">//[16],[17]　　　　　　　　</span></div><div class="line">	BB b;             <span class="comment">//[24]......[47]　　　　　　　　　　原则２</span></div><div class="line">&#125;AA;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  AA a;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="keyword">sizeof</span>(a) &lt;&lt; <span class="string">" "</span> &lt;&lt; <span class="keyword">sizeof</span>(BB) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">48</span> <span class="number">24</span></div></pre></td></tr></table></figure>
+<h2 id="特例：-pragma-pack"><a href="#特例：-pragma-pack" class="headerlink" title="特例：#pragma pack()"></a>特例：#pragma pack()</h2><p>当为#pragma pack(1)时不需要对齐；</p>
+<p>当其他数时，遵循百度百科中的说法</p>
+<blockquote>
+<p>第一、如果n大于等于该变量所占用的字节数，那么偏移量必须满足默认的对齐方式;<br>第二、如果n小于该变量的类型所占用的字节数，那么偏移量为n的倍数，不用满足默认的对齐方式。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;该文章参考博客&lt;a href=&quot;http://blog.csdn.net/hairetz/article/details/4084088&quot;&gt;5分钟搞定内存字节对齐&lt;/a&gt;，主要就是修改了格式以及对齐进行了验证。&lt;/p&gt;
+&lt;h2 id=&quot;三条原则&quot;&gt;&lt;a href=&quot;#三条原则&quot; class=&quot;headerlink&quot; title=&quot;三条原则&quot;&gt;&lt;/a&gt;三条原则&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;数据成员对齐规则&lt;/strong&gt;：struct(或union)的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从自身成员大小或者成员的子成员大小（只要自身成员有子成员，比如说是array，struct等）的整数倍开始(比如int在32位机为4字节,则要从4的整数倍地址开始存储）。  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;结构体作为成员&lt;/strong&gt;：如果一个结构里有某些结构体成员,则结构体成员要从其内部最大元素大小的整数倍地址开始存储.(struct a里存有struct b,b里有char,int ,double等元素,那b应该从8的整数倍开始存储.)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;收尾工作&lt;/strong&gt;：结构体的总大小,也就是sizeof的结果,.必须是其内部最大成员的整数倍.不足的要补齐. &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+      <category term="操作系统" scheme="http://wangqiucheng.com/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+      <category term="存储" scheme="http://wangqiucheng.com/tags/%E5%AD%98%E5%82%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>cout对字符型指针的处理以及内存中的字符串常量</title>
+    <link href="http://wangqiucheng.com/2016/03/04/cpp%E4%B9%8Bcout%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F/"/>
+    <id>http://wangqiucheng.com/2016/03/04/cpp之cout与字符串常量/</id>
+    <published>2016-03-04T03:08:23.000Z</published>
+    <updated>2016-09-28T03:55:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="cont对字符型指针的处理"><a href="#cont对字符型指针的处理" class="headerlink" title="cont对字符型指针的处理"></a>cont对字符型指针的处理</h2><p>在开始前，首先看一下代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">char</span> str1[] = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> *str2 = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; str1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; str2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>程序的本意是输出字符数组指针的地址值和字符指针的地址值，但是输出结果却都是字符串“abc”。</p>
+<p>查阅资料得知，由于C++标准库中I/O类对&lt;&lt;操作符重载，因此在遇到字符型指针时会将其当作字符串名来处理，输出指针所指的字符串。</p>
+<a id="more"></a>
+<h3 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h3><p>得知原因之后，则需要让编译器不将字符型指针当成字符串名来处理，可以使用强制转换。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str1) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div></pre></td></tr></table></figure>
+<p>将字符型指针转换成无类型指针，则可以正常输出指针值。</p>
+<h3 id="amp-标识只对字符数组指针有效"><a href="#amp-标识只对字符数组指针有效" class="headerlink" title="&amp;标识只对字符数组指针有效"></a>&amp;标识只对字符数组指针有效</h3><p>需要注意的是，有些地方说对字符数组指针来说，对其数组名再次取地址就可以得到它的地址而不是被当成字符串。实测这方法只对字符数组有效而对字符指针无效。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; &amp;str1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; &amp;str2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div></pre></td></tr></table></figure>
+<p>这里涉及到C++或者C对数组的处理，比如对数组<code>char a[] = &quot;abc&quot;</code>,<code>a = &amp;a</code>，它们的地址相同，但是类型并不相同，<code>a</code>是指向char类型的指针，<code>sizeof(a) = 1</code>；而<code>&amp;a</code>是指向char数组类型的指针，<code>sizeof(&amp;a) = 3</code>，长度为数组长度。</p>
+<p>然而对于字符指针，则真是对其再次取地址符，那样就得不到它的真实地址，还是需要通过强制转换来得到地址。</p>
+<h2 id="内存中的字符串常量"><a href="#内存中的字符串常量" class="headerlink" title="内存中的字符串常量"></a>内存中的字符串常量</h2><p>知道了cout对字符型指针的处理之后，就可以查看字符串常量在内存中是如何分布的了。</p>
+<p>照例，先上代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">char</span> str1[] = <span class="string">"abc"</span>;</div><div class="line">	<span class="keyword">char</span> str2[] = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> *str3 = <span class="string">"abc"</span>;</div><div class="line">	<span class="keyword">char</span> *str4 = <span class="string">"abc"</span>;</div><div class="line"></div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str1) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str2) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; (<span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str1) == <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str2)) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str3) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str4) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; (<span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str3) == <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">void</span> *&gt;(str4)) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>得到输出为：</p>
+<pre><code>➜  ~ ./a.out
+0x7fff55d9ca28
+0x7fff55d9ca24
+0
+0x109e63f5c
+0x109e63f5c
+1
+</code></pre><p>(<em>注：不同机器得到的地址值不同，不过可以肯定前两个地址不同，而后两个地址相同</em>)</p>
+<p>之所以结果如此，是因为<strong>数组有自己的内存空间，而指针则可以指向任意类型的内存区域。</strong></p>
+<p>字符串常量是存储在静态存储区域的。</p>
+<p>将字符串常量赋给数组时，由于数组有自己的内存空间，并无法指向静态存储区域，因此在赋值时是将字符串常量拷贝到自己的内存空间了。不同的数组有不同的内存空间，因此理所当然两个地址是不相同的。</p>
+<p>而字符指针可以指向任意类型的内存区域，因此将字符串常量赋给字符指针时，并没有进行拷贝，而是指针指向了静态存储区域。因此两个指针存储的地址值都是字符串常量的地址，因此相同。</p>
+<p>（<em>注：在C++11的标准中，将字符串常量赋给字符指针会抛出不允许的警告，应该是有安全性的考虑</em>）</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;cont对字符型指针的处理&quot;&gt;&lt;a href=&quot;#cont对字符型指针的处理&quot; class=&quot;headerlink&quot; title=&quot;cont对字符型指针的处理&quot;&gt;&lt;/a&gt;cont对字符型指针的处理&lt;/h2&gt;&lt;p&gt;在开始前，首先看一下代码：&lt;/p&gt;
+&lt;figure class=&quot;highlight cpp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt;&lt;/span&gt;&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt; str1[] = &lt;span class=&quot;string&quot;&gt;&quot;abc&quot;&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt; *str2 = &lt;span class=&quot;string&quot;&gt;&quot;abc&quot;&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;	&lt;span class=&quot;built_in&quot;&gt;std&lt;/span&gt;::&lt;span class=&quot;built_in&quot;&gt;cout&lt;/span&gt; &amp;lt;&amp;lt; str1 &amp;lt;&amp;lt; &lt;span class=&quot;built_in&quot;&gt;std&lt;/span&gt;::&lt;span class=&quot;built_in&quot;&gt;endl&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;	&lt;span class=&quot;built_in&quot;&gt;std&lt;/span&gt;::&lt;span class=&quot;built_in&quot;&gt;cout&lt;/span&gt; &amp;lt;&amp;lt; str2 &amp;lt;&amp;lt; &lt;span class=&quot;built_in&quot;&gt;std&lt;/span&gt;::&lt;span class=&quot;built_in&quot;&gt;endl&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;程序的本意是输出字符数组指针的地址值和字符指针的地址值，但是输出结果却都是字符串“abc”。&lt;/p&gt;
+&lt;p&gt;查阅资料得知，由于C++标准库中I/O类对&amp;lt;&amp;lt;操作符重载，因此在遇到字符型指针时会将其当作字符串名来处理，输出指针所指的字符串。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="c++" scheme="http://wangqiucheng.com/categories/c/"/>
+    
+    
+      <category term="c++" scheme="http://wangqiucheng.com/tags/c/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>C++之拷贝、赋值与销毁</title>
+    <link href="http://wangqiucheng.com/2016/03/01/cpp%E4%B9%8B%E6%8B%B7%E8%B4%9D%E8%B5%8B%E5%80%BC%E4%B8%8E%E9%94%80%E6%AF%81-md/"/>
+    <id>http://wangqiucheng.com/2016/03/01/cpp之拷贝赋值与销毁-md/</id>
+    <published>2016-03-01T08:03:35.000Z</published>
+    <updated>2016-09-28T03:56:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。</p>
+<pre><code>为何必须是引用？
+拷贝构造函数被用来初始化非引用类类型参数，比如非引用实参传给形参，或是非引用返回类型的函数返回对象等。
+若自身类型不是引用的话，为了调用拷贝构造函数，必须拷贝实参，此时又得调用拷贝构造函数，如此无限循环。
+</code></pre><h4 id="合成拷贝构造函数"><a href="#合成拷贝构造函数" class="headerlink" title="合成拷贝构造函数"></a>合成拷贝构造函数</h4><p>一般情况下，合成的拷贝构造函数会将其参数的成员逐个拷贝到正在创建的对象当中</p>
+<a id="more"></a>
+<h3 id="拷贝初始化"><a href="#拷贝初始化" class="headerlink" title="拷贝初始化"></a>拷贝初始化</h3><h4 id="何时发生"><a href="#何时发生" class="headerlink" title="何时发生"></a>何时发生</h4><ul>
+<li>用=定义变量的时候</li>
+<li>将一个对象作为实参传递给一个非引用类型的形参</li>
+<li>从一个返回类型为非引用类型的函数中返回一个对象</li>
+<li>用花括号列表初始化一个数组中的元素或一个聚合类中的成员</li>
+<li>初始化标准化库容器或是调用insert或push成员时（<strong>注意，使用emplace是直接初始化</strong>）</li>
+</ul>
+<h4 id="如何发生"><a href="#如何发生" class="headerlink" title="如何发生"></a>如何发生</h4><p>依靠拷贝构造函数或移动构造函数</p>
+<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><p>当传递一个实参或从函数返回一个值时，不能隐式地使用一个explict构造函数。例如</p>
+<p>对void f(vector<int>)：</int></p>
+<ul>
+<li>f(10)         <em>//错误：不能用一个explict构造函数拷贝一个实参</em></li>
+<li>f(vector<int>(10))      <em>正确：从一个int直接构造一个临时vector</em></int></li>
+</ul>
+<h4 id="部分习题解答"><a href="#部分习题解答" class="headerlink" title="部分习题解答"></a>部分习题解答</h4><p>13.4中指出多少地方用到了拷贝构造函数，有一处一开始没找到：*heap = new Point(global)。起初的想法是只要是用括号初始化的一律为直接初始化。然而回到拷贝构造函数的定义，Point(Point&amp;)就是拷贝构造函数，所以这里是直接调用。</p>
+<p>13.5解答：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HasPtr(<span class="keyword">const</span> HasPtr&amp; hp):ps(<span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(*hp.ps)),i(hp.i)&#123;&#125;</div></pre></td></tr></table></figure>
+<h2 id="拷贝赋值运算符"><a href="#拷贝赋值运算符" class="headerlink" title="拷贝赋值运算符"></a>拷贝赋值运算符</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>拷贝赋值运算符就是一个名为operator=的函数。</p>
+<h3 id="何时发生-1"><a href="#何时发生-1" class="headerlink" title="何时发生"></a>何时发生</h3><p>当对象赋值时</p>
+<h3 id="何时生成合成拷贝赋值运算符"><a href="#何时生成合成拷贝赋值运算符" class="headerlink" title="何时生成合成拷贝赋值运算符"></a>何时生成合成拷贝赋值运算符</h3><p>如果一个类未定义自己的拷贝赋值运算符，编译器会为它生成一个合成拷贝赋值运算符</p>
+<h3 id="部分习题解答-1"><a href="#部分习题解答-1" class="headerlink" title="部分习题解答"></a>部分习题解答</h3><p>13.8 解答：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">HasPtr&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> HasPtr &amp;hp) &#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> *new_ps = <span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(*hp.ps);</div><div class="line">    <span class="keyword">delete</span> ps;</div><div class="line">    ps = new_ps;</div><div class="line">    i = hp.i;</div><div class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><p>析构函数是类的一个成员函数，名字由波浪号接类名构成。它没有返回值，也不接受参数。(由于不接受参数，因此不可被重载)</p>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>释放对象使用的资源，并销毁对象的非static数据成员。</p>
+<h3 id="析构函数完成什么工作"><a href="#析构函数完成什么工作" class="headerlink" title="析构函数完成什么工作"></a>析构函数完成什么工作</h3><p>在一个析构函数中，首先执行函数体，然后销毁成员。成员按初始化顺序的逆序销毁。析构部分是隐式的，不存在初始化列表的东西来控制成员如何销毁。</p>
+<p><strong>注意：</strong>销毁类类型的成员需要执行成员自己的析构函数，智能指针也是类类型，而内置类型没有析构函数。</p>
+<h3 id="何时调用析构函数"><a href="#何时调用析构函数" class="headerlink" title="何时调用析构函数"></a>何时调用析构函数</h3><ul>
+<li>变量在离开其作用域时被销毁</li>
+<li>当一个对象被销毁时，其成员被销毁</li>
+<li>容器被销毁时，其元素被销毁</li>
+<li>对于动态分配的对象，当对指向它的指针应用delete运算符时被销毁</li>
+<li>对于临时对象，当创建它的完整表达式结束时被销毁</li>
+</ul>
+<h3 id="合成析构函数完成什么工作"><a href="#合成析构函数完成什么工作" class="headerlink" title="合成析构函数完成什么工作"></a>合成析构函数完成什么工作</h3><p>（类似拷贝构造函数）对于某些类，合成析构函数被用来阻止该类型的对象被销毁。否则，函数体为空。</p>
+<h3 id="何时生成合成析构函数"><a href="#何时生成合成析构函数" class="headerlink" title="何时生成合成析构函数"></a>何时生成合成析构函数</h3><p>未定义自己的析构函数</p>
+<h3 id="部分习题解答-2"><a href="#部分习题解答-2" class="headerlink" title="部分习题解答"></a>部分习题解答</h3><p>13.13 解答</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> X &#123;</div><div class="line">    X() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"X()"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">    X(<span class="keyword">const</span> X&amp;) &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"X(const X&amp;)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">    X&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> X&amp;) &#123; </div><div class="line">    	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"X&amp; operator=(const X&amp;)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; </div><div class="line">    	<span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">    ~X() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"~X()"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> X &amp;rx, X x)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;X&gt; vec;</div><div class="line">    vec.reserve(<span class="number">2</span>);</div><div class="line">    vec.push_back(rx);</div><div class="line">    vec.push_back(x);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    X *px = <span class="keyword">new</span> X;</div><div class="line">    f(*px, *px);</div><div class="line">    <span class="keyword">delete</span> px;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>之后的输出为：</p>
+<pre><code>X()
+X(const X&amp;)
+X(const X&amp;)
+X(const X&amp;)
+~X()
+~X()
+~X()
+~X()
+</code></pre><p>第一个是构造函数；接下来三个调用了拷贝构造函数，一个是传非引用参时调用，另两个是push_back调用的，注意在声明元素类型为X的vector时并没有进行初始化，仅仅是开辟了空间；接下来四个析构函数跟拷贝构造函数的相对应，剩下的一个是delete调用的。</p>
+<h2 id="三-五法则"><a href="#三-五法则" class="headerlink" title="三/五法则"></a>三/五法则</h2><h3 id="需要析构函数的类也需要拷贝和赋值操作"><a href="#需要析构函数的类也需要拷贝和赋值操作" class="headerlink" title="需要析构函数的类也需要拷贝和赋值操作"></a>需要析构函数的类也需要拷贝和赋值操作</h3><p>练习中的HasPtr就是个例子，因为类中在构造函数有一个指针类型的数据成员，指向一块动态申请的内存。如果是使用合成的拷贝构造函数和拷贝赋值函数，则会使得多个HasPtr对象都指向相同的内存。这样析构函数可能会多次释放同一块内存，出错！</p>
+<h3 id="需要拷贝操作的类也需要赋值操作，反之亦然"><a href="#需要拷贝操作的类也需要赋值操作，反之亦然" class="headerlink" title="需要拷贝操作的类也需要赋值操作，反之亦然"></a>需要拷贝操作的类也需要赋值操作，反之亦然</h3><h2 id="使用-default"><a href="#使用-default" class="headerlink" title="使用=default"></a>使用=default</h2><ul>
+<li>可以通过将拷贝控制成员定义为=default来显式地要求编译器生成合成的版本</li>
+<li>类内用=default修饰成员的声明时，隐式成为内联；类外定义用=default则不会内联</li>
+<li>只能对具有合成版本的成员函数使用=default</li>
+</ul>
+<h2 id="阻止拷贝"><a href="#阻止拷贝" class="headerlink" title="阻止拷贝"></a>阻止拷贝</h2><h3 id="定义删除的函数"><a href="#定义删除的函数" class="headerlink" title="定义删除的函数"></a>定义删除的函数</h3><p>在新标准下，可以通过将拷贝构造函数和拷贝赋值运算符定义为删除的函数（deleted function）来阻止拷贝。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Nocopy(<span class="keyword">const</span> NoCopy&amp;) = <span class="keyword">delete</span>;</div></pre></td></tr></table></figure>
+<h3 id="delete与-default的不同"><a href="#delete与-default的不同" class="headerlink" title="=delete与=default的不同"></a>=delete与=default的不同</h3><ul>
+<li>=delete必须出现在函数第一次声明的时候</li>
+<li>可以对任何函数指定=delete</li>
+</ul>
+<h3 id="析构函数不能是删除的成员"><a href="#析构函数不能是删除的成员" class="headerlink" title="析构函数不能是删除的成员"></a>析构函数不能是删除的成员</h3><ul>
+<li>不能删除析构函数。如果析构函数被删除，就无法销毁此类型的对象</li>
+<li>对于析构函数已删除的类型，不能定义该类型的变量或释放指向该类型动态分配对象的指针。（但可以动态分配这种类型的对象）</li>
+</ul>
+<h3 id="合成的拷贝控制成员可能是删除的"><a href="#合成的拷贝控制成员可能是删除的" class="headerlink" title="合成的拷贝控制成员可能是删除的"></a>合成的拷贝控制成员可能是删除的</h3><ul>
+<li>本质上，当不可能拷贝、赋值或销毁累的成员时，类的合成拷贝控制成员就被定义为删除的。</li>
+<li>对于具有引用成员或无法默认构造的const成员的类，编译器不会为其合成默认构造函数。</li>
+</ul>
+<h3 id="private拷贝控制"><a href="#private拷贝控制" class="headerlink" title="private拷贝控制"></a>private拷贝控制</h3><p>希望阻止拷贝的类应该使用=delete来定义它们自己的拷贝构造函数和拷贝赋值运算符，而不应该将它们声明为private的。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;拷贝构造函数&quot;&gt;&lt;a href=&quot;#拷贝构造函数&quot; class=&quot;headerlink&quot; title=&quot;拷贝构造函数&quot;&gt;&lt;/a&gt;拷贝构造函数&lt;/h2&gt;&lt;h3 id=&quot;定义&quot;&gt;&lt;a href=&quot;#定义&quot; class=&quot;headerlink&quot; title=&quot;定义&quot;&gt;&lt;/a&gt;定义&lt;/h3&gt;&lt;p&gt;如果一个构造函数的第一个类型是自身类型的引用，且任何额外参数都有额外默认值，则此构造函数是拷贝构造函数。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;为何必须是引用？
+拷贝构造函数被用来初始化非引用类类型参数，比如非引用实参传给形参，或是非引用返回类型的函数返回对象等。
+若自身类型不是引用的话，为了调用拷贝构造函数，必须拷贝实参，此时又得调用拷贝构造函数，如此无限循环。
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&quot;合成拷贝构造函数&quot;&gt;&lt;a href=&quot;#合成拷贝构造函数&quot; class=&quot;headerlink&quot; title=&quot;合成拷贝构造函数&quot;&gt;&lt;/a&gt;合成拷贝构造函数&lt;/h4&gt;&lt;p&gt;一般情况下，合成的拷贝构造函数会将其参数的成员逐个拷贝到正在创建的对象当中&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="c++" scheme="http://wangqiucheng.com/categories/c/"/>
+    
+    
+      <category term="c++" scheme="http://wangqiucheng.com/tags/c/"/>
+    
+      <category term="c++ primer 5th" scheme="http://wangqiucheng.com/tags/c-primer-5th/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>redis入门</title>
+    <link href="http://wangqiucheng.com/2016/02/29/redis%E5%85%A5%E9%97%A8/"/>
+    <id>http://wangqiucheng.com/2016/02/29/redis入门/</id>
+    <published>2016-02-29T14:00:27.000Z</published>
+    <updated>2016-09-28T03:57:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="redis入门"><a href="#redis入门" class="headerlink" title="redis入门"></a>redis入门</h1><p>前阵子拜读了《redis入门指南第2版》，书中对redis的介绍通俗易懂，以下为简单的思维导图：</p>
+<h3 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h3><p><img src="http://7xjnpo.com1.z0.glb.clouddn.com/wqcredis_newer.png" alt="redis framework"></p>
+<a id="more"></a>
+<p>由于图片过小可能看不清楚，以下为整本书的简单框架：</p>
+<h3 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h3><p><strong>redis</strong></p>
+<ol>
+<li>准备<ol>
+<li>安装——brew install redis</li>
+<li>启动服务端<ol>
+<li>redis-server [–port xxx]</li>
+<li>初始化脚本自启动</li>
+</ol>
+</li>
+<li>启动客户端——redis-cli</li>
+<li>测试连通性——在客户端中ping</li>
+<li>停止服务端——在客户端shutdown</li>
+</ol>
+</li>
+<li>数据结构（字典结构）<ol>
+<li>字符串类型：序列化和反序列化</li>
+<li>散列类型：键-字段-字段值（字符串类型）</li>
+<li>列表类型：双向链表</li>
+<li>集合类型——支持集合操作</li>
+<li>有序集合类型——跳跃表（Skip list）</li>
+</ol>
+</li>
+<li>进阶<ol>
+<li>事务——MULTI+EXEC</li>
+<li>监视——WATCH</li>
+<li>过期时间——EXPIRE</li>
+<li>排序<ol>
+<li>SORT</li>
+<li>BY</li>
+<li>GET</li>
+<li>STORE</li>
+</ol>
+</li>
+<li>消息通知<ol>
+<li>任务队列——优先级队列</li>
+<li>发布/订阅</li>
+</ol>
+</li>
+<li>管道</li>
+<li>节省空间——编码方式</li>
+</ol>
+</li>
+<li>实践<ol>
+<li>php——用户注册登录</li>
+<li>ruby——自动补全</li>
+<li>python——查看在线好友</li>
+<li>node.js——ip地址查询</li>
+<li>其他语言</li>
+</ol>
+</li>
+<li>脚本——Lua</li>
+<li>持久化<ol>
+<li>RDB方式——使用“快照”，将内存中的所有数据生成一份副本并存储在硬盘上<ol>
+<li>AOF方式——记录redis的每一条写命令</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>集群<ol>
+<li>复制<ol>
+<li>主从复制</li>
+<li>读写分离</li>
+<li>无硬盘复制</li>
+<li>增量复制<ol>
+<li>哨兵</li>
+<li>集群</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>管理<ol>
+<li>安全</li>
+<li>通信协议<ol>
+<li>简单协议</li>
+<li>统一请求协议</li>
+</ol>
+</li>
+<li>管理工具<ol>
+<li>phpRedisAdmin</li>
+<li>Rdbtools</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="进阶学习"><a href="#进阶学习" class="headerlink" title="进阶学习"></a>进阶学习</h3><p>由于对redis数据库的应用并没有具体情景，接下来可以对redis进行源码研读，其中有黄建宏大神的《redis设计与实现》，而且他在github上面还有针对redis源码的中文注释，传送门在此——<a href="https://github.com/huangz1990/redis" target="_blank" rel="external">黄建宏：redis设计与实现</a>，马克之！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;redis入门&quot;&gt;&lt;a href=&quot;#redis入门&quot; class=&quot;headerlink&quot; title=&quot;redis入门&quot;&gt;&lt;/a&gt;redis入门&lt;/h1&gt;&lt;p&gt;前阵子拜读了《redis入门指南第2版》，书中对redis的介绍通俗易懂，以下为简单的思维导图：&lt;/p&gt;
+&lt;h3 id=&quot;思维导图&quot;&gt;&lt;a href=&quot;#思维导图&quot; class=&quot;headerlink&quot; title=&quot;思维导图&quot;&gt;&lt;/a&gt;思维导图&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;http://7xjnpo.com1.z0.glb.clouddn.com/wqcredis_newer.png&quot; alt=&quot;redis framework&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="数据库" scheme="http://wangqiucheng.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="redis" scheme="http://wangqiucheng.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/redis/"/>
+    
+    
+      <category term="redis" scheme="http://wangqiucheng.com/tags/redis/"/>
+    
+      <category term="数据库" scheme="http://wangqiucheng.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>初读《算法》</title>
+    <link href="http://wangqiucheng.com/2016/01/14/%E5%88%9D%E8%AF%BB%E3%80%8A%E7%AE%97%E6%B3%95%E3%80%8B/"/>
+    <id>http://wangqiucheng.com/2016/01/14/初读《算法》/</id>
+    <published>2016-01-14T01:32:31.000Z</published>
+    <updated>2016-09-28T03:59:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="初读《算法》"><a href="#初读《算法》" class="headerlink" title="初读《算法》"></a>初读《算法》</h1><p>最近终于把《算法》这本书看完了，以下神书镇楼：</p>
+<p><img src="http://7xjnpo.com1.z0.glb.clouddn.com/cover.png" alt="book algorithms"></p>
+<h2 id="整体印象"><a href="#整体印象" class="headerlink" title="整体印象"></a>整体印象</h2><p>知乎上曾经讨论过新手学算法第一本书应该选择哪一本，其中就有答案说了这一本。</p>
+<p>该书编排结构很清晰，主要是分了排序，查找，图和字符串几个部分来讲述，并没有像其他算法书一样会讲述算法思想，如果仅仅是想要涉猎常用算法而不过多关注算法思想，那本书是非常推荐的。</p>
+<a id="more"></a>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>本书特点在于：</p>
+<ol>
+<li>讲述算法过程中有丰富的配图，对算法过程中比较重要和晦涩难懂的部分会以彩插形式显现出来。</li>
+<li>在实现算法过程中很重视API的设计以及测试用例的使用，而且会频繁使用之前已经定义过的数据结构或者API来实现新的算法。<ul>
+<li>一来做到代码复用；</li>
+<li>二来因为只使用了之前的接口，也使得代码量大大减少了；</li>
+<li>三来代码各种交叉引用，会不断回想以前所学的数据结构和代码。Elegant！！</li>
+</ul>
+</li>
+</ol>
+<h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><p>阅读完之后将内容做了一下思维导图，其实大概也就是目录结构。很多算法现在想起来还是特别地简洁精妙。</p>
+<p><img src="http://7xjnpo.com1.z0.glb.clouddn.com/%E7%AE%97%E6%B3%95.png" alt="mind graph"></p>
+<h2 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h2><p>如果手头没有这本书也没有太大关系，网上有关于这本书的网站，斯坦福出品，在讲解、答疑以及代码查看方面比书上更加方便。</p>
+<p><a href="http://algs4.cs.princeton.edu/home/" target="_blank" rel="external">Algorithms, 4th Edition</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;初读《算法》&quot;&gt;&lt;a href=&quot;#初读《算法》&quot; class=&quot;headerlink&quot; title=&quot;初读《算法》&quot;&gt;&lt;/a&gt;初读《算法》&lt;/h1&gt;&lt;p&gt;最近终于把《算法》这本书看完了，以下神书镇楼：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xjnpo.com1.z0.glb.clouddn.com/cover.png&quot; alt=&quot;book algorithms&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;整体印象&quot;&gt;&lt;a href=&quot;#整体印象&quot; class=&quot;headerlink&quot; title=&quot;整体印象&quot;&gt;&lt;/a&gt;整体印象&lt;/h2&gt;&lt;p&gt;知乎上曾经讨论过新手学算法第一本书应该选择哪一本，其中就有答案说了这一本。&lt;/p&gt;
+&lt;p&gt;该书编排结构很清晰，主要是分了排序，查找，图和字符串几个部分来讲述，并没有像其他算法书一样会讲述算法思想，如果仅仅是想要涉猎常用算法而不过多关注算法思想，那本书是非常推荐的。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法" scheme="http://wangqiucheng.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="算法" scheme="http://wangqiucheng.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[转]如何阅读一本书－读书笔记</title>
+    <link href="http://wangqiucheng.com/2015/06/23/e8-bd-ac-e5-a6-82-e4-bd-95-e9-98-85-e8-af-bb-e4-b8-80-e6-9c-ac-e4-b9-a6-ef-bc-8d-e8-af-bb-e4-b9-a6-e7-ac-94-e8-ae-b0/"/>
+    <id>http://wangqiucheng.com/2015/06/23/e8-bd-ac-e5-a6-82-e4-bd-95-e9-98-85-e8-af-bb-e4-b8-80-e6-9c-ac-e4-b9-a6-ef-bc-8d-e8-af-bb-e4-b9-a6-e7-ac-94-e8-ae-b0/</id>
+    <published>2015-06-23T13:39:08.000Z</published>
+    <updated>2016-09-28T03:56:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="如何阅读一本书"><a href="#如何阅读一本书" class="headerlink" title="如何阅读一本书"></a>如何阅读一本书</h1><h2 id="读书四问："><a href="#读书四问：" class="headerlink" title="读书四问："></a>读书四问：</h2><h3 id="1、这本书的主题？"><a href="#1、这本书的主题？" class="headerlink" title="1、这本书的主题？"></a>1、这本书的主题？</h3><p>讲述阅读的四种层次，以及每种层次所需要的、截然不同的阅读方法。</p>
+<h3 id="2、作者的主要声明与论点？"><a href="#2、作者的主要声明与论点？" class="headerlink" title="2、作者的主要声明与论点？"></a>2、作者的主要声明与论点？</h3><p>作者提倡的阅读方法可以归纳为以下五点：</p>
+<ol>
+<li>带着问题阅读，时刻不忘在书中寻找问题的答案。</li>
+<li>高速阅读，以最短的时间了解一本书的全貌，然后决定是否值得再次阅读。</li>
+<li>解构内容，以笔记的方式，列举全书的大纲。</li>
+<li>海量阅读，深度阅读同一领域里的经典著作。</li>
+<li>思考与评价，要有足够坚实的理由去赞同或者反对一本书，否则不要轻易评价。</li>
+</ol>
+<a id="more"></a>
+<h3 id="3、这本书说得有道理吗？"><a href="#3、这本书说得有道理吗？" class="headerlink" title="3、这本书说得有道理吗？"></a>3、这本书说得有道理吗？</h3><p>有一定的道理，至少给原来不求甚解的读者当头一棒。但是作者的思想有点片面，阅读方式对文学作品也有一定的局限性。</p>
+<h3 id="4、这本书与自己的关系？"><a href="#4、这本书与自己的关系？" class="headerlink" title="4、这本书与自己的关系？"></a>4、这本书与自己的关系？</h3><p>以前自己更多注重阅读感受，现在明白理性阅读也很重要。</p>
+<h2 id="引文摘要："><a href="#引文摘要：" class="headerlink" title="引文摘要："></a>引文摘要：</h2><h3 id="【1】阅读过程中的四个问题："><a href="#【1】阅读过程中的四个问题：" class="headerlink" title="【1】阅读过程中的四个问题："></a>【1】阅读过程中的四个问题：</h3><ol>
+<li>这本书在谈什么？作者如何依次发展主题，如何从核心主题分解出关键议题。</li>
+<li>作者说了什么，怎么说的？找出主要的想法、声明与论点。组合成作者传达的特殊讯息。</li>
+<li>这本书说得有道理吗？是全部有道理，还是部分有道理？为这本书做出自己的判断。</li>
+<li>这本书与自己的关系？这本书提供的资讯有什么意义。为什么这位作者认为这件事很重要？自己真的有必要去了解吗？如果还启发了自己，就有必要找出其他相关的含意或建议，以获得更多的启示。</li>
+</ol>
+<h3 id="【2】阅读的四个层次："><a href="#【2】阅读的四个层次：" class="headerlink" title="【2】阅读的四个层次："></a>【2】阅读的四个层次：</h3><ol>
+<li>基础阅读</li>
+<li>检视阅读</li>
+<li>分析阅读</li>
+<li>主题阅读</li>
+</ol>
+<h3 id="【3】基础阅读必备的四种能力："><a href="#【3】基础阅读必备的四种能力：" class="headerlink" title="【3】基础阅读必备的四种能力："></a>【3】基础阅读必备的四种能力：</h3><ol>
+<li>词义的认知能力</li>
+<li>信息的查阅能力</li>
+<li>读写的记录能力</li>
+<li>对未知事物的好奇心</li>
+</ol>
+<h3 id="【4】检视阅读的两个阶段："><a href="#【4】检视阅读的两个阶段：" class="headerlink" title="【4】检视阅读的两个阶段："></a>【4】检视阅读的两个阶段：</h3><h4 id="一、简略的阅读"><a href="#一、简略的阅读" class="headerlink" title="一、简略的阅读"></a>一、简略的阅读</h4><ol>
+<li>先看书名和序言，特别注意副标题，或其他的相关说明，然后将书在脑海中进行归类。</li>
+<li>研究目录页，对书的基本架构做概括性的理解。</li>
+<li>检阅索引，快速评估一下这本书涵盖了哪些议题的范围，以及所提到的书籍种类与作者。</li>
+<li>阅读出版介绍、广告文案、宣传文案。</li>
+<li>从目录当中挑选几个与主题息息相关的篇章来读。如果这些篇章在开头或结尾有摘要说明，就要仔细地阅读这些说明。</li>
+<li>跳跃式阅读，寻找主要论点的讯号，留意主题的基本脉动。最后阅读后记。</li>
+</ol>
+<h4 id="二、粗浅的阅读"><a href="#二、粗浅的阅读" class="headerlink" title="二、粗浅的阅读"></a>二、粗浅的阅读</h4><ol>
+<li>关注自己理解的部分，不要因为一些暂时难以理解的东西而停顿。</li>
+<li>快速阅读一部陌生的书籍，尽量选择默读，避免阅读过程中视线的逗留或倒退。</li>
+<li>学会判断一本书的难易程度，以此决定自己的阅读速度。</li>
+</ol>
+<h3 id="【5】分析阅读的三个阶段："><a href="#【5】分析阅读的三个阶段：" class="headerlink" title="【5】分析阅读的三个阶段："></a>【5】分析阅读的三个阶段：</h3><h4 id="一、分析阅读的第一阶段：找出一本书在谈些什么的规则"><a href="#一、分析阅读的第一阶段：找出一本书在谈些什么的规则" class="headerlink" title="一、分析阅读的第一阶段：找出一本书在谈些什么的规则"></a>一、分析阅读的第一阶段：找出一本书在谈些什么的规则</h4><ol>
+<li>依照书的种类与主题来分类。</li>
+<li>使用最简短的文字说明整本书在谈些什么。</li>
+<li>将主要部分按顺序与关联性列举出来。将全书的大纲列举出来，并将各个部分的大纲也列出来。</li>
+<li>确定作者想要解决的问题。</li>
+</ol>
+<h4 id="二、分析阅读的第二阶段：诊释一本书的内容规则"><a href="#二、分析阅读的第二阶段：诊释一本书的内容规则" class="headerlink" title="二、分析阅读的第二阶段：诊释一本书的内容规则"></a>二、分析阅读的第二阶段：诊释一本书的内容规则</h4><ol>
+<li>诊释作者的关键字，与他达成共识。</li>
+<li>由最重要的句子中，抓住作者的重要主旨。</li>
+<li>知道作者的论述是什么，从内容中找出相关的句子，再重新架构出来。</li>
+<li>确定作者已经解决了哪些问题，还有哪些是没解决的。再判断哪些是作者知道他没解决的问题。</li>
+</ol>
+<h4 id="三、分析阅读的第三阶段：像是沟通知识一样地评论一本书的规则"><a href="#三、分析阅读的第三阶段：像是沟通知识一样地评论一本书的规则" class="headerlink" title="三、分析阅读的第三阶段：像是沟通知识一样地评论一本书的规则"></a>三、分析阅读的第三阶段：像是沟通知识一样地评论一本书的规则</h4><h5 id="A-智慧礼节的一般规则"><a href="#A-智慧礼节的一般规则" class="headerlink" title="A.智慧礼节的一般规则"></a>A.智慧礼节的一般规则</h5><ol>
+<li>除非你已经完成大纲架构，也能诠释整本书了，否则不要轻易批评。（在你说出：&quot;我读懂了！&quot;之前，不要说你同意、不同意或暂缓评论。）</li>
+<li>不要争强好胜，非辩到底不可。</li>
+<li>在说出评论之前，你要能证明自己区别得出真正的知识与个人观点的不同。</li>
+</ol>
+<h5 id="B-批评观点的特别标准"><a href="#B-批评观点的特别标准" class="headerlink" title="B.批评观点的特别标准"></a>B.批评观点的特别标准</h5><ol>
+<li>证明作者的知识不足。</li>
+<li>证明作者的知识错误。</li>
+<li>证明作者不合逻辑。</li>
+<li>证明作者的分析与理由是不完整的。</li>
+</ol>
+<p><em>注意：关于最后这四点，前三点是表示不同意见的准则，如果你无法提出相关的佐证，就必须同意作者的说法，或至少一部分说法。你只能因为最后一点理由，对这本书暂缓评论。</em></p>
+<h3 id="【6】主题阅读的两个阶段："><a href="#【6】主题阅读的两个阶段：" class="headerlink" title="【6】主题阅读的两个阶段："></a>【6】主题阅读的两个阶段：</h3><h4 id="一、观察研究范围：主题阅读的准备阶段："><a href="#一、观察研究范围：主题阅读的准备阶段：" class="headerlink" title="一、观察研究范围：主题阅读的准备阶段："></a>一、观察研究范围：主题阅读的准备阶段：</h4><ol>
+<li>针对研究的主题，设计一份试验性的书目。</li>
+<li>浏览书目，确定哪些与主题相关，并就主题建立起清楚的概念。</li>
+</ol>
+<h4 id="二、主题阅读：阅读第一阶段收集到的书籍："><a href="#二、主题阅读：阅读第一阶段收集到的书籍：" class="headerlink" title="二、主题阅读：阅读第一阶段收集到的书籍："></a>二、主题阅读：阅读第一阶段收集到的书籍：</h4><ol>
+<li>浏览所有在第一阶段被认定与主题相关的书，找出最相关的章节。</li>
+<li>根据主题创造出一套中立的词汇，带引作者与你达成共识，使大部分的作者都可以用这套词汇来诠释。</li>
+<li>建立一个中立的主旨，列出一连串的问题，使大多数的作者为解读这些问题提供了他们的回答。</li>
+<li>界定主要及次要的议题。然后将作者针对各个问题的不同意见整理陈列在各个议题之旁。</li>
+<li>分析这些讨论。以突显主题为原则，把问题和议题按顺序排列。议题以其共通性来决定排列的先后顺序。解读某个作家对一个议题的观点时，必须从他自己的文章中引一段话来并列。</li>
+</ol>
+<h3 id="【7】读书笔记的方法："><a href="#【7】读书笔记的方法：" class="headerlink" title="【7】读书笔记的方法："></a>【7】读书笔记的方法：</h3><ol>
+<li>画底线——在主要的重点，或重要又有力量的句子下画线。</li>
+<li>在画底线处的栏外再加画一道线——把你已经画线的部分再强调一遍，或是某一段很重要，但要画底线太长了，便在这一整段外加上一个记号。</li>
+<li>在空白处做星号或其他符号——要慎用，只用来强调书中十来个最重要的声明或段落即可。你可能想要将做过这样记号的地方每页折一个角，或是夹一张书签，这样你随时从书架上拿起这本书，打开你做记号的地方，就能唤醒你的记忆。</li>
+<li>在空白处编号——作者的某个论点发展出一连串的重要陈述时，可以做顺序编号。</li>
+<li>在空白处记下其他的页码——强调作者在书中其他部分也有过同样的论点，或相关的要点，或是与此处观点不同的地方。这样做能让散布全书的想法统一集中起来。许多读者会用Cf这样的记号，表示比较或参照的意思。</li>
+<li>将关键字或句子圈出来——这跟画底线是同样的功能。</li>
+<li>在书页的空白处做笔记——在阅读某一章节时，你可能会有些问题（或答案），在空白处记下来，这样可以帮你回想起你的问题或答案。你也可以将复杂的论点简化说明在书页的空白处。或是记下全书所有主要论点的发展顺序。书中最后一页可以用来作为个人的索引页，将作者的主要观点依序记下来。</li>
+</ol>
+<h2 id="简评："><a href="#简评：" class="headerlink" title="简评："></a>简评：</h2><p>读书是一种习惯，也是一种技巧，更是一门技术。一个人读书，不是说他逐字逐句地念过一遍就能叫做“读书”，那顶多算是翻书。人家说，“想到”和“得到”之间，还有一个词叫“做到”。读书同样如此，“读过了”和“读懂了”之间，还有一段距离，而“读懂了”和“做到了”之间，也有一段距离。这本书就是告诉你一个如何才能“读懂”一本书的方法，至于能否“做到”，这需要看一个人的执行力，以及他的实践精神。与其说这是一本实用性的书籍，不如说是一本“成功学”的书籍。在这个“知识创造财富”的时代，如何能够更高效地获取知识，并将其转化为个人能力，才是一个人成功的重要资本。</p>
+<h2 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h2><p>知乎上问题<a href="http://www.zhihu.com/question/20631409" target="_blank" rel="external">如何评价《如何阅读一本书》</a>中<a href="http://www.zhihu.com/people/cheng-hao-81" target="_blank" rel="external">程浩</a>的回答。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;如何阅读一本书&quot;&gt;&lt;a href=&quot;#如何阅读一本书&quot; class=&quot;headerlink&quot; title=&quot;如何阅读一本书&quot;&gt;&lt;/a&gt;如何阅读一本书&lt;/h1&gt;&lt;h2 id=&quot;读书四问：&quot;&gt;&lt;a href=&quot;#读书四问：&quot; class=&quot;headerlink&quot; title=&quot;读书四问：&quot;&gt;&lt;/a&gt;读书四问：&lt;/h2&gt;&lt;h3 id=&quot;1、这本书的主题？&quot;&gt;&lt;a href=&quot;#1、这本书的主题？&quot; class=&quot;headerlink&quot; title=&quot;1、这本书的主题？&quot;&gt;&lt;/a&gt;1、这本书的主题？&lt;/h3&gt;&lt;p&gt;讲述阅读的四种层次，以及每种层次所需要的、截然不同的阅读方法。&lt;/p&gt;
+&lt;h3 id=&quot;2、作者的主要声明与论点？&quot;&gt;&lt;a href=&quot;#2、作者的主要声明与论点？&quot; class=&quot;headerlink&quot; title=&quot;2、作者的主要声明与论点？&quot;&gt;&lt;/a&gt;2、作者的主要声明与论点？&lt;/h3&gt;&lt;p&gt;作者提倡的阅读方法可以归纳为以下五点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;带着问题阅读，时刻不忘在书中寻找问题的答案。&lt;/li&gt;
+&lt;li&gt;高速阅读，以最短的时间了解一本书的全貌，然后决定是否值得再次阅读。&lt;/li&gt;
+&lt;li&gt;解构内容，以笔记的方式，列举全书的大纲。&lt;/li&gt;
+&lt;li&gt;海量阅读，深度阅读同一领域里的经典著作。&lt;/li&gt;
+&lt;li&gt;思考与评价，要有足够坚实的理由去赞同或者反对一本书，否则不要轻易评价。&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+      <category term="学习方法" scheme="http://wangqiucheng.com/categories/%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/"/>
+    
+    
+      <category term="效率" scheme="http://wangqiucheng.com/tags/%E6%95%88%E7%8E%87/"/>
+    
+      <category term="学习方法" scheme="http://wangqiucheng.com/tags/%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Markdown新手入门</title>
+    <link href="http://wangqiucheng.com/2015/06/18/markdown-e6-96-b0-e6-89-8b-e5-85-a5-e9-97-a8/"/>
+    <id>http://wangqiucheng.com/2015/06/18/markdown-e6-96-b0-e6-89-8b-e5-85-a5-e9-97-a8/</id>
+    <published>2015-06-17T17:21:59.000Z</published>
+    <updated>2016-09-28T03:57:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="认识Markdown"><a href="#认识Markdown" class="headerlink" title="认识Markdown"></a>认识Markdown</h1><hr>
+<p>说到markdown，第一个印象就是<strong>极简</strong>。不需要像word那样去考虑排版，字号大小，行间距，因为很多时候记录技术问题的时候更关注的是内容本身，如果需要考虑缩进，间隔，那样思路很容易被打断。</p>
+<p>也因为没有太多复杂的格式问题，或者更加简洁的说法，在用markdown写文章的时候，基本上手可以不用离开键盘，因此markdown受到了很多技术人的青睐。github上面的项目介绍就是使用markdown写的，具体例子可以参考<a href="https://github.com/wangqc/jieba/blob/master/README.md" target="_blank" rel="external">结巴中文分词</a>。可以看到里面包含的元素很少，也就是标题，列表，链接，代码框，没了，但是从整体来看，排版很简洁，花的精力都可以集中在内容上，对作者对读者都好。</p>
+<p>如果我们在<a href="https://github.com/wangqc/jieba/blob/master/README.md" target="_blank" rel="external">结巴中文分词</a>中将内容转换成<a href="https://raw.githubusercontent.com/wangqc/jieba/master/README.md" target="_blank" rel="external">raw模式</a>，发现其实markdown就是一堆类似HTML的代码，当然某些标记还是不一样的。Markdown是一种轻量级的标记语言，可以很容易转换成为HTML代码。</p>
+<a id="more"></a>
+<h1 id="学习Markdown"><a href="#学习Markdown" class="headerlink" title="学习Markdown"></a>学习Markdown</h1><hr>
+<p>Markdown编辑器很多，在Mac下推荐使用Mou或者Macdown，本文使用Macdown誊写的。</p>
+<p>Markdown常用的元素有以下几种：</p>
+<ul>
+<li>标题</li>
+<li>列表</li>
+<li>引用</li>
+<li>链接</li>
+<li>代码框</li>
+</ul>
+<h2 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h2><p>对应于HTML中的h1,h2…，Markdown中通过#个数的多少来判定为几号标题。而在Macdown中，可以使用command+[num]快捷键来快速设置几号标题。</p>
+<h3 id="标题3"><a href="#标题3" class="headerlink" title="标题3"></a>标题3</h3><h4 id="标题4"><a href="#标题4" class="headerlink" title="标题4"></a>标题4</h4><h5 id="标题5"><a href="#标题5" class="headerlink" title="标题5"></a>标题5</h5><p>Markdown语法：</p>
+<pre><code>### 标题3
+#### 标题4
+##### 标题5`&lt;/pre&gt;
+
+## 列表
+
+列表使用英文字符-开头，中间空一格，后面书写内容，就可以把这个变成列表内容了。
+</code></pre><ul>
+<li>列表1</li>
+<li><p>列表2</p>
+<pre><code>*   子列表1
+</code></pre><ul>
+<li>子列表2</li>
+</ul>
+</li>
+<li><p>列表3<br>Markdown语法：</p>
+<pre>`- 列表1
+- 列表2
+    + 子列表1
+    + 子列表2
+- 列表3`</pre>
+
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>引用只需要在想要被引用的内容前面加上&gt;就可以了。</p>
+<blockquote>
+<p>被引用的内容<br>Markdown语法： </p>
+<pre class="lang:default decode:true ">&gt; 被引用的内容</pre>
+
+</blockquote>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p>对于普通链接，只需要用方括号括上想要显示的文字，之后再用括号括上网址，即可生成链接。<br>例如之前的<a href="https://github.com/wangqc/jieba/blob/master/README.md" target="_blank" rel="external">结巴中文分词</a>。</p>
+<p>而图片链接，则在普通链接前面加上一个感叹号即可，图片需要图床，简单说就是网络一个存放图片的空间，空间为这张图片生成一个外链地址，可以让图片像网页一样通过URL访问。这里推荐<a href="http://www.qiniu.com/?utm_source=BAIDU&amp;utm_medium=cpc&amp;utm_term=%E4%BA%91%E5%AD%98%E5%82%A8&amp;utm_content=chanpinlei&amp;utm_campaign=qiniu-ceshi" target="_blank" rel="external">七牛云存储</a>。</p>
+<p>以下为图片链接：<img src="http://7xjnpo.com1.z0.glb.clouddn.com/wqcchrome_vimuim-640x400.jpg" alt="测试图片"></p>
+<p>Markdown语法：</p>
+<pre>`[结巴中文分词](https://github.com/wangqc/jieba/blob/master/README.md)
+
+![测试图片](http://7xjnpo.com1.z0.glb.clouddn.com/wqcchrome_vimuim-640x400.jpg)`</pre>
+
+<h2 id="代码框"><a href="#代码框" class="headerlink" title="代码框"></a>代码框</h2><p>身为IT从业人员怎么可以没有代码的内容呢！？代码框我在前面已经使用过了，只要在新行使用Tab键即可，也可以使用反引号<code>代码框（反引号）</code>。<br><pre>`代码框（TAB）</pre></p>
+</li>
+</ul>
+<h2 id="细节点"><a href="#细节点" class="headerlink" title="细节点"></a>细节点</h2><ul>
+<li>文字<strong>加粗</strong>使用左右两个*包含加粗的文字，也可以选中文字后command+B快捷键。</li>
+<li>文字<em>斜体</em>使用左右一个*包含斜体的文字，也可以选中文字后command+I快捷键</li>
+<li>新起一行，在句子最后使用两个空格后再起一行，相当于HTML中的&lt;br&gt;</li>
+<li>新起一段，在一个段落后连续两个回车。</li>
+</ul>
+<h2 id="更多资源"><a href="#更多资源" class="headerlink" title="更多资源"></a>更多资源</h2><ul>
+<li>对于Macdown，最好的参考是Help文件。</li>
+<li><a href="http://lutaf.com/markdown-simple-usage.htm" target="_blank" rel="external">鲁塔弗的博客－1分钟学会Markdown语法</a>。确实1分钟可以让你有个整体印象，特别不错</li>
+<li><a href="http://sspai.com/25137" target="_blank" rel="external">少数派－认识与入门Markdown</a>。比之上一个图文并茂。</li>
+<li><a href="http://www.markdown.cn/" target="_blank" rel="external">Markdown语法说明</a>。这个是最为详细的。学完后Markdown语法中起码80%的东西已经掌握了，足以应付日常的工作了。</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;认识Markdown&quot;&gt;&lt;a href=&quot;#认识Markdown&quot; class=&quot;headerlink&quot; title=&quot;认识Markdown&quot;&gt;&lt;/a&gt;认识Markdown&lt;/h1&gt;&lt;hr&gt;
+&lt;p&gt;说到markdown，第一个印象就是&lt;strong&gt;极简&lt;/strong&gt;。不需要像word那样去考虑排版，字号大小，行间距，因为很多时候记录技术问题的时候更关注的是内容本身，如果需要考虑缩进，间隔，那样思路很容易被打断。&lt;/p&gt;
+&lt;p&gt;也因为没有太多复杂的格式问题，或者更加简洁的说法，在用markdown写文章的时候，基本上手可以不用离开键盘，因此markdown受到了很多技术人的青睐。github上面的项目介绍就是使用markdown写的，具体例子可以参考&lt;a href=&quot;https://github.com/wangqc/jieba/blob/master/README.md&quot;&gt;结巴中文分词&lt;/a&gt;。可以看到里面包含的元素很少，也就是标题，列表，链接，代码框，没了，但是从整体来看，排版很简洁，花的精力都可以集中在内容上，对作者对读者都好。&lt;/p&gt;
+&lt;p&gt;如果我们在&lt;a href=&quot;https://github.com/wangqc/jieba/blob/master/README.md&quot;&gt;结巴中文分词&lt;/a&gt;中将内容转换成&lt;a href=&quot;https://raw.githubusercontent.com/wangqc/jieba/master/README.md&quot;&gt;raw模式&lt;/a&gt;，发现其实markdown就是一堆类似HTML的代码，当然某些标记还是不一样的。Markdown是一种轻量级的标记语言，可以很容易转换成为HTML代码。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具" scheme="http://wangqiucheng.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="效率" scheme="http://wangqiucheng.com/tags/%E6%95%88%E7%8E%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>chrome效率工具－－vimium</title>
+    <link href="http://wangqiucheng.com/2015/04/17/chrome-e6-95-88-e7-8e-87-e5-b7-a5-e5-85-b7-ef-bc-8d-ef-bc-8dvimium/"/>
+    <id>http://wangqiucheng.com/2015/04/17/chrome-e6-95-88-e7-8e-87-e5-b7-a5-e5-85-b7-ef-bc-8d-ef-bc-8dvimium/</id>
+    <published>2015-04-17T12:32:26.000Z</published>
+    <updated>2016-09-28T03:55:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>由于长时间面对电脑加上姿势不正确，这几天脖子比较疼痛，医生给的建议是不要久坐以及将显示屏垫高。遵循医嘱，将mac本垫高后使用自带键盘打字已经不方便了，因此就使用外接键盘。而用久mac的都会不喜欢使用鼠标。那现在问题来了，挖掘家技术哪家强？哦，不对，使用外接键盘用chrome上网时，譬如百度时你想要点击链接时还需要将手伸到触摸板去点击，这对键盘狂人来说简直就是不能忍。因此在经过一番搜索后，发现了这款神器－－vimium。</p>
+<a id="more"></a>
+<h4 id="Vimium"><a href="#Vimium" class="headerlink" title="Vimium"></a>Vimium</h4><blockquote>
+<p>Vimium is a Google Chrome extension which provides keyboard shortcuts for navigation and control in the spirit of the Vim editor.根据Vimium官网的介绍，就是能让用户使用vim的操作方式去操作chrome上网。不过在我使用一段时间后发现并没有发现有多么像vim，最多就是一个insert模式以及一个esc模式，很多时候都是在esc模式下操作，以下是我觉得比较给力的操作：</p>
+</blockquote>
+<ul>
+<li>f，F：这是我最心仪的一个操作。在百度时你百度出一大堆链接后要访问某个链接你一般都需要用鼠标去点击，这个时候手就不得不离开键盘去按触摸板。按下f后会在当前页面里面把可以点击的链接全部用字母索引出来，再次键入你需要的链接对应的字母（或字母组合）就可以在当前页打开这个链接，使用F则是在新的标签页打开这个链接；<br><img src="http://7xjnpo.com1.z0.glb.clouddn.com/wqcchrome_vimuim-640x400.jpg" alt=""></li>
+<li>gi：这个操作可以使用f来代替，不过这个更加便捷。同样以百度为例，你搜索出一堆链接后，此时光标已经不在输入栏了。当你还想搜索的时候你又是得将鼠标移到输入栏点击来定位光标。而按下gi会将光标移到当前页面第一个输入框中，再使用tab可以在跳到下一个输入框。如果使用f操作，因为输入框也被看成了一个链接，只要按下f后再键入相应字母组合就可以跳到输入框；</li>
+<li>b，B：这个可以打开你书签中的链接，不过你还是需要记得你想要打开链接的相关字段，从而才能联想到对应的链接；</li>
+</ul>
+<p>其他的操作因为在chrome有相应操作，只是更简洁，这里也列举一下：</p>
+<ul>
+<li>x：x操作就是关闭当前页，这跟ctrl＋w是一个道理。不过大写的X就是恢复刚关掉的标签页，这个还是不错的；</li>
+<li>t：t操作就是新开一个标签页，这与ctrl＋t一样。另外大写的T好像是在当前打开的所有标签页中搜索，感觉没啥大意义；</li>
+<li>h，j，k，l，gg，G：这个就是vim下面的相应操作了，h，l，j，k分别是往左，往右，往下，往上滚动当前页，gg则是滚动到当前页最前，G滚动到当前页最后；</li>
+<li>J，K：J在chrome窗口移到左边一个标签页，K则是右边一个标签页。在mac chrome中可以使用cmd＋［num］跳到第num个标签页；</li>
+<li>H，L：H就是历史回退，L就是历史往前。<br>以上是我觉得对我帮助比较大的操作，如果想要查看更多的操作，可以在页面中的esc模式下敲击？，会出现帮助页面。</li>
+</ul>
+<p><img src="http://7xjnpo.com1.z0.glb.clouddn.com/wqcvimuim-632x640.jpg" alt=""></p>
+<p>P.S：比较郁闷的是在worepress中写博客内容时如果光标在文本内容框时很多快捷键就没法用了，包括chrome自带的cmd＋［num］，还是得将鼠标点到文本框外才可以使用vimium。</p>
+<p>&nbsp;</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;由于长时间面对电脑加上姿势不正确，这几天脖子比较疼痛，医生给的建议是不要久坐以及将显示屏垫高。遵循医嘱，将mac本垫高后使用自带键盘打字已经不方便了，因此就使用外接键盘。而用久mac的都会不喜欢使用鼠标。那现在问题来了，挖掘家技术哪家强？哦，不对，使用外接键盘用chrome上网时，譬如百度时你想要点击链接时还需要将手伸到触摸板去点击，这对键盘狂人来说简直就是不能忍。因此在经过一番搜索后，发现了这款神器－－vimium。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具" scheme="http://wangqiucheng.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="效率" scheme="http://wangqiucheng.com/tags/%E6%95%88%E7%8E%87/"/>
+    
+  </entry>
+  
+</feed>
