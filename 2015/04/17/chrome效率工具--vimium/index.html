@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="存储," />
+  <meta name="keywords" content="效率," />
 
 
 
@@ -86,22 +86,19 @@
 
 
 
-<meta name="description" content="前言该文章参考博客5分钟搞定内存字节对齐，主要就是修改了格式以及对齐进行了验证。
-三条原则
-数据成员对齐规则：struct(或union)的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从自身成员大小或者成员的子成员大小（只要自身成员有子成员，比如说是array，struct等）的整数倍开始(比如int在32位机为4字节,则要从4的整数倍地址开始存储）。">
+<meta name="description" content="由于长时间面对电脑加上姿势不正确，这几天脖子比较疼痛，医生给的建议是不要久坐以及将显示屏垫高。遵循医嘱，将mac本垫高后使用自带键盘打字已经不方便了，因此就使用外接键盘。而用久mac的都会不喜欢使用鼠标。那现在问题来了，挖掘家技术哪家强？哦，不对，使用外接键盘用chrome上网时，譬如百度时你想要点击链接时还需要将手伸到触摸板去点击，这对键盘狂人来说简直就是不能忍。因此在经过一番搜索后，发现了这款">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[转]5分钟搞定内存字节对齐">
-<meta property="og:url" content="http://wangqiucheng.com/2016/03/10/转-5分钟搞定内存字节对齐/index.html">
+<meta property="og:title" content="chrome效率工具－－vimium">
+<meta property="og:url" content="http://wangqiucheng.com/2015/04/17/chrome效率工具--vimium/index.html">
 <meta property="og:site_name" content="JoeyWong's Blog">
-<meta property="og:description" content="前言该文章参考博客5分钟搞定内存字节对齐，主要就是修改了格式以及对齐进行了验证。
-三条原则
-数据成员对齐规则：struct(或union)的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从自身成员大小或者成员的子成员大小（只要自身成员有子成员，比如说是array，struct等）的整数倍开始(比如int在32位机为4字节,则要从4的整数倍地址开始存储）。">
-<meta property="og:updated_time" content="2016-09-28T03:58:23.000Z">
+<meta property="og:description" content="由于长时间面对电脑加上姿势不正确，这几天脖子比较疼痛，医生给的建议是不要久坐以及将显示屏垫高。遵循医嘱，将mac本垫高后使用自带键盘打字已经不方便了，因此就使用外接键盘。而用久mac的都会不喜欢使用鼠标。那现在问题来了，挖掘家技术哪家强？哦，不对，使用外接键盘用chrome上网时，譬如百度时你想要点击链接时还需要将手伸到触摸板去点击，这对键盘狂人来说简直就是不能忍。因此在经过一番搜索后，发现了这款">
+<meta property="og:image" content="http://7xjnpo.com1.z0.glb.clouddn.com/wqcchrome_vimuim-640x400.jpg">
+<meta property="og:image" content="http://7xjnpo.com1.z0.glb.clouddn.com/wqcvimuim-632x640.jpg">
+<meta property="og:updated_time" content="2016-09-28T03:55:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[转]5分钟搞定内存字节对齐">
-<meta name="twitter:description" content="前言该文章参考博客5分钟搞定内存字节对齐，主要就是修改了格式以及对齐进行了验证。
-三条原则
-数据成员对齐规则：struct(或union)的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从自身成员大小或者成员的子成员大小（只要自身成员有子成员，比如说是array，struct等）的整数倍开始(比如int在32位机为4字节,则要从4的整数倍地址开始存储）。">
+<meta name="twitter:title" content="chrome效率工具－－vimium">
+<meta name="twitter:description" content="由于长时间面对电脑加上姿势不正确，这几天脖子比较疼痛，医生给的建议是不要久坐以及将显示屏垫高。遵循医嘱，将mac本垫高后使用自带键盘打字已经不方便了，因此就使用外接键盘。而用久mac的都会不喜欢使用鼠标。那现在问题来了，挖掘家技术哪家强？哦，不对，使用外接键盘用chrome上网时，譬如百度时你想要点击链接时还需要将手伸到触摸板去点击，这对键盘狂人来说简直就是不能忍。因此在经过一番搜索后，发现了这款">
+<meta name="twitter:image" content="http://7xjnpo.com1.z0.glb.clouddn.com/wqcchrome_vimuim-640x400.jpg">
 
 
 
@@ -119,7 +116,7 @@
   };
 </script>
 
-  <title> [转]5分钟搞定内存字节对齐 | JoeyWong's Blog </title>
+  <title> chrome效率工具－－vimium | JoeyWong's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -259,7 +256,7 @@
             
             
               
-                [转]5分钟搞定内存字节对齐
+                chrome效率工具－－vimium
               
             
           </h1>
@@ -271,8 +268,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-10T11:25:26+08:00" content="2016-03-10">
-              2016-03-10
+            <time itemprop="dateCreated" datetime="2015-04-17T20:32:26+08:00" content="2015-04-17">
+              2015-04-17
             </time>
           </span>
 
@@ -285,8 +282,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/操作系统/" itemprop="url" rel="index">
-                    <span itemprop="name">操作系统</span>
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
                   </a>
                 </span>
 
@@ -301,8 +298,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/10/转-5分钟搞定内存字节对齐/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/10/转-5分钟搞定内存字节对齐/" itemprop="commentsCount"></span>
+                <a href="/2015/04/17/chrome效率工具--vimium/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/17/chrome效率工具--vimium/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -325,24 +322,27 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文章参考博客<a href="http://blog.csdn.net/hairetz/article/details/4084088" target="_blank" rel="external">5分钟搞定内存字节对齐</a>，主要就是修改了格式以及对齐进行了验证。</p>
-<h2 id="三条原则"><a href="#三条原则" class="headerlink" title="三条原则"></a>三条原则</h2><ol>
-<li><p><strong>数据成员对齐规则</strong>：struct(或union)的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从自身成员大小或者成员的子成员大小（只要自身成员有子成员，比如说是array，struct等）的整数倍开始(比如int在32位机为4字节,则要从4的整数倍地址开始存储）。  </p>
-</li>
-<li><p><strong>结构体作为成员</strong>：如果一个结构里有某些结构体成员,则结构体成员要从其内部最大元素大小的整数倍地址开始存储.(struct a里存有struct b,b里有char,int ,double等元素,那b应该从8的整数倍开始存储.)</p>
-</li>
-<li><p><strong>收尾工作</strong>：结构体的总大小,也就是sizeof的结果,.必须是其内部最大成员的整数倍.不足的要补齐. </p>
-</li>
-</ol>
+        <p>由于长时间面对电脑加上姿势不正确，这几天脖子比较疼痛，医生给的建议是不要久坐以及将显示屏垫高。遵循医嘱，将mac本垫高后使用自带键盘打字已经不方便了，因此就使用外接键盘。而用久mac的都会不喜欢使用鼠标。那现在问题来了，挖掘家技术哪家强？哦，不对，使用外接键盘用chrome上网时，譬如百度时你想要点击链接时还需要将手伸到触摸板去点击，这对键盘狂人来说简直就是不能忍。因此在经过一番搜索后，发现了这款神器－－vimium。</p>
 <a id="more"></a>
-<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> bb</div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> id;             <span class="comment">//[0]....[3]</span></div><div class="line">	<span class="keyword">double</span> weight;      <span class="comment">//[8].....[15]　　　　　　原则１</span></div><div class="line">	<span class="keyword">float</span> height;      </div><div class="line">	<span class="comment">//[16]..[19],总长要为８的整数倍,补齐[20]...[23]　　　　　原则３</span></div><div class="line">&#125;BB;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> aa</div><div class="line">&#123;</div><div class="line">	<span class="keyword">char</span> name[<span class="number">2</span>];     <span class="comment">//[0],[1]</span></div><div class="line">	<span class="keyword">int</span>  id;         <span class="comment">//[4]...[7]　　　　　　　　　　原则１</span></div><div class="line">	<span class="keyword">double</span> score;     <span class="comment">//[8]....[15]　　　　</span></div><div class="line">	<span class="keyword">short</span> grade;    <span class="comment">//[16],[17]　　　　　　　　</span></div><div class="line">	BB b;             <span class="comment">//[24]......[47]　　　　　　　　　　原则２</span></div><div class="line">&#125;AA;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  AA a;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="keyword">sizeof</span>(a) &lt;&lt; <span class="string">" "</span> &lt;&lt; <span class="keyword">sizeof</span>(BB) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>结果是：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">48</span> <span class="number">24</span></div></pre></td></tr></table></figure>
-<h2 id="特例：-pragma-pack"><a href="#特例：-pragma-pack" class="headerlink" title="特例：#pragma pack()"></a>特例：#pragma pack()</h2><p>当为#pragma pack(1)时不需要对齐；</p>
-<p>当其他数时，遵循百度百科中的说法</p>
-<blockquote>
-<p>第一、如果n大于等于该变量所占用的字节数，那么偏移量必须满足默认的对齐方式;<br>第二、如果n小于该变量的类型所占用的字节数，那么偏移量为n的倍数，不用满足默认的对齐方式。</p>
+<h4 id="Vimium"><a href="#Vimium" class="headerlink" title="Vimium"></a>Vimium</h4><blockquote>
+<p>Vimium is a Google Chrome extension which provides keyboard shortcuts for navigation and control in the spirit of the Vim editor.根据Vimium官网的介绍，就是能让用户使用vim的操作方式去操作chrome上网。不过在我使用一段时间后发现并没有发现有多么像vim，最多就是一个insert模式以及一个esc模式，很多时候都是在esc模式下操作，以下是我觉得比较给力的操作：</p>
 </blockquote>
+<ul>
+<li>f，F：这是我最心仪的一个操作。在百度时你百度出一大堆链接后要访问某个链接你一般都需要用鼠标去点击，这个时候手就不得不离开键盘去按触摸板。按下f后会在当前页面里面把可以点击的链接全部用字母索引出来，再次键入你需要的链接对应的字母（或字母组合）就可以在当前页打开这个链接，使用F则是在新的标签页打开这个链接；<br><img src="http://7xjnpo.com1.z0.glb.clouddn.com/wqcchrome_vimuim-640x400.jpg" alt=""></li>
+<li>gi：这个操作可以使用f来代替，不过这个更加便捷。同样以百度为例，你搜索出一堆链接后，此时光标已经不在输入栏了。当你还想搜索的时候你又是得将鼠标移到输入栏点击来定位光标。而按下gi会将光标移到当前页面第一个输入框中，再使用tab可以在跳到下一个输入框。如果使用f操作，因为输入框也被看成了一个链接，只要按下f后再键入相应字母组合就可以跳到输入框；</li>
+<li>b，B：这个可以打开你书签中的链接，不过你还是需要记得你想要打开链接的相关字段，从而才能联想到对应的链接；</li>
+</ul>
+<p>其他的操作因为在chrome有相应操作，只是更简洁，这里也列举一下：</p>
+<ul>
+<li>x：x操作就是关闭当前页，这跟ctrl＋w是一个道理。不过大写的X就是恢复刚关掉的标签页，这个还是不错的；</li>
+<li>t：t操作就是新开一个标签页，这与ctrl＋t一样。另外大写的T好像是在当前打开的所有标签页中搜索，感觉没啥大意义；</li>
+<li>h，j，k，l，gg，G：这个就是vim下面的相应操作了，h，l，j，k分别是往左，往右，往下，往上滚动当前页，gg则是滚动到当前页最前，G滚动到当前页最后；</li>
+<li>J，K：J在chrome窗口移到左边一个标签页，K则是右边一个标签页。在mac chrome中可以使用cmd＋［num］跳到第num个标签页；</li>
+<li>H，L：H就是历史回退，L就是历史往前。<br>以上是我觉得对我帮助比较大的操作，如果想要查看更多的操作，可以在页面中的esc模式下敲击？，会出现帮助页面。</li>
+</ul>
+<p><img src="http://7xjnpo.com1.z0.glb.clouddn.com/wqcvimuim-632x640.jpg" alt=""></p>
+<p>P.S：比较郁闷的是在worepress中写博客内容时如果光标在文本内容框时很多快捷键就没法用了，包括chrome自带的cmd＋［num］，还是得将鼠标点到文本框外才可以使用vimium。</p>
+<p>&nbsp;</p>
 
       
     </div>
@@ -364,7 +364,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/存储/" rel="tag">#存储</a>
+            <a href="/tags/效率/" rel="tag">#效率</a>
           
         </div>
       
@@ -373,16 +373,12 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/04/cpp之cout与字符串常量/" rel="next" title="cout对字符型指针的处理以及内存中的字符串常量">
-                <i class="fa fa-chevron-left"></i> cout对字符型指针的处理以及内存中的字符串常量
-              </a>
-            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/03/10/T的几道笔试题/" rel="prev" title="T的几道笔试题">
-                T的几道笔试题 <i class="fa fa-chevron-right"></i>
+              <a href="/2015/06/18/markdown新手入门/" rel="prev" title="Markdown新手入门">
+                Markdown新手入门 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -409,8 +405,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/10/转-5分钟搞定内存字节对齐/"
-           data-title="[转]5分钟搞定内存字节对齐" data-url="http://wangqiucheng.com/2016/03/10/转-5分钟搞定内存字节对齐/">
+      <div class="ds-thread" data-thread-key="2015/04/17/chrome效率工具--vimium/"
+           data-title="chrome效率工具－－vimium" data-url="http://wangqiucheng.com/2015/04/17/chrome效率工具--vimium/">
       </div>
     
   </div>
@@ -546,7 +542,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三条原则"><span class="nav-number">2.</span> <span class="nav-text">三条原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举个栗子"><span class="nav-number">3.</span> <span class="nav-text">举个栗子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特例：-pragma-pack"><span class="nav-number">4.</span> <span class="nav-text">特例：#pragma pack()</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Vimium"><span class="nav-number">1.</span> <span class="nav-text">Vimium</span></a></li></ol></div>
             
           </div>
         </section>
